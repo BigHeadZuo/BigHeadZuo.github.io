@@ -162,23 +162,35 @@
         <div class="task-grid">
           <div class="task-item">
             <div class="task-title">计算机基础</div>
-            <div class="task-desc">操作系统原理（Linux/Windows）、计算机网络（TCP/IP、OSI七层模型、三次握手/四次挥手）、数据结构与算法基础、进程与线程、内存管理</div>
+            <div class="task-desc">操作系统原理（Linux/Windows/macOS）、计算机网络（TCP/IP、OSI七层模型、三次握手/四次挥手）、数据结构与算法基础、进程与线程、内存管理</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">硬件与连接类型</div>
+            <div class="task-desc">计算机硬件组件认知（CPU/内存/硬盘/网卡）、连接类型与功能（NFC/WiFi/蓝牙/红外线）、网络设备（路由器/交换机/AP/防火墙）、接口类型（RJ45/光纤/USB）</div>
           </div>
           <div class="task-item">
             <div class="task-title">编程语言入门</div>
-            <div class="task-desc">Python（首选，用于自动化脚本和工具开发）、Bash Shell 脚本（日常运维必备）、SQL 基础语法（数据库查询与管理）、正则表达式</div>
+            <div class="task-desc">Python（首选，用于自动化脚本和工具开发）、Bash Shell 脚本（日常运维必备）、PowerShell（Windows 环境管理）、SQL 基础语法（数据库查询与管理）、正则表达式</div>
           </div>
           <div class="task-item">
             <div class="task-title">Linux 运维基础</div>
-            <div class="task-desc">常用命令（grep/awk/sed/find）、文件权限与 ACL、用户与组管理、Systemd 服务管理、Crontab 定时任务、日志分析（/var/log）、SSH 远程管理</div>
+            <div class="task-desc">常用命令（grep/awk/sed/find）、文件权限与 ACL、用户与组管理、Systemd 服务管理、Crontab 定时任务、日志分析（/var/log）、SSH 远程管理、各发行版差异（Ubuntu/CentOS/Debian）</div>
           </div>
           <div class="task-item">
             <div class="task-title">网络基础实操</div>
-            <div class="task-desc">Wireshark 抓包分析、Nmap 端口扫描与服务识别、DNS/HTTP/HTTPS/FTP/SMTP 协议理解、子网划分与路由基础、VPN 原理</div>
+            <div class="task-desc">Wireshark 抓包分析、Nmap 端口扫描与服务识别、DNS/HTTP/HTTPS/FTP/SFTP/SMTP/NTP 协议理解、子网划分（CIDR/子网掩码/默认网关）、公网IP vs 私网IP、localhost/loopback</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">网络术语与概念</div>
+            <div class="task-desc">VLAN、DMZ、ARP、VM、DHCP、DNS、NAT、IP、VPN、MAN/LAN/WAN/WLAN、NAS 与 SAN 基础、SSL/TLS 基础概念</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">网络拓扑与排障工具</div>
+            <div class="task-desc">网络拓扑类型（星型/环型/网状/总线型）、排障工具实操（ping/tracert/nslookup/ipconfig/netstat/arp/dig/route）、端口扫描器、协议分析器、iptables 基础</div>
           </div>
           <div class="task-item">
             <div class="task-title">虚拟化与实验环境</div>
-            <div class="task-desc">VMware/VirtualBox 虚拟机搭建、Ubuntu/CentOS 安装配置、Docker 基础使用、搭建个人实验网络环境</div>
+            <div class="task-desc">VMware/VirtualBox 虚拟机搭建、Proxmox/ESXi 了解、Hypervisor 概念（Type1/Type2）、GuestOS vs HostOS、Docker 基础使用、搭建个人实验网络环境</div>
           </div>
           <div class="task-item">
             <div class="task-title">📚 推荐资源</div>
@@ -215,7 +227,23 @@
           </div>
           <div class="task-item">
             <div class="task-title">密码学基础</div>
-            <div class="task-desc">对称加密（AES/DES）、非对称加密（RSA/ECC）、哈希算法（MD5/SHA）、数字签名与证书、PKI 体系、SSL/TLS 握手流程、密码破解原理</div>
+            <div class="task-desc">对称加密（AES/DES）、非对称加密（RSA/ECC）、哈希算法（MD5/SHA）、数字签名与证书、PKI 体系、SSL/TLS 握手流程、密码破解原理、Salting 与 Key Exchange、混淆技术（Obfuscation）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">认证方法论</div>
+            <div class="task-desc">Kerberos 认证协议、LDAP 目录服务、SSO 单点登录、RADIUS 认证、本地认证机制、证书认证、MFA 多因素认证与 2FA、Authentication vs Authorization 区别</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">安全协议对比</div>
+            <div class="task-desc">FTP vs SFTP、SSL vs TLS、HTTP vs HTTPS、IPSec、DNSSEC、LDAPS、SRTP、S/MIME、安全协议与非安全协议的选择原则</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">端点安全基础</div>
+            <div class="task-desc">Antivirus vs Antimalware、EDR 端点检测与响应、DLP 数据防泄漏、ACL 访问控制列表、防火墙与下一代防火墙（NGFW）、HIPS 主机入侵防御、沙箱（Sandboxing）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">无线安全</div>
+            <div class="task-desc">WPA vs WPA2 vs WPA3 vs WEP 对比、EAP vs PEAP 认证、WPS 安全风险、无线网络攻击（Deauth/Evil Twin/Rogue AP）</div>
           </div>
           <div class="task-item">
             <div class="task-title">安全工具使用</div>
@@ -268,7 +296,15 @@
           </div>
           <div class="task-item">
             <div class="task-title">红队技术</div>
-            <div class="task-desc">Cobalt Strike Beacon 操作、免杀技术（Shellcode加载器/混淆/加壳）、钓鱼攻击（邮件/网站克隆/Office宏）、社会工程学、APT 攻击链模拟、C2 基础设施搭建</div>
+            <div class="task-desc">Cobalt Strike Beacon 操作、免杀技术（Shellcode加载器/混淆/加壳）、钓鱼攻击（邮件/网站克隆/Office宏）、社会工程学、APT 攻击链模拟、C2 基础设施搭建、LOLBAS/GTFOBins（利用合法工具进行攻击）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">常见攻击类型详解</div>
+            <div class="task-desc">社工类：Phishing/Vishing/Whaling/Smishing/Spam vs Spim/Shoulder Surfing/Dumpster Diving/Tailgating/Impersonation；网络类：DoS vs DDoS/MITM/Spoofing/DNS Poisoning/ARP欺骗/VLAN Hopping/Replay Attack/Pass the Hash</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">Web 攻击与恶意软件</div>
+            <div class="task-desc">Buffer Overflow/Memory Leak/XSS/SQL Injection/CSRF/Directory Traversal/Watering Hole/Drive-by Attack/Typo Squatting；恶意软件类型：病毒/蠕虫/木马/勒索软件/Rootkit/Keylogger/Botnet/Fileless Malware</div>
           </div>
           <div class="task-item">
             <div class="task-title">漏洞赏金实战</div>
@@ -324,6 +360,26 @@
             <div class="task-desc">Windows/Linux 入侵排查、Webshell 查杀、恶意进程分析、日志溯源、内存取证（Volatility）、磁盘取证（Autopsy）、攻击时间线还原</div>
           </div>
           <div class="task-item">
+            <div class="task-title">事件响应六步法</div>
+            <div class="task-desc">① Preparation 准备 → ② Identification 识别 → ③ Containment 遏制 → ④ Eradication 根除 → ⑤ Recovery 恢复 → ⑥ Lessons Learned 总结复盘；IR 工具：nmap/curl/hping/wireshark/FTK Imager/memdump/winhex</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">日志类型与分析</div>
+            <div class="task-desc">Event Logs（Windows事件日志）、Syslog（Linux系统日志）、Netflow（网络流量日志）、Packet Captures（数据包捕获）、Firewall Logs（防火墙日志）、日志收集与关联分析</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">系统加固概念</div>
+            <div class="task-desc">MAC-based/NAC-based 访问控制、端口阻断（Port Blocking）、组策略（Group Policy）、ACL 访问控制列表、Sinkhole 技术、补丁管理（Patching）、跳板机（Jump Server）、操作系统加固基线</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">威胁分类与情报工具</div>
+            <div class="task-desc">Zero Day/Known vs Unknown 威胁/APT 高级持续威胁；蓝/红/紫队职责；False Positive vs False Negative/True Positive vs True Negative；常用工具：VirusTotal/Joe Sandbox/Any.Run/URLVoid/URLScan/WHOIS</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">安全框架与标准</div>
+            <div class="task-desc">MITRE ATT&CK 框架、Cyber Kill Chain 杀伤链、Diamond Model 钻石模型；标准体系：NIST CSF/RMF、ISO 27001、CIS Benchmarks；概念：纵深防御（Defense in Depth）、零信任（Zero Trust）、Runbook 运维手册</div>
+          </div>
+          <div class="task-item">
             <div class="task-title">安全合规与管理</div>
             <div class="task-desc">等级保护 2.0 实施、ISO 27001 体系建设、GDPR 合规要求、安全审计流程、风险评估方法论（NIST/OCTAVE）、安全策略编写</div>
           </div>
@@ -358,15 +414,19 @@
           </div>
           <div class="task-item">
             <div class="task-title">后端开发</div>
-            <div class="task-desc">Python（Flask/FastAPI/Django）、Go 语言（高性能工具开发）、RESTful API 设计、GraphQL、数据库（MySQL/PostgreSQL/Redis/MongoDB）、消息队列（RabbitMQ/Kafka）</div>
+            <div class="task-desc">Python（Flask/FastAPI/Django）、Go 语言（高性能工具开发）、C++（底层安全工具）、JavaScript/Node.js、RESTful API 设计、GraphQL、数据库（MySQL/PostgreSQL/Redis/MongoDB）、消息队列（RabbitMQ/Kafka）</div>
           </div>
           <div class="task-item">
             <div class="task-title">安全工具开发</div>
-            <div class="task-desc">自研漏洞扫描器（分布式架构）、自动化渗透框架、漏洞管理平台（资产管理+漏洞跟踪）、安全编排自动化（SOAR）、威胁情报平台开发</div>
+            <div class="task-desc">自研漏洞扫描器（分布式架构）、自动化渗透框架、漏洞管理平台（资产管理+漏洞跟踪）、安全编排自动化（SOAR）、威胁情报平台开发、SIEM 与 SOAR 集成开发</div>
           </div>
           <div class="task-item">
             <div class="task-title">云安全</div>
-            <div class="task-desc">AWS/Azure/阿里云安全配置与审计、云原生安全（CSPM/CWPP）、Serverless 安全、IAM 策略与最小权限、云上攻防实战、Terraform 安全即代码</div>
+            <div class="task-desc">AWS/GCP/Azure/阿里云安全配置与审计、云服务模型（SaaS/PaaS/IaaS）、云部署模型（公有云/私有云/混合云）、云原生安全（CSPM/CWPP）、Serverless 安全、IAM 策略与最小权限、云上攻防实战、Infrastructure as Code 安全</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">云存储安全</div>
+            <div class="task-desc">S3/OSS 存储桶安全配置、Dropbox/Box/OneDrive/Google Drive/iCloud 企业安全管理、云存储访问控制与加密、数据分类与敏感数据保护、云与本地环境安全差异</div>
           </div>
           <div class="task-item">
             <div class="task-title">基础设施即代码</div>
