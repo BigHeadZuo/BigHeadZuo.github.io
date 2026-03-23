@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网络安全全栈发展路线 - StarLink</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0a0a1a;
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+    canvas#starfield {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      padding: 3rem 1rem 6rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .page-title {
+      text-align: center;
+      font-size: 2.2rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(100,140,255,0.5);
+    }
+    .page-subtitle {
+      text-align: center;
+      color: #6688cc;
+      margin-bottom: 4rem;
+      font-size: 1rem;
+    }
+    /* 星链主线 */
+    .timeline {
+      position: relative;
+      padding-left: 60px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom,
+        transparent,
+        rgba(100,140,255,0.6) 5%,
+        rgba(100,140,255,0.6) 95%,
+        transparent
+      );
+      box-shadow: 0 0 8px rgba(100,140,255,0.3);
+    }
+    /* 阶段节点 */
+    .stage {
+      position: relative;
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.6s forwards;
+    }
+    .stage:nth-child(1) { animation-delay: 0.1s; }
+    .stage:nth-child(2) { animation-delay: 0.25s; }
+    .stage:nth-child(3) { animation-delay: 0.4s; }
+    .stage:nth-child(4) { animation-delay: 0.55s; }
+    .stage:nth-child(5) { animation-delay: 0.7s; }
+    .stage:nth-child(6) { animation-delay: 0.85s; }
+    .stage:nth-child(7) { animation-delay: 1.0s; }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* 星点 */
+    .star-node {
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid;
+      box-shadow: 0 0 12px;
+      animation: pulse 2s infinite;
+    }
+    .star-node::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 8px; }
+      50% { box-shadow: 0 0 20px; }
+    }
+    /* 阶段颜色 */
+    .stage-1 .star-node { border-color: #4fc3f7; color: #4fc3f7; box-shadow: 0 0 12px #4fc3f7; }
+    .stage-2 .star-node { border-color: #81c784; color: #81c784; box-shadow: 0 0 12px #81c784; }
+    .stage-3 .star-node { border-color: #ffb74d; color: #ffb74d; box-shadow: 0 0 12px #ffb74d; }
+    .stage-4 .star-node { border-color: #e57373; color: #e57373; box-shadow: 0 0 12px #e57373; }
+    .stage-5 .star-node { border-color: #ba68c8; color: #ba68c8; box-shadow: 0 0 12px #ba68c8; }
+    .stage-6 .star-node { border-color: #f06292; color: #f06292; box-shadow: 0 0 12px #f06292; }
+    .stage-7 .star-node { border-color: #ffd54f; color: #ffd54f; box-shadow: 0 0 12px #ffd54f; }
+    .stage-card {
+      background: rgba(15,15,35,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+    }
+    .stage-card:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateX(4px);
+      box-shadow: 0 4px 30px rgba(100,140,255,0.1);
+    }
+    .stage-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .stage-phase {
+      font-size: 0.75rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .stage-1 .stage-phase { background: rgba(79,195,247,0.15); color: #4fc3f7; }
+    .stage-2 .stage-phase { background: rgba(129,199,132,0.15); color: #81c784; }
+    .stage-3 .stage-phase { background: rgba(255,183,77,0.15); color: #ffb74d; }
+    .stage-4 .stage-phase { background: rgba(229,115,115,0.15); color: #e57373; }
+    .stage-5 .stage-phase { background: rgba(186,104,200,0.15); color: #ba68c8; }
+    .stage-6 .stage-phase { background: rgba(240,98,146,0.15); color: #f06292; }
+    .stage-7 .stage-phase { background: rgba(255,213,79,0.15); color: #ffd54f; }
+</style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+<div class="page-wrapper">
+  <h1 class="page-title">🛡️ 网络安全全栈发展路线</h1>
+  <p class="page-subtitle">StarLink Roadmap · 从入门到专家的星链之路</p>
+
+  <div class="timeline">
+
+    <!-- 阶段一 -->
+    <div class="stage stage-1">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段一</span>
+          <h2 style="font-size:1.2rem;color:#4fc3f7;">🌱 基础筑基（0-6个月）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">计算机基础</div>
+            <div class="task-desc">操作系统原理（Linux/Windows）、计算机网络（TCP/IP、OSI模型）、数据结构与算法基础</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">编程语言入门</div>
+            <div class="task-desc">Python（首选）、Bash Shell 脚本、SQL 基础语法</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">Linux 运维基础</div>
+            <div class="task-desc">常用命令、文件权限、用户管理、服务管理、日志分析</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">网络基础实操</div>
+            <div class="task-desc">Wireshark 抓包分析、Nmap 端口扫描、DNS/HTTP/HTTPS 协议理解</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">CompTIA Network+ / 华为 HCIA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段二 -->
+    <div class="stage stage-2">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段二</span>
+          <h2 style="font-size:1.2rem;color:#81c784;">🔒 安全入门（6-12个月）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">Web 安全基础</div>
+            <div class="task-desc">OWASP Top 10、SQL注入、XSS、CSRF、文件上传漏洞、SSRF</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">渗透测试入门</div>
+            <div class="task-desc">Burp Suite、SQLMap、Metasploit 基础使用、靶场练习（DVWA、Pikachu）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">密码学基础</div>
+            <div class="task-desc">对称/非对称加密、哈希算法、数字签名、PKI 体系、SSL/TLS</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">安全工具使用</div>
+            <div class="task-desc">Kali Linux 环境搭建、Nessus 漏洞扫描、Hydra 暴力破解</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">CompTIA Security+ / CISP-PTE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段三 -->
+    <div class="stage stage-3">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段三</span>
+          <h2 style="font-size:1.2rem;color:#ffb74d;">⚔️ 渗透测试进阶（1-2年）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">高级渗透技术</div>
+            <div class="task-desc">内网渗透、域渗透、权限提升、横向移动、隧道技术（frp/Chisel）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">代码审计</div>
+            <div class="task-desc">PHP/Java/Python 代码审计、漏洞挖掘、0day 分析与复现</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">红队技术</div>
+            <div class="task-desc">Cobalt Strike、免杀技术、钓鱼攻击、社会工程学、APT 攻击链</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">漏洞赏金实战</div>
+            <div class="task-desc">参与 SRC 漏洞提交、HackerOne/补天平台实战、编写漏洞报告</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">OSCP / CEH / CISP-PTS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段四 -->
+    <div class="stage stage-4">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段四</span>
+          <h2 style="font-size:1.2rem;color:#e57373;">🛡️ 安全防御体系（2-3年）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">安全运营（SOC）</div>
+            <div class="task-desc">SIEM 平台（Splunk/ELK）、安全事件分析、告警研判、应急响应流程</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">防御技术</div>
+            <div class="task-desc">WAF 配置与绕过、IDS/IPS、防火墙策略、蜜罐部署、零信任架构</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">安全开发（DevSecOps）</div>
+            <div class="task-desc">SAST/DAST 工具集成、CI/CD 安全流水线、容器安全（Docker/K8s）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">威胁情报</div>
+            <div class="task-desc">MITRE ATT&CK 框架、威胁狩猎（Threat Hunting）、IOC 分析</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">CISSP / CISP / CySA+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段五 -->
+    <div class="stage stage-5">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段五</span>
+          <h2 style="font-size:1.2rem;color:#ba68c8;">🌐 全栈开发能力（2-3年并行）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">前端开发</div>
+            <div class="task-desc">HTML/CSS/JavaScript、React 或 Vue 框架、安全工具平台前端开发</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">后端开发</div>
+            <div class="task-desc">Python（Flask/Django）、Go 语言、RESTful API 设计、数据库（MySQL/Redis）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">安全工具开发</div>
+            <div class="task-desc">自研扫描器、自动化渗透框架、漏洞管理平台、安全编排（SOAR）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">云安全</div>
+            <div class="task-desc">AWS/Azure/阿里云安全配置、云原生安全、Serverless 安全、IAM 策略</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">AWS Security Specialty / CCSP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段六 -->
+    <div class="stage stage-6">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段六</span>
+          <h2 style="font-size:1.2rem;color:#f06292;">🔬 高级专项方向（3-5年）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">逆向工程与恶意软件分析</div>
+            <div class="task-desc">IDA Pro、Ghidra、x86/ARM 汇编、恶意样本分析、沙箱技术</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">二进制安全</div>
+            <div class="task-desc">缓冲区溢出、堆利用、ROP 链、Fuzzing 技术、漏洞利用开发</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">AI + 安全</div>
+            <div class="task-desc">机器学习检测恶意流量、AI 辅助漏洞挖掘、对抗样本攻防、LLM 安全</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">区块链安全</div>
+            <div class="task-desc">智能合约审计、DeFi 安全、链上数据分析</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">OSCE3 / GREM / GXPN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 阶段七 -->
+    <div class="stage stage-7">
+      <div class="star-node"></div>
+      <div class="stage-card">
+        <div class="stage-header">
+          <span class="stage-phase">阶段七</span>
+          <h2 style="font-size:1.2rem;color:#ffd54f;">👑 安全架构师 / 技术领袖（5年+）</h2>
+        </div>
+        <div class="task-grid">
+          <div class="task-item">
+            <div class="task-title">安全架构设计</div>
+            <div class="task-desc">企业安全体系规划、安全架构评审、风险评估与合规（等保/ISO27001/GDPR）</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">团队管理</div>
+            <div class="task-desc">安全团队建设、红蓝对抗体系、安全文化推广、预算与资源管理</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">行业影响力</div>
+            <div class="task-desc">安全会议演讲（BlackHat/DEF CON/KCon）、开源安全项目、技术博客与社区贡献</div>
+          </div>
+          <div class="task-item">
+            <div class="task-title">前沿研究</div>
+            <div class="task-desc">零日漏洞研究、安全标准制定、产学研合作、推动行业安全发展</div>
+          </div>
+          <div class="task-item cert">
+            <div class="task-title">📜 建议认证</div>
+            <div class="task-desc">CISSP-ISSAP / CISM / 高级信息安全工程师</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end timeline -->
+</div><!-- end page-wrapper -->
+
+<style>
+  .task-grid {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .task-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    transition: all 0.2s;
+  }
+  .task-item:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .task-item.cert {
+    border-style: dashed;
+    border-color: rgba(255,213,79,0.3);
+    background: rgba(255,213,79,0.03);
+  }
+  .task-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+  .task-desc {
+    font-size: 0.85rem;
+    color: #9090b0;
+    line-height: 1.6;
+  }
+  .footer-note {
+    text-align: center;
+    margin-top: 4rem;
+    color: #4a4a6a;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    .page-title { font-size: 1.5rem; }
+    .timeline { padding-left: 45px; }
+    .star-node { left: -28px; width: 12px; height: 12px; }
+    .star-node::after { width: 4px; height: 4px; top: 2px; left: 2px; }
+    .stage-card { padding: 1rem; }
+  }
+</style>
+
+<p class="footer-note" style="position:relative;z-index:1;">
+  ✨ BigHeadZuo 的网络安全全栈星链路线 · 持续更新中
+</p>
+
+<script>
+// 星空背景
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = document.documentElement.scrollHeight;
+  initStars();
+}
+
+function initStars() {
+  stars = [];
+  const count = Math.floor((canvas.width * canvas.height) / 8000);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      alpha: Math.random() * 0.8 + 0.2,
+      speed: Math.random() * 0.005 + 0.002
+    });
+  }
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const time = Date.now();
+  stars.forEach(s => {
+    const flicker = Math.sin(time * s.speed) * 0.3 + 0.7;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180,200,255,${s.alpha * flicker})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+
+window.addEventListener('resize', resize);
+resize();
+drawStars();
+
+// 页面高度变化时重新设置 canvas
+const observer = new ResizeObserver(() => {
+  canvas.height = document.documentElement.scrollHeight;
+});
+observer.observe(document.body);
+</script>
+</body>
+</html>
