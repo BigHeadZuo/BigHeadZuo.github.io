@@ -59,6 +59,10 @@
   <p class="subtitle">精选安全工具 · 按阶段分类整理</p>
   <nav class="nav-back"><a href="index.html">← 返回主页</a> · <a href="roadmap.html">发展路线</a></nav>
 
+  <div style="max-width:500px;margin:0 auto 2rem;">
+    <input type="text" id="searchBox" placeholder="🔍 搜索工具名称或关键词..." style="width:100%;padding:0.7rem 1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#e0e0e0;font-size:0.95rem;outline:none;backdrop-filter:blur(6px);transition:border-color 0.3s;" onfocus="this.style.borderColor='rgba(100,140,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" aria-label="搜索工具">
+  </div>
+
   <!-- 信息收集 -->
   <div class="category">
     <h2 class="cat-title">🔍 信息收集与侦察 <span class="cat-tag">基础阶段</span></h2>
@@ -276,6 +280,20 @@ s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0
 requestAnimationFrame(d);}
 addEventListener('resize',r);r();d();
 new ResizeObserver(()=>{c.height=document.documentElement.scrollHeight}).observe(document.body);
+
+// 搜索过滤
+document.getElementById('searchBox').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.tool-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(q) ? '' : 'none';
+  });
+  document.querySelectorAll('.category').forEach(cat => {
+    const visible = cat.querySelectorAll('.tool-card[style=""], .tool-card:not([style])');
+    const hidden = cat.querySelectorAll('.tool-card[style*="none"]');
+    cat.style.display = (visible.length === 0 && hidden.length > 0) ? 'none' : '';
+  });
+});
 </script>
 </body>
 </html>
