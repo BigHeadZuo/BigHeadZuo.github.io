@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的个人主页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 2rem;
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #fff; }
+    .tagline { color: #a0a0c0; margin-bottom: 2rem; font-size: 1.1rem; }
+    .links { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .links a {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: #e0e0e0;
+      text-decoration: none;
+      transition: all 0.3s;
+      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.05);
+    }
+    .links a:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+    .bio {
+      margin: 2rem 0;
+      line-height: 1.8;
+      color: #b0b0d0;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="avatar" role="img" aria-label="头像">👤</div>
+    <h1>BigHeadZuo</h1>
+    <p class="tagline">开发者 / 设计师 / 创作者</p>
+    <p class="bio">
+      这里写一段简短的自我介绍。比如你的技术栈、兴趣爱好、正在做的项目等。
+    </p>
+    <nav class="links" aria-label="社交链接">
+      <a href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:your@email.com">邮箱</a>
+      <a href="https://twitter.com/BigHeadZuo" target="_blank" rel="noopener">Twitter</a>
+      <a href="/blog">博客</a>
+    </nav>
+  </main>
+</body>
+</html>
