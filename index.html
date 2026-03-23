@@ -8,70 +8,126 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background: #0a0a1a;
       color: #e0e0e0;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-    .container {
-      text-align: center;
-      max-width: 600px;
-      padding: 2rem;
-    }
+    canvas#bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+    .page { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
+    .container { text-align: center; max-width: 700px; width: 100%; }
     .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
+      width: 130px; height: 130px; border-radius: 50%;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 0 auto 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
+      margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; box-shadow: 0 0 40px rgba(102,126,234,0.3);
+      animation: float 3s ease-in-out infinite;
     }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #fff; }
-    .tagline { color: #a0a0c0; margin-bottom: 2rem; font-size: 1.1rem; }
-    .links { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-    .links a {
-      display: inline-block;
-      padding: 0.7rem 1.5rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 8px;
-      color: #e0e0e0;
-      text-decoration: none;
-      transition: all 0.3s;
-      backdrop-filter: blur(4px);
-      background: rgba(255,255,255,0.05);
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
-    .links a:hover {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.4);
-      transform: translateY(-2px);
+    h1 { font-size: 2.2rem; margin-bottom: 0.4rem; color: #fff; text-shadow: 0 0 20px rgba(100,140,255,0.3); }
+    .tagline { color: #8888bb; margin-bottom: 1.5rem; font-size: 1.05rem; }
+    .bio { margin: 0 auto 2rem; line-height: 1.8; color: #9999bb; max-width: 500px; font-size: 0.95rem; }
+    /* 技能标签 */
+    .skills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .skill {
+      font-size: 0.78rem; padding: 4px 12px; border-radius: 20px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: #8899bb; transition: all 0.3s;
     }
-    .bio {
-      margin: 2rem 0;
-      line-height: 1.8;
-      color: #b0b0d0;
+    .skill:hover { background: rgba(100,140,255,0.1); border-color: rgba(100,140,255,0.3); color: #aabbee; }
+    .skill.highlight { background: rgba(100,140,255,0.12); border-color: rgba(100,140,255,0.25); color: #88aaee; }
+    /* 导航卡片 */
+    .nav-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .nav-card {
+      background: rgba(15,15,35,0.8); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 1.3rem 1rem; text-decoration: none; color: inherit;
+      transition: all 0.3s; backdrop-filter: blur(6px);
     }
+    .nav-card:hover { border-color: rgba(100,140,255,0.3); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(100,140,255,0.1); }
+    .nav-card .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .nav-card .card-title { font-weight: 600; color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .nav-card .card-desc { font-size: 0.8rem; color: #7777aa; line-height: 1.5; }
+    /* 社交链接 */
+    .social { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+    .social a {
+      padding: 0.6rem 1.2rem; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; color: #8899bb; text-decoration: none; font-size: 0.85rem;
+      transition: all 0.3s; background: rgba(255,255,255,0.03);
+    }
+    .social a:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); color: #bbccee; }
+    .footer { margin-top: 2rem; color: #3a3a5a; font-size: 0.8rem; }
+    @media (max-width: 500px) { h1 { font-size: 1.7rem; } .nav-cards { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
+<canvas id="bg"></canvas>
+<div class="page">
   <main class="container">
-    <div class="avatar" role="img" aria-label="头像">👤</div>
+    <div class="avatar" role="img" aria-label="头像">�️</div>
     <h1>BigHeadZuo</h1>
     <p class="tagline">网络安全工程师 / 全栈开发者</p>
     <p class="bio">
       热爱网络安全与全栈开发，正在从基础筑基到安全架构师的星链之路上前行。<br>
       这里记录我的学习路线、安全工具收藏和成长轨迹。
     </p>
-    <nav class="links" aria-label="社交链接">
+
+    <div class="skills">
+      <span class="skill highlight">Python</span>
+      <span class="skill highlight">Kali Linux</span>
+      <span class="skill">Burp Suite</span>
+      <span class="skill">Nmap</span>
+      <span class="skill">Wireshark</span>
+      <span class="skill">Metasploit</span>
+      <span class="skill">Web安全</span>
+      <span class="skill">渗透测试</span>
+      <span class="skill">网络协议</span>
+      <span class="skill">Docker</span>
+      <span class="skill">Go</span>
+      <span class="skill">Vue.js</span>
+    </div>
+
+    <div class="nav-cards">
+      <a class="nav-card" href="roadmap.html">
+        <div class="icon">🗺️</div>
+        <div class="card-title">发展路线</div>
+        <div class="card-desc">7 阶段星链路线图，从入门到安全架构师</div>
+      </a>
+      <a class="nav-card" href="tools.html">
+        <div class="icon">🧰</div>
+        <div class="card-title">安全工具箱</div>
+        <div class="card-desc">精选 30+ 安全工具，按方向分类整理</div>
+      </a>
+      <a class="nav-card" href="ctf.html">
+        <div class="icon">🚩</div>
+        <div class="card-title">CTF 资源</div>
+        <div class="card-desc">练习平台、比赛日历、工具与学习资源</div>
+      </a>
+      <a class="nav-card" href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">
+        <div class="icon">💻</div>
+        <div class="card-title">GitHub</div>
+        <div class="card-desc">开源项目与代码仓库</div>
+      </a>
+    </div>
+
+    <div class="social">
       <a href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">GitHub</a>
       <a href="mailto:your@email.com">邮箱</a>
-      <a href="roadmap.html">发展路线</a>
-      <a href="tools.html">安全工具箱</a>
-    </nav>
+    </div>
+    <p class="footer">© 2026 BigHeadZuo · 网络安全全栈之路</p>
   </main>
+</div>
+
+<script>
+const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
+function r(){c.width=innerWidth;c.height=innerHeight;s=[];
+const n=Math.floor(c.width*c.height/6000);
+for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5+0.3,a:Math.random()*0.8+0.2,sp:Math.random()*0.005+0.002});}
+function d(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
+s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
+requestAnimationFrame(d);}
+addEventListener('resize',r);r();d();
+</script>
 </body>
 </html>
