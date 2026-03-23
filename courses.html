@@ -45,6 +45,20 @@
     .back-top{position:fixed;bottom:2rem;right:2rem;z-index:20;width:44px;height:44px;border-radius:50%;background:rgba(100,140,255,.2);border:1px solid rgba(100,140,255,.3);color:#88aaee;font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:all .3s}
     .back-top:hover{background:rgba(100,140,255,.35);transform:translateY(-2px)}
     .back-top.show{display:flex}
+    /* 侧边浮动索引 */
+    .side-index{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:30;background:rgba(10,10,30,.92);border:1px solid rgba(255,255,255,.08);border-left:none;border-radius:0 12px 12px 0;padding:10px 8px;backdrop-filter:blur(8px);transition:all .3s;max-height:80vh;overflow-y:auto}
+    .side-index::-webkit-scrollbar{width:3px}
+    .side-index::-webkit-scrollbar-thumb{background:rgba(100,140,255,.3);border-radius:3px}
+    .side-index .si-title{font-size:.65rem;color:#555577;text-align:center;margin-bottom:6px;letter-spacing:1px}
+    .side-index a{display:block;font-size:.7rem;color:#6677aa;text-decoration:none;padding:3px 10px 3px 8px;border-radius:4px;transition:all .2s;white-space:nowrap;border-left:2px solid transparent;margin-bottom:1px}
+    .side-index a:hover{color:#88aaee;background:rgba(100,140,255,.1)}
+    .side-index a.active{color:#a0c4ff;border-left-color:#7cacf8;background:rgba(100,140,255,.08)}
+    .side-index .si-stage{font-size:.6rem;color:#444466;margin-top:6px;margin-bottom:2px;padding-left:8px;font-weight:600}
+    .si-toggle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:31;background:rgba(100,140,255,.2);border:1px solid rgba(100,140,255,.3);border-left:none;border-radius:0 8px 8px 0;color:#88aaee;cursor:pointer;padding:8px 4px;font-size:.75rem;display:none;backdrop-filter:blur(6px);writing-mode:vertical-lr}
+    .si-toggle:hover{background:rgba(100,140,255,.35)}
+    .side-index.collapsed{transform:translateY(-50%) translateX(-100%)}
+    .side-index.collapsed+.si-toggle{display:flex}
+    @media(max-width:1200px){.side-index{display:none}.si-toggle{display:none}}
     @media(max-width:600px){h1{font-size:1.5rem}.toc-grid{grid-template-columns:1fr}.mod-head{flex-direction:column;gap:.3rem}}
   </style>
 </head>
@@ -1213,6 +1227,54 @@
 
 </div><!-- end .wrap -->
 
+<!-- 侧边浮动索引 -->
+<nav class="side-index" id="sideIndex">
+  <div class="si-title">📍 索引</div>
+  <div class="si-stage">阶段一 · 基础筑基</div>
+  <a href="#m1-1">1.1 计算机组成</a>
+  <a href="#m1-2">1.2 计算机网络</a>
+  <a href="#m1-3">1.3 Linux 管理</a>
+  <a href="#m1-4">1.4 Python 编程</a>
+  <a href="#m1-5">1.5 数据库 SQL</a>
+  <a href="#m1-6">1.6 Shell 脚本</a>
+  <div class="si-stage">阶段二 · 安全入门</div>
+  <a href="#m2-1">2.1 Web 安全</a>
+  <a href="#m2-2">2.2 渗透工具链</a>
+  <a href="#m2-3">2.3 密码学</a>
+  <a href="#m2-4">2.4 协议安全</a>
+  <a href="#m2-5">2.5 系统安全</a>
+  <a href="#m2-6">2.6 法规合规</a>
+  <div class="si-stage">阶段三 · 渗透进阶</div>
+  <a href="#m3-1">3.1 内网域攻防</a>
+  <a href="#m3-2">3.2 代码审计</a>
+  <a href="#m3-3">3.3 红队武器化</a>
+  <a href="#m3-4">3.4 移动安全</a>
+  <a href="#m3-5">3.5 漏洞赏金</a>
+  <div class="si-stage">阶段四 · 安全防御</div>
+  <a href="#m4-1">4.1 SIEM 运营</a>
+  <a href="#m4-2">4.2 IDS/IPS</a>
+  <a href="#m4-3">4.3 应急取证</a>
+  <a href="#m4-4">4.4 威胁情报</a>
+  <a href="#m4-5">4.5 安全框架</a>
+  <a href="#m4-6">4.6 DevSecOps</a>
+  <div class="si-stage">阶段五 · 全栈开发</div>
+  <a href="#m5-1">5.1 前端开发</a>
+  <a href="#m5-2">5.2 后端 API</a>
+  <a href="#m5-3">5.3 工具开发</a>
+  <a href="#m5-4">5.4 云安全</a>
+  <a href="#m5-5">5.5 容器 DevOps</a>
+  <div class="si-stage">阶段六 · 高级专项</div>
+  <a href="#m6-1">6.1 逆向工程</a>
+  <a href="#m6-2">6.2 二进制利用</a>
+  <a href="#m6-3">6.3 恶意软件</a>
+  <a href="#m6-4">6.4 AI 安全</a>
+  <a href="#m6-5">6.5 IoT 工控</a>
+  <div class="si-stage">阶段七 · 架构领袖</div>
+  <a href="#m7-1">7.1 安全架构</a>
+  <a href="#m7-2">7.2 管理领导力</a>
+</nav>
+<button class="si-toggle" id="siToggle" onclick="document.getElementById('sideIndex').classList.remove('collapsed')" aria-label="展开索引">📍索引</button>
+
 <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
 
 <script>
@@ -1229,6 +1291,31 @@ addEventListener('resize',r);r();d();
 // 回到顶部按钮
 const btn=document.querySelector('.back-top');
 addEventListener('scroll',()=>{btn.classList.toggle('show',scrollY>400);});
+
+// 侧边索引高亮当前位置
+(function(){
+  const si=document.getElementById('sideIndex');
+  const links=si.querySelectorAll('a[href^="#m"]');
+  const sections=[];
+  links.forEach(a=>{
+    const id=a.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    if(el) sections.push({el,a});
+  });
+  let ticking=false;
+  addEventListener('scroll',()=>{
+    if(!ticking){requestAnimationFrame(()=>{
+      let current=null;
+      const offset=window.innerHeight*0.3;
+      for(let i=sections.length-1;i>=0;i--){
+        if(sections[i].el.getBoundingClientRect().top<=offset){current=sections[i];break;}
+      }
+      links.forEach(a=>a.classList.remove('active'));
+      if(current) current.a.classList.add('active');
+      ticking=false;
+    });ticking=true;}
+  });
+})();
 </script>
 </body>
 </html>
