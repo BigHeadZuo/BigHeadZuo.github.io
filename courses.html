@@ -23,371 +23,132 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      background: var(--bg); color: var(--text); line-height: 1.7;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     a { text-decoration: none; color: inherit; }
 
-    /* ===== Page Header ===== */
     .page-header {
-      text-align: center;
-      padding: 100px 24px 48px;
-      max-width: 680px;
-      margin: 0 auto;
+      text-align: center; padding: 100px 24px 48px;
+      max-width: 680px; margin: 0 auto;
     }
     .page-header h1 {
-      font-size: 48px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.08;
-      margin-bottom: 12px;
+      font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.08; margin-bottom: 12px;
       background: linear-gradient(180deg, #fff 40%, #999);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .page-header .subtitle {
-      font-size: 19px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      letter-spacing: -0.01em;
-      margin-bottom: 8px;
-    }
-    .page-header .stats {
-      font-size: 14px;
-      color: var(--text-dim);
-      margin-bottom: 24px;
-    }
-    .page-header nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .page-header nav a {
-      color: var(--accent);
-      font-size: 15px;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
+    .page-header .subtitle { font-size: 19px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+    .page-header .stats { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; }
+    .page-header nav { display: flex; justify-content: center; gap: 20px; }
+    .page-header nav a { color: var(--accent); font-size: 15px; transition: color 0.2s; }
     .page-header nav a:hover { color: var(--accent-hover); }
 
-    /* ===== Divider ===== */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      max-width: 980px;
-      margin: 0 auto;
-    }
+    .divider { height: 1px; background: var(--border); max-width: 980px; margin: 0 auto; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
 
-    /* ===== Main Content ===== */
-    .wrap {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 24px 80px;
+    /* ===== Phase Cards Grid ===== */
+    .phase-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px; margin: 48px 0;
     }
+    .phase-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; cursor: pointer;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .phase-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+    .phase-card.active { border-color: var(--accent); background: rgba(41,151,255,0.04); }
+    .phase-card .phase-num {
+      font-size: 11px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+    .phase-card .phase-name {
+      font-size: 20px; font-weight: 700; color: #fff;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .phase-card .phase-time {
+      font-size: 13px; color: var(--text-dim); margin-bottom: 10px;
+    }
+    .phase-card .phase-desc {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+    }
+    .phase-card .phase-modules {
+      font-size: 12px; color: var(--text-dim); margin-top: 12px;
+      padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .phase-card .arrow {
+      position: absolute; top: 28px; right: 24px;
+      font-size: 18px; color: var(--text-dim); transition: all 0.3s;
+    }
+    .phase-card.active .arrow { color: var(--accent); transform: rotate(90deg); }
 
-    /* ===== Table of Contents ===== */
-    .toc {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      margin: 48px 0 64px;
+    /* ===== Phase Detail (hidden by default) ===== */
+    .phase-detail {
+      max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+      margin-bottom: 0;
     }
-    .toc h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
+    .phase-detail.open { max-height: none; margin-bottom: 48px; }
+    .phase-detail-inner { padding: 32px 0 0; }
+    .phase-detail-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px;
     }
-    .toc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 8px 32px;
+    .phase-detail-title {
+      font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.03em;
     }
-    .toc .toc-stage {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 16px;
-      margin-bottom: 4px;
+    .phase-close {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text-dim); cursor: pointer;
+      padding: 6px 14px; font-size: 13px; transition: all 0.2s;
     }
-    .toc a {
-      display: block;
-      color: var(--accent);
-      font-size: 14px;
-      padding: 3px 0;
-      transition: color 0.2s;
-    }
-    .toc a:hover { color: var(--accent-hover); }
-
-    /* ===== Phase ===== */
-    .phase {
-      margin-bottom: 64px;
-    }
-    .phase-title {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.03em;
-      padding-top: 48px;
-      margin-bottom: 6px;
-    }
-    .phase-meta {
-      font-size: 15px;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
+    .phase-close:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
 
     /* ===== Module Card ===== */
     .module {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; margin-bottom: 16px;
       transition: border-color 0.3s;
     }
     .module:hover { border-color: rgba(255,255,255,0.15); }
-    .mod-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-      gap: 16px;
-    }
-    .mod-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.01em;
-    }
-    .mod-time {
-      font-size: 12px;
-      color: var(--text-dim);
-      background: rgba(255,255,255,0.04);
-      padding: 4px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    /* ===== Goal ===== */
-    .mod-goal {
-      font-size: 14px;
-      color: var(--green);
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      background: rgba(48,209,88,0.04);
-      border-radius: 8px;
-      border-left: 3px solid rgba(48,209,88,0.4);
-    }
-
-    /* ===== Section ===== */
+    .mod-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 16px; }
+    .mod-title { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+    .mod-time { font-size: 12px; color: var(--text-dim); background: rgba(255,255,255,0.04); padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+    .mod-goal { font-size: 14px; color: var(--green); margin-bottom: 16px; padding: 10px 14px; background: rgba(48,209,88,0.04); border-radius: 8px; border-left: 3px solid rgba(48,209,88,0.4); }
     .mod-section { margin-bottom: 16px; }
-    .mod-section-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    /* ===== Knowledge List ===== */
-    .mod-list {
-      list-style: none;
-      padding: 0;
-    }
-    .mod-list li {
-      font-size: 14px;
-      color: var(--text-secondary);
-      padding: 4px 0 4px 20px;
-      position: relative;
-      line-height: 1.6;
-    }
-    .mod-list li::before {
-      content: '·';
-      position: absolute;
-      left: 6px;
-      color: var(--text-dim);
-      font-weight: 700;
-    }
-    .mod-list a {
-      color: var(--accent);
-      transition: color 0.2s;
-    }
+    .mod-section-title { font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .mod-list { list-style: none; padding: 0; }
+    .mod-list li { font-size: 14px; color: var(--text-secondary); padding: 4px 0 4px 20px; position: relative; line-height: 1.6; }
+    .mod-list li::before { content: '·'; position: absolute; left: 6px; color: var(--text-dim); font-weight: 700; }
+    .mod-list a { color: var(--accent); transition: color 0.2s; }
     .mod-list a:hover { color: var(--accent-hover); }
-
-    /* ===== Practice ===== */
-    .mod-practice {
-      background: rgba(255,159,10,0.03);
-      border: 1px solid rgba(255,159,10,0.1);
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-top: 8px;
-    }
-    .mod-practice-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--amber);
-      margin-bottom: 6px;
-    }
-    .mod-practice p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-    .mod-practice a {
-      color: var(--accent);
-      transition: color 0.2s;
-    }
+    .mod-practice { background: rgba(255,159,10,0.03); border: 1px solid rgba(255,159,10,0.1); border-radius: 10px; padding: 14px 18px; margin-top: 8px; }
+    .mod-practice-title { font-size: 12px; font-weight: 600; color: var(--amber); margin-bottom: 6px; }
+    .mod-practice p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+    .mod-practice a { color: var(--accent); transition: color 0.2s; }
     .mod-practice a:hover { color: var(--accent-hover); }
-    .mod-practice code {
-      font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
-      font-size: 13px;
-      background: rgba(255,255,255,0.06);
-      padding: 1px 6px;
-      border-radius: 4px;
-    }
+    .mod-practice code { font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; font-size: 13px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; }
 
-    /* ===== Side Index ===== */
-    .side-index {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 30;
-      background: #0a0a0a;
-      border: 1px solid var(--border);
-      border-left: none;
-      border-radius: 0 12px 12px 0;
-      padding: 14px 10px;
-      max-height: 80vh;
-      overflow-y: auto;
-      transition: transform 0.3s;
-    }
-    .side-index::-webkit-scrollbar { width: 2px; }
-    .side-index::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-    .side-index .si-title {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-align: center;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .side-index a {
-      display: block;
-      font-size: 12px;
-      color: var(--text-dim);
-      padding: 3px 12px 3px 10px;
-      border-radius: 4px;
-      transition: all 0.2s;
-      white-space: nowrap;
-      border-left: 2px solid transparent;
-      margin-bottom: 1px;
-    }
-    .side-index a:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
-    .side-index a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(41,151,255,0.05); }
-    .side-index .si-stage {
-      font-size: 9px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.2);
-      margin-top: 8px;
-      margin-bottom: 2px;
-      padding-left: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .si-toggle {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 31;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: none;
-      border-radius: 0 8px 8px 0;
-      color: var(--text-dim);
-      cursor: pointer;
-      padding: 8px 4px;
-      font-size: 12px;
-      display: none;
-      writing-mode: vertical-lr;
-      transition: color 0.2s;
-    }
-    .si-toggle:hover { color: var(--text-secondary); }
-    .side-index.collapsed { transform: translateY(-50%) translateX(-100%); }
-    .side-index.collapsed + .si-toggle { display: flex; }
+    footer { max-width: 980px; margin: 0 auto; padding: 32px 24px 48px; border-top: 1px solid var(--border); text-align: center; }
+    .footer-copy { font-size: 12px; color: var(--text-dim); }
 
-    /* ===== Back to Top ===== */
-    .back-top {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 20;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      font-size: 16px;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
+    .back-top { position: fixed; bottom: 32px; right: 32px; z-index: 20; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); font-size: 16px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: all 0.3s; }
     .back-top:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
     .back-top.show { display: flex; }
 
-    /* ===== Footer ===== */
-    footer {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 32px 24px 48px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-    .footer-copy {
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 1200px) {
-      .side-index { display: none; }
-      .si-toggle { display: none; }
-    }
     @media (max-width: 768px) {
       .page-header { padding: 64px 20px 32px; }
       .page-header h1 { font-size: 32px; }
-      .page-header .subtitle { font-size: 17px; }
-      .page-header nav { gap: 16px; }
       .wrap { padding: 0 20px 60px; }
-      .toc { padding: 24px; }
-      .toc-grid { grid-template-columns: 1fr; }
-      .phase-title { font-size: 24px; padding-top: 32px; }
+      .phase-grid { grid-template-columns: 1fr; }
+      .phase-detail-title { font-size: 22px; }
       .module { padding: 20px; }
       .mod-head { flex-direction: column; gap: 6px; }
-    }
-    @media (max-width: 480px) {
-      .page-header h1 { font-size: 28px; }
-      .page-header nav { flex-wrap: wrap; gap: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Page Header -->
   <section class="page-header">
     <h1>网络安全全栈课程体系</h1>
     <p class="subtitle">从零基础到超高级全栈安全工程师 · 完整学习路径</p>
@@ -404,1256 +165,450 @@
 
   <div class="wrap">
 
-  <!-- Table of Contents -->
-  <div class="toc">
-    <h3>课程目录</h3>
-    <div class="toc-grid">
-      <div>
-        <div class="toc-stage">阶段一 · 基础筑基</div>
-        <a href="#m1-1">1.1 计算机组成与操作系统</a>
-        <a href="#m1-2">1.2 计算机网络核心</a>
-        <a href="#m1-3">1.3 Linux 系统管理</a>
-        <a href="#m1-4">1.4 Python 编程基础</a>
-        <a href="#m1-5">1.5 数据库与 SQL</a>
-        <a href="#m1-6">1.6 Shell 脚本与自动化</a>
-        <div class="toc-stage">阶段二 · 安全入门</div>
-        <a href="#m2-1">2.1 Web 安全原理</a>
-        <a href="#m2-2">2.2 渗透测试工具链</a>
-        <a href="#m2-3">2.3 密码学与认证</a>
-        <a href="#m2-4">2.4 网络协议安全</a>
-        <a href="#m2-5">2.5 操作系统安全</a>
-        <a href="#m2-6">2.6 安全法规与合规</a>
+    <!-- ===== Phase Cards ===== -->
+    <div class="phase-grid">
+      <div class="phase-card" onclick="togglePhase(1)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段一</div>
+        <div class="phase-name">基础筑基</div>
+        <div class="phase-time">0-6 个月</div>
+        <div class="phase-desc">打好计算机科学基础，掌握核心编程与系统管理能力</div>
+        <div class="phase-modules">6 门课程 · 225 学时</div>
       </div>
-      <div>
-        <div class="toc-stage">阶段三 · 渗透进阶</div>
-        <a href="#m3-1">3.1 内网渗透与域攻防</a>
-        <a href="#m3-2">3.2 代码审计</a>
-        <a href="#m3-3">3.3 红队武器化</a>
-        <a href="#m3-4">3.4 移动安全</a>
-        <a href="#m3-5">3.5 漏洞研究与赏金</a>
-        <div class="toc-stage">阶段四 · 安全防御</div>
-        <a href="#m4-1">4.1 SIEM 与安全运营</a>
-        <a href="#m4-2">4.2 入侵检测与防御</a>
-        <a href="#m4-3">4.3 应急响应与取证</a>
-        <a href="#m4-4">4.4 威胁情报与狩猎</a>
-        <a href="#m4-5">4.5 安全框架与合规</a>
-        <a href="#m4-6">4.6 DevSecOps</a>
+      <div class="phase-card" onclick="togglePhase(2)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段二</div>
+        <div class="phase-name">安全入门</div>
+        <div class="phase-time">6-12 个月</div>
+        <div class="phase-desc">建立安全思维，掌握 Web 安全与渗透测试基础</div>
+        <div class="phase-modules">6 门课程 · 185 学时</div>
       </div>
-      <div>
-        <div class="toc-stage">阶段五 · 全栈开发</div>
-        <a href="#m5-1">5.1 前端开发</a>
-        <a href="#m5-2">5.2 后端开发与 API</a>
-        <a href="#m5-3">5.3 安全工具开发</a>
-        <a href="#m5-4">5.4 云安全与架构</a>
-        <a href="#m5-5">5.5 容器与 DevOps</a>
-        <div class="toc-stage">阶段六 · 高级专项</div>
-        <a href="#m6-1">6.1 逆向工程</a>
-        <a href="#m6-2">6.2 二进制漏洞利用</a>
-        <a href="#m6-3">6.3 恶意软件分析</a>
-        <a href="#m6-4">6.4 AI 安全</a>
-        <a href="#m6-5">6.5 IoT 与工控安全</a>
-        <div class="toc-stage">阶段七 · 架构领袖</div>
-        <a href="#m7-1">7.1 安全架构设计</a>
-        <a href="#m7-2">7.2 安全管理与领导力</a>
+      <div class="phase-card" onclick="togglePhase(3)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段三</div>
+        <div class="phase-name">渗透进阶</div>
+        <div class="phase-time">1-2 年</div>
+        <div class="phase-desc">深入攻击技术，掌握内网渗透、代码审计与红队作战能力</div>
+        <div class="phase-modules">5 门课程 · 185 学时</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ==================== 阶段一：基础筑基 ==================== -->
-  <div class="phase" id="phase1">
-    <h2 class="phase-title">阶段一：基础筑基（0-6 个月）</h2>
-    <p class="phase-meta">打好计算机科学基础，掌握核心编程与系统管理能力</p>
-
-    <div class="module" id="m1-1">
-      <div class="mod-head"><div class="mod-title">1.1 计算机组成与操作系统</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 理解计算机硬件架构、操作系统原理，为后续安全研究打下底层基础</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>CPU 架构（x86/ARM）、寄存器、指令集、内存层次结构</li>
-          <li>进程与线程管理、进程间通信（IPC）、调度算法</li>
-          <li>虚拟内存、分页机制、内存保护（DEP/ASLR 原理）</li>
-          <li>文件系统（ext4/NTFS）、磁盘 I/O、RAID</li>
-          <li>系统调用、中断机制、内核态与用户态</li>
-          <li>启动流程（BIOS/UEFI → Bootloader → Kernel）</li>
-        </ul>
+      <div class="phase-card" onclick="togglePhase(4)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段四</div>
+        <div class="phase-name">安全防御</div>
+        <div class="phase-time">2-3 年</div>
+        <div class="phase-desc">从攻击转向防御，掌握企业级安全运营与应急响应</div>
+        <div class="phase-modules">6 门课程 · 180 学时</div>
       </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.bilibili.com/video/BV1YE411D7nH" target="_blank">王道考研 - 操作系统（B站）</a></li>
-          <li><a href="https://www.coursera.org/learn/os-pku" target="_blank">北大操作系统 - Coursera</a></li>
-          <li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/" target="_blank">OSTEP 操作系统导论（免费教材）</a></li>
-          <li><a href="https://www.nand2tetris.org/" target="_blank">Nand2Tetris - 从零构建计算机</a></li>
-        </ul>
+      <div class="phase-card" onclick="togglePhase(5)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段五</div>
+        <div class="phase-name">全栈开发</div>
+        <div class="phase-time">2-3 年</div>
+        <div class="phase-desc">掌握前后端开发与云原生技术，能独立开发安全产品</div>
+        <div class="phase-modules">5 门课程 · 205 学时</div>
       </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在 VirtualBox 中安装 Ubuntu/Kali，熟悉双系统环境<br>② 使用 <code>top/htop/ps</code> 观察进程，用 <code>strace</code> 跟踪系统调用<br>③ 完成 <a href="https://www.nand2tetris.org/" target="_blank">Nand2Tetris</a> 前 6 章项目</p>
+      <div class="phase-card" onclick="togglePhase(6)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段六</div>
+        <div class="phase-name">高级专项</div>
+        <div class="phase-time">3-5 年</div>
+        <div class="phase-desc">深入底层安全与前沿领域，成为细分方向专家</div>
+        <div class="phase-modules">5 门课程 · 200 学时</div>
+      </div>
+      <div class="phase-card" onclick="togglePhase(7)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段七</div>
+        <div class="phase-name">架构领袖</div>
+        <div class="phase-time">5 年+</div>
+        <div class="phase-desc">站在全局视角设计安全体系，成为安全架构师与技术领袖</div>
+        <div class="phase-modules">2 门课程 · 70 学时</div>
       </div>
     </div>
 
-    <div class="module" id="m1-2">
-      <div class="mod-head"><div class="mod-title">1.2 计算机网络核心</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 精通 TCP/IP 协议栈，能用 Wireshark 分析任意网络流量</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>OSI 七层模型 vs TCP/IP 四层模型</li>
-          <li>以太网帧、ARP 协议、MAC 地址表</li>
-          <li>IP 协议、子网划分（CIDR）、路由原理（RIP/OSPF/BGP）</li>
-          <li>TCP 三次握手/四次挥手、滑动窗口、拥塞控制</li>
-          <li>UDP 协议、DNS 解析流程（递归/迭代）</li>
-          <li>HTTP/HTTPS 协议、TLS 握手、证书链</li>
-          <li>DHCP、NAT、VPN 原理（IPSec/WireGuard）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.bilibili.com/video/BV1c4411d7jb" target="_blank">韩立刚 - 计算机网络（B站）</a></li>
-          <li><a href="https://www.coursera.org/professional-certificates/google-it-support" target="_blank">Google IT Support - Coursera</a></li>
-          <li><a href="https://beej.us/guide/bgnet/" target="_blank">Beej's Guide to Network Programming</a></li>
-          <li>书籍：《TCP/IP 详解 卷1》《图解 HTTP》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 <a href="https://www.wireshark.org/" target="_blank">Wireshark</a> 抓包分析 TCP 握手、DNS 查询、HTTPS 流量<br>② 用 Python socket 编写简易 HTTP 服务器和客户端<br>③ 搭建家庭实验网络：配置 VLAN、静态路由、端口转发</p>
+    <!-- ===== Phase 1 Detail ===== -->
+    <div class="phase-detail" id="phase1">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段一：基础筑基</div>
+          <button class="phase-close" onclick="togglePhase(1)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m1-1">
+          <div class="mod-head"><div class="mod-title">1.1 计算机组成与操作系统</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 理解计算机硬件架构、操作系统原理，为后续安全研究打下底层基础</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>CPU 架构（x86/ARM）、寄存器、指令集、内存层次结构</li><li>进程与线程管理、进程间通信（IPC）、调度算法</li><li>虚拟内存、分页机制、内存保护（DEP/ASLR 原理）</li><li>文件系统（ext4/NTFS）、磁盘 I/O、RAID</li><li>系统调用、中断机制、内核态与用户态</li><li>启动流程（BIOS/UEFI → Bootloader → Kernel）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.bilibili.com/video/BV1YE411D7nH" target="_blank">王道考研 - 操作系统（B站）</a></li><li><a href="https://www.coursera.org/learn/os-pku" target="_blank">北大操作系统 - Coursera</a></li><li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/" target="_blank">OSTEP 操作系统导论（免费教材）</a></li><li><a href="https://www.nand2tetris.org/" target="_blank">Nand2Tetris - 从零构建计算机</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 在 VirtualBox 中安装 Ubuntu/Kali，熟悉双系统环境<br>② 使用 <code>top/htop/ps</code> 观察进程，用 <code>strace</code> 跟踪系统调用<br>③ 完成 <a href="https://www.nand2tetris.org/" target="_blank">Nand2Tetris</a> 前 6 章项目</p></div>
+        </div>
+
+        <div class="module" id="m1-2">
+          <div class="mod-head"><div class="mod-title">1.2 计算机网络核心</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 精通 TCP/IP 协议栈，能用 Wireshark 分析任意网络流量</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>OSI 七层模型 vs TCP/IP 四层模型</li><li>以太网帧、ARP 协议、MAC 地址表</li><li>IP 协议、子网划分（CIDR）、路由原理（RIP/OSPF/BGP）</li><li>TCP 三次握手/四次挥手、滑动窗口、拥塞控制</li><li>UDP 协议、DNS 解析流程（递归/迭代）</li><li>HTTP/HTTPS 协议、TLS 握手、证书链</li><li>DHCP、NAT、VPN 原理（IPSec/WireGuard）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.bilibili.com/video/BV1c4411d7jb" target="_blank">韩立刚 - 计算机网络（B站）</a></li><li><a href="https://www.coursera.org/professional-certificates/google-it-support" target="_blank">Google IT Support - Coursera</a></li><li><a href="https://beej.us/guide/bgnet/" target="_blank">Beej's Guide to Network Programming</a></li><li>书籍：《TCP/IP 详解 卷1》《图解 HTTP》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 <a href="https://www.wireshark.org/" target="_blank">Wireshark</a> 抓包分析 TCP 握手、DNS 查询、HTTPS 流量<br>② 用 Python socket 编写简易 HTTP 服务器和客户端<br>③ 搭建家庭实验网络：配置 VLAN、静态路由、端口转发</p></div>
+        </div>
+
+        <div class="module" id="m1-3">
+          <div class="mod-head"><div class="mod-title">1.3 Linux 系统管理</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 熟练使用 Linux 命令行，能独立管理服务器和排查问题</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>文件系统层级（FHS）、权限管理（chmod/chown/ACL/SUID/SGID）</li><li>用户与组管理、PAM 认证、sudo 配置</li><li>包管理（apt/yum/pacman）、源码编译安装</li><li>服务管理（systemd/systemctl）、日志系统（journalctl/rsyslog）</li><li>网络配置（ip/ss/iptables/nftables/firewalld）</li><li>SSH 配置与密钥管理、远程管理</li><li>磁盘管理（fdisk/LVM/RAID）、定时任务（cron）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://linuxjourney.com/" target="_blank">Linux Journey（交互式学习）</a></li><li><a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit（闯关学 Linux）</a></li><li><a href="https://www.bilibili.com/video/BV1Sv411r7vd" target="_blank">兄弟连 Linux 教程（B站）</a></li><li><a href="https://www.linuxfromscratch.org/" target="_blank">Linux From Scratch（从零构建 Linux）</a></li><li>书籍：《鸟哥的 Linux 私房菜》《Linux 命令行与 Shell 脚本编程大全》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit</a> 全部 34 关<br>② 在 VPS 上搭建 LAMP/LEMP 环境，部署一个 WordPress<br>③ 配置 iptables 防火墙规则，只开放 22/80/443 端口<br>④ 编写 cron 定时备份脚本</p></div>
+        </div>
+
+        <div class="module" id="m1-4">
+          <div class="mod-head"><div class="mod-title">1.4 Python 编程基础</div><div class="mod-time">⏱ 60 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Python 核心语法与常用库，能编写安全工具脚本</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>数据类型、控制流、函数、面向对象编程</li><li>文件操作、异常处理、正则表达式</li><li>标准库：os/sys/subprocess/json/re/hashlib</li><li>网络编程：socket/requests/urllib</li><li>多线程/多进程/异步编程（asyncio）</li><li>第三方库：scapy（网络包构造）、paramiko（SSH）、beautifulsoup4（爬虫）</li><li>虚拟环境（venv/conda）、pip 包管理</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://docs.python.org/zh-cn/3/tutorial/" target="_blank">Python 官方教程（中文）</a></li><li><a href="https://automatetheboringstuff.com/" target="_blank">Automate the Boring Stuff with Python（免费）</a></li><li><a href="https://www.bilibili.com/video/BV1qW4y1a7fU" target="_blank">黑马程序员 Python 教程（B站）</a></li><li><a href="https://www.hackthebox.com/blog/learn-python-for-hacking" target="_blank">HTB - Python for Hackers</a></li><li>书籍：《Python 编程：从入门到实践》《Black Hat Python》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 编写端口扫描器（TCP Connect/SYN 扫描）<br>② 编写子域名枚举工具<br>③ 编写简易密码字典生成器<br>④ 用 requests 编写自动化登录脚本<br>⑤ 完成 <a href="https://www.hackerrank.com/domains/python" target="_blank">HackerRank Python</a> 练习</p></div>
+        </div>
+
+        <div class="module" id="m1-5">
+          <div class="mod-head"><div class="mod-title">1.5 数据库与 SQL</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握关系型数据库原理与 SQL 语法，理解 SQL 注入的底层逻辑</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>关系模型、ER 图、范式（1NF/2NF/3NF）</li><li>SQL 语法：SELECT/INSERT/UPDATE/DELETE/JOIN/子查询</li><li>索引原理（B+树）、事务（ACID）、锁机制</li><li>MySQL/PostgreSQL 安装与管理</li><li>NoSQL 基础：Redis、MongoDB</li><li>数据库安全：权限管理、审计日志、加密存储</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://sqlzoo.net/" target="_blank">SQLZoo（交互式 SQL 练习）</a></li><li><a href="https://www.w3schools.com/sql/" target="_blank">W3Schools SQL 教程</a></li><li><a href="https://mystery.knightlab.com/" target="_blank">SQL Murder Mystery（游戏学 SQL）</a></li><li><a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger SQL 注入实验室</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://sqlzoo.net/" target="_blank">SQLZoo</a> 全部练习<br>② 搭建 MySQL 数据库，设计一个用户管理系统<br>③ 完成 <a href="https://mystery.knightlab.com/" target="_blank">SQL Murder Mystery</a><br>④ 在 <a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger</a> 完成 SQL 注入基础实验</p></div>
+        </div>
+
+        <div class="module" id="m1-6">
+          <div class="mod-head"><div class="mod-title">1.6 Shell 脚本与自动化</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 编写 Bash 脚本自动化日常任务，提升运维与渗透效率</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Bash 语法：变量、条件判断、循环、函数</li><li>文本处理三剑客：grep/sed/awk</li><li>管道与重定向、xargs、进程替换</li><li>脚本调试（set -x/shellcheck）</li><li>常用工具：curl/wget/jq/nc/socat</li><li>PowerShell 基础（Windows 环境）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.shellscript.sh/" target="_blank">Shell Scripting Tutorial</a></li><li><a href="https://www.learnshell.org/" target="_blank">LearnShell.org（交互式）</a></li><li><a href="https://explainshell.com/" target="_blank">ExplainShell（命令解析）</a></li><li>书籍：《Linux 命令行与 Shell 脚本编程大全》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 编写自动化信息收集脚本（whois/dig/nmap 整合）<br>② 编写日志分析脚本（统计 IP 访问频率、检测异常）<br>③ 编写批量漏洞检测脚本框架<br>④ 完成 <a href="https://cmdchallenge.com/" target="_blank">CMD Challenge</a> 练习</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m1-3">
-      <div class="mod-head"><div class="mod-title">1.3 Linux 系统管理</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 熟练使用 Linux 命令行，能独立管理服务器和排查问题</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>文件系统层级（FHS）、权限管理（chmod/chown/ACL/SUID/SGID）</li>
-          <li>用户与组管理、PAM 认证、sudo 配置</li>
-          <li>包管理（apt/yum/pacman）、源码编译安装</li>
-          <li>服务管理（systemd/systemctl）、日志系统（journalctl/rsyslog）</li>
-          <li>网络配置（ip/ss/iptables/nftables/firewalld）</li>
-          <li>SSH 配置与密钥管理、远程管理</li>
-          <li>磁盘管理（fdisk/LVM/RAID）、定时任务（cron）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://linuxjourney.com/" target="_blank">Linux Journey（交互式学习）</a></li>
-          <li><a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit（闯关学 Linux）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1Sv411r7vd" target="_blank">兄弟连 Linux 教程（B站）</a></li>
-          <li><a href="https://www.linuxfromscratch.org/" target="_blank">Linux From Scratch（从零构建 Linux）</a></li>
-          <li>书籍：《鸟哥的 Linux 私房菜》《Linux 命令行与 Shell 脚本编程大全》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit</a> 全部 34 关<br>② 在 VPS 上搭建 LAMP/LEMP 环境，部署一个 WordPress<br>③ 配置 iptables 防火墙规则，只开放 22/80/443 端口<br>④ 编写 cron 定时备份脚本</p>
+    <!-- ===== Phase 2 Detail ===== -->
+    <div class="phase-detail" id="phase2">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段二：安全入门</div>
+          <button class="phase-close" onclick="togglePhase(2)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m2-1">
+          <div class="mod-head"><div class="mod-title">2.1 Web 安全原理</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 深入理解 OWASP Top 10 漏洞原理，能独立发现和利用 Web 漏洞</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>SQL 注入（联合注入/盲注/报错注入/堆叠注入/二次注入）</li><li>XSS（反射型/存储型/DOM型）、CSP 绕过</li><li>CSRF、SSRF、XXE 注入</li><li>文件上传漏洞（绕过黑白名单/Content-Type/图片马）</li><li>文件包含（LFI/RFI）、目录遍历</li><li>命令注入、反序列化漏洞</li><li>逻辑漏洞（越权/支付漏洞/验证码绕过）</li><li>OWASP Top 10 2021 全面解读</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://portswigger.net/web-security" target="_blank">PortSwigger Web Security Academy（必做）</a></li><li><a href="https://www.bilibili.com/video/BV1LQ4y1a7iS" target="_blank">小迪安全 Web 渗透（B站）</a></li><li><a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank">OWASP Testing Guide</a></li><li><a href="https://book.hacktricks.xyz/" target="_blank">HackTricks（渗透百科全书）</a></li><li>书籍：《Web 安全攻防》《白帽子讲 Web 安全》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://portswigger.net/web-security" target="_blank">PortSwigger Academy</a> 全部 SQL 注入和 XSS 实验<br>② 搭建 <a href="https://github.com/digininja/DVWA" target="_blank">DVWA</a> 靶场，逐个攻破所有漏洞<br>③ 搭建 <a href="https://github.com/WebGoat/WebGoat" target="_blank">WebGoat</a> 完成全部课程<br>④ 在 <a href="https://buuoj.cn/" target="_blank">BUUCTF</a> 刷 Web 题</p></div>
+        </div>
+
+        <div class="module" id="m2-2">
+          <div class="mod-head"><div class="mod-title">2.2 渗透测试工具链</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 熟练使用主流渗透工具，建立完整的渗透测试方法论</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>信息收集：Nmap/Masscan/Shodan/Fofa/子域名枚举</li><li>漏洞扫描：Nessus/OpenVAS/Nuclei</li><li>Web 代理：Burp Suite（Intruder/Repeater/Scanner/Extender）</li><li>漏洞利用：Metasploit Framework（模块/Payload/Meterpreter）</li><li>密码攻击：Hydra/John the Ripper/Hashcat</li><li>目录扫描：dirsearch/gobuster/ffuf</li><li>渗透测试方法论：PTES/OSSTMM</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/path/outline/beginner" target="_blank">TryHackMe - Beginner Path</a></li><li><a href="https://www.offensive-security.com/metasploit-unleashed/" target="_blank">Metasploit Unleashed（免费）</a></li><li><a href="https://portswigger.net/burp/documentation" target="_blank">Burp Suite 官方文档</a></li><li><a href="https://nmap.org/book/" target="_blank">Nmap Network Scanning（官方书籍）</a></li><li>书籍：《Metasploit 渗透测试指南》《Kali Linux 渗透测试的艺术》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://tryhackme.com/" target="_blank">TryHackMe</a> Beginner Path 全部房间<br>② 用 Nmap 扫描自己的实验网络，分析开放端口和服务<br>③ 用 Burp Suite 拦截并修改 HTTP 请求，完成靶场挑战<br>④ 用 Metasploit 攻破 <a href="https://www.vulnhub.com/" target="_blank">VulnHub</a> 靶机</p></div>
+        </div>
+
+        <div class="module" id="m2-3">
+          <div class="mod-head"><div class="mod-title">2.3 密码学与认证</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 理解加密算法原理，能分析和攻击弱加密实现</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>对称加密（AES/DES/ChaCha20）、分组模式（ECB/CBC/GCM）</li><li>非对称加密（RSA/ECC/Diffie-Hellman）</li><li>哈希函数（MD5/SHA/bcrypt/scrypt/Argon2）</li><li>数字签名、数字证书、PKI 体系</li><li>认证协议：OAuth 2.0/JWT/SAML/Kerberos</li><li>常见密码攻击：彩虹表/碰撞攻击/Padding Oracle</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://cryptohack.org/" target="_blank">CryptoHack（交互式密码学挑战）</a></li><li><a href="https://cryptopals.com/" target="_blank">Cryptopals（密码学编程挑战）</a></li><li><a href="https://www.coursera.org/learn/crypto" target="_blank">Stanford Cryptography I - Coursera</a></li><li>书籍：《深入浅出密码学》《图解密码技术》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://cryptohack.org/" target="_blank">CryptoHack</a> Introduction 全部挑战<br>② 完成 <a href="https://cryptopals.com/" target="_blank">Cryptopals</a> Set 1-2<br>③ 用 Python 实现 AES-CBC 加解密<br>④ 用 Hashcat 破解常见哈希</p></div>
+        </div>
+
+        <div class="module" id="m2-4">
+          <div class="mod-head"><div class="mod-title">2.4 网络协议安全</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握网络层攻击手法与防御，能进行中间人攻击与流量分析</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>ARP 欺骗与中间人攻击（MITM）</li><li>DNS 劫持/投毒/隧道</li><li>Wi-Fi 安全（WPA2 破解/Evil Twin/Deauth）</li><li>SSL/TLS 攻击（SSL Strip/BEAST/POODLE/Heartbleed）</li><li>DDoS 攻击原理与防御（SYN Flood/UDP Flood/反射放大）</li><li>网络嗅探与流量分析</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/room/dvwa" target="_blank">TryHackMe 网络安全房间</a></li><li><a href="https://www.bilibili.com/video/BV1WY4y1D7NU" target="_blank">网络安全攻防实战（B站）</a></li><li><a href="https://www.aircrack-ng.org/doku.php?id=tutorial" target="_blank">Aircrack-ng 官方教程</a></li><li>书籍：《网络安全攻防技术与实战》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 在实验环境中用 <a href="https://www.ettercap-project.org/" target="_blank">Ettercap</a> 进行 ARP 欺骗<br>② 用 Wireshark 分析 HTTPS 握手过程<br>③ 搭建 DNS 服务器并模拟 DNS 投毒<br>④ 用 <a href="https://github.com/bettercap/bettercap" target="_blank">Bettercap</a> 进行网络攻击实验</p></div>
+        </div>
+
+        <div class="module" id="m2-5">
+          <div class="mod-head"><div class="mod-title">2.5 操作系统安全</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Linux/Windows 系统加固与提权技术</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Linux 提权（SUID/内核漏洞/Cron/PATH 劫持/Capabilities）</li><li>Windows 提权（服务漏洞/令牌模拟/UAC 绕过/Potato 系列）</li><li>系统加固：最小权限原则、补丁管理、审计策略</li><li>SELinux/AppArmor 强制访问控制</li><li>Windows 安全：组策略/BitLocker/Windows Defender</li><li>日志分析与入侵痕迹检测</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/room/linprivesc" target="_blank">TryHackMe - Linux PrivEsc</a></li><li><a href="https://tryhackme.com/room/windows10privesc" target="_blank">TryHackMe - Windows PrivEsc</a></li><li><a href="https://gtfobins.github.io/" target="_blank">GTFOBins（Linux 提权速查）</a></li><li><a href="https://lolbas-project.github.io/" target="_blank">LOLBAS（Windows 提权速查）</a></li><li>书籍：《权限提升技术》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 TryHackMe Linux/Windows 提权房间<br>② 在 <a href="https://www.vulnhub.com/" target="_blank">VulnHub</a> 下载靶机练习提权<br>③ 使用 <a href="https://github.com/carlospolop/PEASS-ng" target="_blank">LinPEAS/WinPEAS</a> 进行自动化枚举<br>④ 按 CIS Benchmark 加固一台 Linux 服务器</p></div>
+        </div>
+
+        <div class="module" id="m2-6">
+          <div class="mod-head"><div class="mod-title">2.6 安全法规与合规</div><div class="mod-time">⏱ 15 学时</div></div>
+          <div class="mod-goal">🎯 了解网络安全法律法规，建立合法合规的安全意识</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>《网络安全法》《数据安全法》《个人信息保护法》</li><li>等级保护 2.0（等保测评流程）</li><li>GDPR（欧盟通用数据保护条例）</li><li>渗透测试授权与法律边界</li><li>漏洞披露规范（负责任披露 vs 全面披露）</li><li>行业标准：PCI DSS/HIPAA/SOC 2</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.pcsec.gov.cn/" target="_blank">国家网络安全等级保护网</a></li><li><a href="https://gdpr.eu/" target="_blank">GDPR 官方指南</a></li><li><a href="https://www.freebuf.com/" target="_blank">FreeBuf（安全资讯与法规解读）</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 阅读《网络安全法》全文并整理要点<br>② 模拟编写一份渗透测试授权书<br>③ 了解 SRC（安全应急响应中心）的漏洞提交流程</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m1-4">
-      <div class="mod-head"><div class="mod-title">1.4 Python 编程基础</div><div class="mod-time">⏱ 60 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Python 核心语法与常用库，能编写安全工具脚本</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>数据类型、控制流、函数、面向对象编程</li>
-          <li>文件操作、异常处理、正则表达式</li>
-          <li>标准库：os/sys/subprocess/json/re/hashlib</li>
-          <li>网络编程：socket/requests/urllib</li>
-          <li>多线程/多进程/异步编程（asyncio）</li>
-          <li>第三方库：scapy（网络包构造）、paramiko（SSH）、beautifulsoup4（爬虫）</li>
-          <li>虚拟环境（venv/conda）、pip 包管理</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.python.org/zh-cn/3/tutorial/" target="_blank">Python 官方教程（中文）</a></li>
-          <li><a href="https://automatetheboringstuff.com/" target="_blank">Automate the Boring Stuff with Python（免费）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1qW4y1a7fU" target="_blank">黑马程序员 Python 教程（B站）</a></li>
-          <li><a href="https://www.hackthebox.com/blog/learn-python-for-hacking" target="_blank">HTB - Python for Hackers</a></li>
-          <li>书籍：《Python 编程：从入门到实践》《Black Hat Python》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 编写端口扫描器（TCP Connect/SYN 扫描）<br>② 编写子域名枚举工具<br>③ 编写简易密码字典生成器<br>④ 用 requests 编写自动化登录脚本<br>⑤ 完成 <a href="https://www.hackerrank.com/domains/python" target="_blank">HackerRank Python</a> 练习</p>
+    <!-- ===== Phase 3 Detail ===== -->
+    <div class="phase-detail" id="phase3">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段三：渗透进阶</div>
+          <button class="phase-close" onclick="togglePhase(3)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m3-1">
+          <div class="mod-head"><div class="mod-title">3.1 内网渗透与域攻防</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Active Directory 攻防，能完成从外网到域控的完整渗透链</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>内网信息收集（存活探测/端口扫描/服务识别）</li><li>横向移动（Pass-the-Hash/Pass-the-Ticket/PsExec/WMI）</li><li>Active Directory 基础（域/林/信任关系/GPO）</li><li>Kerberos 攻击（Kerberoasting/AS-REP Roasting/Golden/Silver Ticket）</li><li>域提权（DCSync/ZeroLogon/PrintNightmare）</li><li>隧道与代理（frp/Chisel/SSH 隧道/SOCKS 代理）</li><li>权限维持（后门/计划任务/WMI 事件订阅）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/path/outline/introtohacking" target="_blank">TryHackMe - Offensive Pentesting Path</a></li><li><a href="https://adsecurity.org/" target="_blank">AD Security（Active Directory 安全博客）</a></li><li><a href="https://www.thehacker.recipes/" target="_blank">The Hacker Recipes（AD 攻击手册）</a></li><li><a href="https://github.com/Orange-Cyberdefense/GOAD" target="_blank">GOAD - 域攻防实验环境</a></li><li>书籍：《内网安全攻防》《Red Team Field Manual》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 搭建 <a href="https://github.com/Orange-Cyberdefense/GOAD" target="_blank">GOAD</a> 域环境进行攻防练习<br>② 完成 <a href="https://app.hackthebox.com/" target="_blank">Hack The Box</a> Pro Labs（Dante/Offshore）<br>③ 用 <a href="https://github.com/BloodHoundAD/BloodHound" target="_blank">BloodHound</a> 分析域攻击路径<br>④ 练习使用 Impacket 工具集进行横向移动</p></div>
+        </div>
+
+        <div class="module" id="m3-2">
+          <div class="mod-head"><div class="mod-title">3.2 代码审计</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 能审计 PHP/Java/Python 代码，发现 0day 漏洞</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>代码审计方法论（正向追踪/逆向追踪/全文搜索）</li><li>PHP 审计（反序列化/文件包含/变量覆盖/弱类型）</li><li>Java 审计（反序列化链/JNDI 注入/表达式注入/SSTI）</li><li>Python 审计（pickle 反序列化/SSTI/命令注入）</li><li>自动化审计工具：Semgrep/CodeQL/SonarQube</li><li>CMS 漏洞挖掘（WordPress/ThinkPHP/Spring）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://codeql.github.com/docs/" target="_blank">CodeQL 官方文档</a></li><li><a href="https://semgrep.dev/docs/" target="_blank">Semgrep 官方文档</a></li><li><a href="https://www.bilibili.com/video/BV1JZ4y1c7ro" target="_blank">代码审计入门（B站）</a></li><li>书籍：《代码审计：企业级 Web 代码安全架构》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 审计 DVWA 源码，找出所有漏洞点<br>② 用 CodeQL 分析开源项目漏洞<br>③ 在 GitHub 上找历史 CVE 对应的代码补丁，逆向分析漏洞<br>④ 审计一个 ThinkPHP/Laravel 项目</p></div>
+        </div>
+
+        <div class="module" id="m3-3">
+          <div class="mod-head"><div class="mod-title">3.3 红队武器化</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握 C2 框架使用与免杀技术，具备红队作战能力</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>C2 框架：Cobalt Strike/Sliver/Havoc/Mythic</li><li>免杀技术（Shellcode 加载器/混淆/加壳/内存执行）</li><li>钓鱼攻击（邮件钓鱼/Office 宏/HTA/LNK）</li><li>EDR 绕过（AMSI Bypass/ETW Patching/Unhooking）</li><li>持久化技术（注册表/服务/DLL 劫持/COM 劫持）</li><li>OPSEC（操作安全/流量隐藏/日志清理）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.ired.team/" target="_blank">Red Team Notes（红队笔记）</a></li><li><a href="https://github.com/BishopFox/sliver" target="_blank">Sliver C2（开源 C2 框架）</a></li><li><a href="https://github.com/HavocFramework/Havoc" target="_blank">Havoc C2 Framework</a></li><li><a href="https://maldevacademy.com/" target="_blank">MalDev Academy（恶意软件开发）</a></li><li>书籍：《Red Team Development and Operations》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 搭建 Sliver/Havoc C2 服务器，完成上线与控制<br>② 编写自定义 Shellcode 加载器（C/Go/Rust）<br>③ 制作免杀 Payload 绕过 Windows Defender<br>④ 模拟完整红队攻击链（侦察→入侵→横向→数据窃取）</p></div>
+        </div>
+
+        <div class="module" id="m3-4">
+          <div class="mod-head"><div class="mod-title">3.4 移动安全</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Android/iOS 应用安全测试方法</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Android 逆向（APK 反编译/Smali/Frida Hook）</li><li>Android 漏洞（组件暴露/WebView 漏洞/不安全存储）</li><li>iOS 安全基础（越狱/Objective-C Runtime/Cycript）</li><li>移动 API 安全测试（证书固定绕过/API 鉴权）</li><li>OWASP Mobile Top 10</li><li>移动应用加固与脱壳</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://mas.owasp.org/" target="_blank">OWASP Mobile Application Security</a></li><li><a href="https://github.com/OWASP/owasp-mastg" target="_blank">OWASP MASTG（移动安全测试指南）</a></li><li><a href="https://frida.re/docs/home/" target="_blank">Frida 官方文档</a></li><li><a href="https://www.bilibili.com/video/BV1UE411A7rY" target="_blank">Android 逆向入门（B站）</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 jadx 反编译 APK 并分析代码逻辑<br>② 用 Frida Hook 绕过 SSL Pinning<br>③ 完成 <a href="https://github.com/OWASP/owasp-mastg" target="_blank">OWASP MASTG</a> 的 CrackMe 挑战<br>④ 对一个测试 APP 进行完整安全评估</p></div>
+        </div>
+
+        <div class="module" id="m3-5">
+          <div class="mod-head"><div class="mod-title">3.5 漏洞研究与赏金</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 具备独立挖掘漏洞的能力，能参与 Bug Bounty 赚取赏金</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>漏洞挖掘方法论（攻击面分析/功能点测试/逻辑分析）</li><li>Bug Bounty 平台规则与技巧</li><li>漏洞报告编写（POC/影响评估/修复建议）</li><li>自动化侦察流程（Amass/httpx/nuclei 组合）</li><li>CVE 申请与漏洞披露流程</li><li>Fuzzing 基础（AFL/LibFuzzer）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.hackerone.com/hackers" target="_blank">HackerOne（Bug Bounty 平台）</a></li><li><a href="https://www.bugcrowd.com/" target="_blank">Bugcrowd（Bug Bounty 平台）</a></li><li><a href="https://pentester.land/list-of-bug-bounty-writeups.html" target="_blank">Bug Bounty Writeups 合集</a></li><li><a href="https://www.youtube.com/@NahamSec" target="_blank">NahamSec（Bug Bounty YouTube）</a></li><li>书籍：《Bug Bounty Bootcamp》《Real-World Bug Hunting》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 注册 HackerOne/Bugcrowd，选择一个公开项目开始挖洞<br>② 搭建自动化侦察管道（子域名→端口→指纹→漏洞扫描）<br>③ 阅读 10 篇高质量 Bug Bounty Writeup 并复现<br>④ 提交你的第一个漏洞报告</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m1-5">
-      <div class="mod-head"><div class="mod-title">1.5 数据库与 SQL</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握关系型数据库原理与 SQL 语法，理解 SQL 注入的底层逻辑</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>关系模型、ER 图、范式（1NF/2NF/3NF）</li>
-          <li>SQL 语法：SELECT/INSERT/UPDATE/DELETE/JOIN/子查询</li>
-          <li>索引原理（B+树）、事务（ACID）、锁机制</li>
-          <li>MySQL/PostgreSQL 安装与管理</li>
-          <li>NoSQL 基础：Redis、MongoDB</li>
-          <li>数据库安全：权限管理、审计日志、加密存储</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://sqlzoo.net/" target="_blank">SQLZoo（交互式 SQL 练习）</a></li>
-          <li><a href="https://www.w3schools.com/sql/" target="_blank">W3Schools SQL 教程</a></li>
-          <li><a href="https://mystery.knightlab.com/" target="_blank">SQL Murder Mystery（游戏学 SQL）</a></li>
-          <li><a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger SQL 注入实验室</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://sqlzoo.net/" target="_blank">SQLZoo</a> 全部练习<br>② 搭建 MySQL 数据库，设计一个用户管理系统<br>③ 完成 <a href="https://mystery.knightlab.com/" target="_blank">SQL Murder Mystery</a><br>④ 在 <a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger</a> 完成 SQL 注入基础实验</p>
+    <!-- ===== Phase 4 Detail ===== -->
+    <div class="phase-detail" id="phase4">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段四：安全防御</div>
+          <button class="phase-close" onclick="togglePhase(4)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m4-1">
+          <div class="mod-head"><div class="mod-title">4.1 SIEM 与安全运营</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握 SIEM 平台部署与告警规则编写，能运营企业 SOC</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>SIEM 原理与架构（日志采集/解析/关联/告警）</li><li>ELK Stack（Elasticsearch + Logstash + Kibana）</li><li>Splunk 基础与 SPL 查询语言</li><li>Wazuh（开源 SIEM + HIDS）</li><li>告警规则编写（Sigma 规则/YARA 规则）</li><li>SOC 运营流程（L1/L2/L3 分级响应）</li><li>日志源管理（Windows Event/Syslog/NetFlow）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/path/outline/soclevel1" target="_blank">TryHackMe - SOC Level 1 Path</a></li><li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank">Elasticsearch 官方文档</a></li><li><a href="https://documentation.wazuh.com/" target="_blank">Wazuh 官方文档</a></li><li><a href="https://github.com/SigmaHQ/sigma" target="_blank">Sigma 规则仓库</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 部署 ELK Stack，接入 Linux/Windows 日志<br>② 部署 Wazuh 并配置告警规则<br>③ 编写 Sigma 规则检测常见攻击（暴力破解/提权/横向移动）<br>④ 完成 TryHackMe SOC Level 1 Path</p></div>
+        </div>
+
+        <div class="module" id="m4-2">
+          <div class="mod-head"><div class="mod-title">4.2 入侵检测与防御</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 部署和调优 IDS/IPS，能检测和阻断网络攻击</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>IDS/IPS 原理（签名检测/异常检测/混合检测）</li><li>Suricata/Snort 规则编写与调优</li><li>WAF 原理与部署（ModSecurity/Cloudflare）</li><li>蜜罐技术（HFish/Cowrie/T-Pot）</li><li>网络流量分析（Zeek/Arkime）</li><li>EDR 解决方案（Velociraptor/osquery）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://suricata.readthedocs.io/" target="_blank">Suricata 官方文档</a></li><li><a href="https://docs.zeek.org/" target="_blank">Zeek 官方文档</a></li><li><a href="https://github.com/hacklcx/HFish" target="_blank">HFish 蜜罐</a></li><li><a href="https://docs.velociraptor.app/" target="_blank">Velociraptor 官方文档</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 部署 Suricata 并编写自定义检测规则<br>② 搭建蜜罐系统，分析攻击者行为<br>③ 用 Zeek 分析 PCAP 流量包<br>④ 部署 ModSecurity WAF 保护 Web 应用</p></div>
+        </div>
+
+        <div class="module" id="m4-3">
+          <div class="mod-head"><div class="mod-title">4.3 应急响应与取证</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 掌握安全事件应急响应流程，能进行数字取证分析</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>应急响应流程（NIST SP 800-61：准备/检测/遏制/根除/恢复/总结）</li><li>Windows 取证（注册表/事件日志/预取文件/MFT）</li><li>Linux 取证（/var/log/auth.log/wtmp/lastlog/进程分析）</li><li>内存取证（Volatility Framework）</li><li>磁盘取证（Autopsy/FTK Imager）</li><li>网络取证（PCAP 分析/流量还原）</li><li>恶意样本初步分析（沙箱/行为分析）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://tryhackme.com/path/outline/introtocybersecurity" target="_blank">TryHackMe - Cyber Defense Path</a></li><li><a href="https://www.volatilityfoundation.org/" target="_blank">Volatility Framework</a></li><li><a href="https://www.autopsy.com/" target="_blank">Autopsy 数字取证平台</a></li><li><a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs Online</a></li><li>书籍：《数字取证技术》《应急响应实战》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 Volatility 分析内存转储，提取恶意进程和网络连接<br>② 用 Autopsy 分析磁盘镜像，恢复删除文件<br>③ 完成 <a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs</a> 取证挑战<br>④ 模拟一次完整的应急响应流程（从告警到报告）</p></div>
+        </div>
+
+        <div class="module" id="m4-4">
+          <div class="mod-head"><div class="mod-title">4.4 威胁情报与狩猎</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握威胁情报分析与主动威胁狩猎技术</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>威胁情报类型（战略/战术/运营/技术）</li><li>MITRE ATT&amp;CK 框架（战术/技术/子技术/程序）</li><li>IOC（失陷指标）收集与分析</li><li>威胁狩猎方法论（假设驱动/数据驱动/情报驱动）</li><li>STIX/TAXII 威胁情报共享标准</li><li>威胁情报平台：MISP/OpenCTI</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://attack.mitre.org/" target="_blank">MITRE ATT&amp;CK 官网</a></li><li><a href="https://www.misp-project.org/" target="_blank">MISP 威胁情报平台</a></li><li><a href="https://www.opencti.io/" target="_blank">OpenCTI 平台</a></li><li><a href="https://cyberdefenders.org/" target="_blank">CyberDefenders（蓝队挑战）</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 MITRE ATT&amp;CK Navigator 映射一次攻击事件<br>② 部署 MISP 并导入威胁情报源<br>③ 基于 ATT&amp;CK 编写威胁狩猎查询（KQL/SPL）<br>④ 完成 <a href="https://cyberdefenders.org/" target="_blank">CyberDefenders</a> 蓝队挑战</p></div>
+        </div>
+
+        <div class="module" id="m4-5">
+          <div class="mod-head"><div class="mod-title">4.5 安全框架与合规</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 熟悉主流安全框架，能制定企业安全策略</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>NIST Cybersecurity Framework（识别/保护/检测/响应/恢复）</li><li>ISO 27001/27002 信息安全管理体系</li><li>CIS Controls（18 项关键安全控制）</li><li>零信任架构（Zero Trust Architecture）</li><li>风险评估方法论（定性/定量分析）</li><li>安全审计与合规检查</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF 官方</a></li><li><a href="https://www.cisecurity.org/controls" target="_blank">CIS Controls</a></li><li><a href="https://csrc.nist.gov/publications/detail/sp/800-207/final" target="_blank">NIST SP 800-207 零信任架构</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 NIST CSF 对一个虚拟企业进行安全评估<br>② 制定一份信息安全策略文档<br>③ 用 CIS Benchmark 加固 Linux/Windows 系统<br>④ 设计一个零信任网络架构方案</p></div>
+        </div>
+
+        <div class="module" id="m4-6">
+          <div class="mod-head"><div class="mod-title">4.6 DevSecOps</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 将安全融入 CI/CD 流程，实现安全左移</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>DevSecOps 理念与文化</li><li>SAST（静态分析）：Semgrep/SonarQube/Checkmarx</li><li>DAST（动态分析）：OWASP ZAP/Burp Suite Enterprise</li><li>SCA（软件成分分析）：Snyk/Dependabot/Trivy</li><li>容器安全扫描（Trivy/Grype/Clair）</li><li>IaC 安全（Checkov/tfsec/KICS）</li><li>CI/CD 安全（GitHub Actions/GitLab CI 安全集成）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://owasp.org/www-project-devsecops-guideline/" target="_blank">OWASP DevSecOps Guideline</a></li><li><a href="https://snyk.io/learn/" target="_blank">Snyk Learn（免费安全课程）</a></li><li><a href="https://www.practical-devsecops.com/" target="_blank">Practical DevSecOps</a></li><li><a href="https://github.com/sottlmarek/DevSecOps" target="_blank">DevSecOps 资源合集</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 在 GitHub Actions 中集成 Semgrep + Trivy 扫描<br>② 用 OWASP ZAP 对 API 进行自动化安全测试<br>③ 配置 Snyk 监控项目依赖漏洞<br>④ 搭建完整的 DevSecOps Pipeline</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m1-6">
-      <div class="mod-head"><div class="mod-title">1.6 Shell 脚本与自动化</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 编写 Bash 脚本自动化日常任务，提升运维与渗透效率</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Bash 语法：变量、条件判断、循环、函数</li>
-          <li>文本处理三剑客：grep/sed/awk</li>
-          <li>管道与重定向、xargs、进程替换</li>
-          <li>脚本调试（set -x/shellcheck）</li>
-          <li>常用工具：curl/wget/jq/nc/socat</li>
-          <li>PowerShell 基础（Windows 环境）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.shellscript.sh/" target="_blank">Shell Scripting Tutorial</a></li>
-          <li><a href="https://www.learnshell.org/" target="_blank">LearnShell.org（交互式）</a></li>
-          <li><a href="https://explainshell.com/" target="_blank">ExplainShell（命令解析）</a></li>
-          <li>书籍：《Linux 命令行与 Shell 脚本编程大全》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 编写自动化信息收集脚本（whois/dig/nmap 整合）<br>② 编写日志分析脚本（统计 IP 访问频率、检测异常）<br>③ 编写批量漏洞检测脚本框架<br>④ 完成 <a href="https://cmdchallenge.com/" target="_blank">CMD Challenge</a> 练习</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
+    <!-- ===== Phase 5 Detail ===== -->
+    <div class="phase-detail" id="phase5">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段五：全栈开发</div>
+          <button class="phase-close" onclick="togglePhase(5)">收起 ↑</button>
+        </div>
 
-  <!-- ==================== 阶段二：安全入门 ==================== -->
-  <div class="phase" id="phase2">
-    <h2 class="phase-title">阶段二：安全入门（6-12 个月）</h2>
-    <p class="phase-meta">建立安全思维，掌握 Web 安全与渗透测试基础</p>
+        <div class="module" id="m5-1">
+          <div class="mod-head"><div class="mod-title">5.1 前端开发</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 掌握现代前端技术栈，能开发安全管理平台界面</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>HTML5/CSS3/JavaScript ES6+ 核心语法</li><li>TypeScript 类型系统</li><li>React/Vue.js 框架（组件/状态管理/路由）</li><li>Tailwind CSS/Ant Design/Element Plus UI 框架</li><li>前端安全（XSS 防御/CSP/SRI/CORS）</li><li>构建工具（Vite/Webpack）、包管理（npm/pnpm）</li><li>前端测试（Jest/Vitest/Cypress）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://javascript.info/" target="_blank">JavaScript.info（现代 JS 教程）</a></li><li><a href="https://react.dev/learn" target="_blank">React 官方教程</a></li><li><a href="https://vuejs.org/tutorial/" target="_blank">Vue.js 官方教程</a></li><li><a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp（免费全栈课程）</a></li><li><a href="https://frontendmasters.com/" target="_blank">Frontend Masters</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 Vue.js/React 开发一个漏洞管理仪表盘<br>② 实现安全的用户认证界面（登录/注册/2FA）<br>③ 完成 <a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp</a> 前端认证<br>④ 开发一个网络拓扑可视化工具</p></div>
+        </div>
 
-    <div class="module" id="m2-1">
-      <div class="mod-head"><div class="mod-title">2.1 Web 安全原理</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 深入理解 OWASP Top 10 漏洞原理，能独立发现和利用 Web 漏洞</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>SQL 注入（联合注入/盲注/报错注入/堆叠注入/二次注入）</li>
-          <li>XSS（反射型/存储型/DOM型）、CSP 绕过</li>
-          <li>CSRF、SSRF、XXE 注入</li>
-          <li>文件上传漏洞（绕过黑白名单/Content-Type/图片马）</li>
-          <li>文件包含（LFI/RFI）、目录遍历</li>
-          <li>命令注入、反序列化漏洞</li>
-          <li>逻辑漏洞（越权/支付漏洞/验证码绕过）</li>
-          <li>OWASP Top 10 2021 全面解读</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://portswigger.net/web-security" target="_blank">PortSwigger Web Security Academy（必做）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1LQ4y1a7iS" target="_blank">小迪安全 Web 渗透（B站）</a></li>
-          <li><a href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank">OWASP Testing Guide</a></li>
-          <li><a href="https://book.hacktricks.xyz/" target="_blank">HackTricks（渗透百科全书）</a></li>
-          <li>书籍：《Web 安全攻防》《白帽子讲 Web 安全》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://portswigger.net/web-security" target="_blank">PortSwigger Academy</a> 全部 SQL 注入和 XSS 实验<br>② 搭建 <a href="https://github.com/digininja/DVWA" target="_blank">DVWA</a> 靶场，逐个攻破所有漏洞<br>③ 搭建 <a href="https://github.com/WebGoat/WebGoat" target="_blank">WebGoat</a> 完成全部课程<br>④ 在 <a href="https://buuoj.cn/" target="_blank">BUUCTF</a> 刷 Web 题</p>
+        <div class="module" id="m5-2">
+          <div class="mod-head"><div class="mod-title">5.2 后端开发与 API</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 掌握后端开发与安全 API 设计，能构建生产级服务</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Python 后端（Flask/FastAPI/Django）</li><li>Go 语言基础与 Web 开发（Gin/Echo）</li><li>Node.js/Express 后端开发</li><li>RESTful API 设计与 GraphQL</li><li>认证与授权（JWT/OAuth2/RBAC）</li><li>数据库 ORM（SQLAlchemy/GORM/Prisma）</li><li>API 安全（限流/输入验证/CORS/API Gateway）</li><li>消息队列（Redis/RabbitMQ/Kafka）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://fastapi.tiangolo.com/zh/" target="_blank">FastAPI 官方文档（中文）</a></li><li><a href="https://go.dev/tour/" target="_blank">Go 语言之旅</a></li><li><a href="https://gobyexample.com/" target="_blank">Go by Example</a></li><li><a href="https://roadmap.sh/backend" target="_blank">Backend Developer Roadmap</a></li><li>书籍：《Go 语言编程》《Flask Web 开发实战》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 FastAPI 开发一个漏洞管理 REST API<br>② 用 Go 开发一个高性能端口扫描服务<br>③ 实现完整的 JWT 认证系统（注册/登录/刷新/注销）<br>④ 开发一个安全资产管理平台后端</p></div>
+        </div>
+
+        <div class="module" id="m5-3">
+          <div class="mod-head"><div class="mod-title">5.3 安全工具开发</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 能独立开发实用的安全工具和自动化平台</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Python 安全工具开发（scapy/pwntools/impacket）</li><li>Go 安全工具开发（高并发扫描器/代理工具）</li><li>漏洞扫描器开发（POC 框架设计）</li><li>流量分析工具开发</li><li>Burp Suite 插件开发（Java/Python）</li><li>浏览器扩展开发（安全检测插件）</li><li>自动化渗透框架设计</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://scapy.readthedocs.io/" target="_blank">Scapy 官方文档</a></li><li><a href="https://docs.pwntools.com/" target="_blank">pwntools 官方文档</a></li><li><a href="https://portswigger.net/burp/extender" target="_blank">Burp Suite Extender API</a></li><li>书籍：《Black Hat Python》《Black Hat Go》《Gray Hat Python》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 Python 开发一个多线程子域名扫描器<br>② 用 Go 开发一个高速目录爆破工具<br>③ 开发一个 Burp Suite 自动化检测插件<br>④ 开发一个集成化漏洞扫描平台（Web 界面 + 扫描引擎 + 报告生成）</p></div>
+        </div>
+
+        <div class="module" id="m5-4">
+          <div class="mod-head"><div class="mod-title">5.4 云安全与架构</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 掌握云平台安全架构，能评估和加固云环境</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>云计算基础（IaaS/PaaS/SaaS/共享责任模型）</li><li>AWS/Azure/GCP 安全服务概览</li><li>IAM 策略与最小权限原则</li><li>云存储安全（S3 Bucket 错误配置/数据加密）</li><li>Serverless 安全（Lambda/Functions 攻击面）</li><li>云原生安全工具（ScoutSuite/Prowler/CloudSploit）</li><li>Kubernetes 安全（RBAC/网络策略/Pod 安全）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.cloudgoat.cloud/" target="_blank">CloudGoat（AWS 攻防靶场）</a></li><li><a href="https://hackingthe.cloud/" target="_blank">Hacking the Cloud（云安全知识库）</a></li><li><a href="https://kubernetes.io/docs/home/" target="_blank">Kubernetes 官方文档</a></li><li><a href="https://sysdig.com/learn-cloud-native/" target="_blank">Sysdig 云原生安全学习</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://www.cloudgoat.cloud/" target="_blank">CloudGoat</a> 全部攻击场景<br>② 用 Prowler/ScoutSuite 审计云环境配置<br>③ 搭建 Kubernetes 集群并实施安全加固<br>④ 设计一个安全的云架构方案</p></div>
+        </div>
+
+        <div class="module" id="m5-5">
+          <div class="mod-head"><div class="mod-title">5.5 容器与 DevOps</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 掌握容器化技术与 CI/CD，能构建安全的交付流水线</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>Docker 核心（镜像/容器/网络/存储/Compose）</li><li>Dockerfile 最佳实践与安全加固</li><li>Kubernetes 编排（Deployment/Service/Ingress/ConfigMap）</li><li>Helm Charts 与 GitOps（ArgoCD/Flux）</li><li>CI/CD 流水线（GitHub Actions/GitLab CI/Jenkins）</li><li>基础设施即代码（Terraform/Ansible）</li><li>监控与可观测性（Prometheus/Grafana/ELK）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://docs.docker.com/get-started/" target="_blank">Docker 官方入门</a></li><li><a href="https://kubernetes.io/docs/tutorials/" target="_blank">Kubernetes 官方教程</a></li><li><a href="https://learn.hashicorp.com/terraform" target="_blank">Terraform 学习</a></li><li><a href="https://www.katacoda.com/" target="_blank">Katacoda（交互式 DevOps 学习）</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 将安全工具容器化并发布到 Docker Hub<br>② 用 Docker Compose 搭建完整的安全实验环境<br>③ 用 Terraform 自动化部署云基础设施<br>④ 搭建 GitHub Actions CI/CD 流水线（构建→测试→扫描→部署）</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m2-2">
-      <div class="mod-head"><div class="mod-title">2.2 渗透测试工具链</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 熟练使用主流渗透工具，建立完整的渗透测试方法论</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>信息收集：Nmap/Masscan/Shodan/Fofa/子域名枚举</li>
-          <li>漏洞扫描：Nessus/OpenVAS/Nuclei</li>
-          <li>Web 代理：Burp Suite（Intruder/Repeater/Scanner/Extender）</li>
-          <li>漏洞利用：Metasploit Framework（模块/Payload/Meterpreter）</li>
-          <li>密码攻击：Hydra/John the Ripper/Hashcat</li>
-          <li>目录扫描：dirsearch/gobuster/ffuf</li>
-          <li>渗透测试方法论：PTES/OSSTMM</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/path/outline/beginner" target="_blank">TryHackMe - Beginner Path</a></li>
-          <li><a href="https://www.offensive-security.com/metasploit-unleashed/" target="_blank">Metasploit Unleashed（免费）</a></li>
-          <li><a href="https://portswigger.net/burp/documentation" target="_blank">Burp Suite 官方文档</a></li>
-          <li><a href="https://nmap.org/book/" target="_blank">Nmap Network Scanning（官方书籍）</a></li>
-          <li>书籍：《Metasploit 渗透测试指南》《Kali Linux 渗透测试的艺术》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://tryhackme.com/" target="_blank">TryHackMe</a> Beginner Path 全部房间<br>② 用 Nmap 扫描自己的实验网络，分析开放端口和服务<br>③ 用 Burp Suite 拦截并修改 HTTP 请求，完成靶场挑战<br>④ 用 Metasploit 攻破 <a href="https://www.vulnhub.com/" target="_blank">VulnHub</a> 靶机</p>
+    <!-- ===== Phase 6 Detail ===== -->
+    <div class="phase-detail" id="phase6">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段六：高级专项</div>
+          <button class="phase-close" onclick="togglePhase(6)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m6-1">
+          <div class="mod-head"><div class="mod-title">6.1 逆向工程</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 掌握逆向分析核心技术，能分析复杂二进制程序</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>x86/ARM 汇编与逆向基础</li><li>IDA Pro 静态分析与脚本编写</li><li>Ghidra 逆向分析平台</li><li>反混淆与脱壳技术</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://beginners.re/" target="_blank">beginners.re（逆向工程入门）</a></li><li><a href="https://ghidra-sre.org/" target="_blank">Ghidra 官方</a></li><li><a href="https://crackmes.one/" target="_blank">Crackmes.one</a></li><li><a href="https://malwareunicorn.org/workshops/re101.html" target="_blank">Malware Unicorn RE101</a></li><li>书籍：《逆向工程核心原理》《加密与解密》《IDA Pro 权威指南》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://crackmes.one/" target="_blank">Crackmes.one</a> 10 个逆向挑战<br>② 用 Ghidra 分析恶意样本<br>③ 完成 <a href="https://beginners.re/" target="_blank">begin.re</a> 逆向课程<br>④ CTF 逆向题实战</p></div>
+        </div>
+
+        <div class="module" id="m6-2">
+          <div class="mod-head"><div class="mod-title">6.2 二进制漏洞利用</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 掌握二进制漏洞挖掘与利用技术，能编写 Exploit</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>栈溢出原理与利用</li><li>堆溢出与堆利用技术</li><li>格式化字符串漏洞</li><li>保护机制绕过（ASLR/DEP/Canary/PIE）</li><li>Kernel 漏洞利用</li><li>Windows 漏洞利用</li><li>Fuzzing 技术（AFL++/LibFuzzer）</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://pwnable.kr/" target="_blank">pwnable.kr</a></li><li><a href="https://pwnable.tw/" target="_blank">pwnable.tw</a></li><li><a href="https://ropemporium.com/" target="_blank">ROP Emporium</a></li><li><a href="https://github.com/shellphish/how2heap" target="_blank">how2heap</a></li><li>书籍：《Hacking: The Art of Exploitation》《0day 安全：软件漏洞分析技术》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 完成 <a href="https://pwnable.kr/" target="_blank">pwnable.kr</a> Toddler's Bottle 全部题目<br>② 完成 <a href="https://ropemporium.com/" target="_blank">ROP Emporium</a> 全部挑战<br>③ 用 AFL++ 对开源软件进行 Fuzzing<br>④ 编写一个完整的栈溢出 Exploit</p></div>
+        </div>
+
+        <div class="module" id="m6-3">
+          <div class="mod-head"><div class="mod-title">6.3 恶意软件分析</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握恶意软件分析全流程，能编写分析报告</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>恶意软件分类与特征</li><li>静态分析（PE 结构/字符串/导入表/签名）</li><li>动态分析（沙箱/行为监控/API 监控）</li><li>代码分析（反汇编/反编译/控制流）</li><li>反分析技术（反调试/反虚拟机/反沙箱）</li><li>C2 通信协议分析</li><li>YARA 规则编写</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://malwareunicorn.org/" target="_blank">Malware Unicorn</a></li><li><a href="https://www.hybrid-analysis.com/" target="_blank">Hybrid Analysis</a></li><li><a href="https://any.run/" target="_blank">ANY.RUN（交互式沙箱）</a></li><li><a href="https://github.com/rshipp/awesome-malware-analysis" target="_blank">Awesome Malware Analysis</a></li><li>书籍：《恶意代码分析实战》《Practical Malware Analysis》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 从 <a href="https://bazaar.abuse.ch/" target="_blank">MalwareBazaar</a> 下载样本进行分析<br>② 编写 YARA 规则检测特定恶意软件家族<br>③ 完成全部恶意软件分析实验<br>④ 撰写一份完整的恶意软件分析报告</p></div>
+        </div>
+
+        <div class="module" id="m6-4">
+          <div class="mod-head"><div class="mod-title">6.4 AI 安全</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 理解 AI/ML 安全风险，能评估和防御 AI 系统攻击</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>机器学习基础与安全概述</li><li>对抗样本攻击与防御</li><li>模型窃取与模型逆向</li><li>数据投毒攻击</li><li>LLM 安全（Prompt Injection/越狱/数据泄露）</li><li>AI 在安全中的应用（异常检测/恶意流量识别）</li><li>Deepfake 检测与防御</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.fast.ai/" target="_blank">fast.ai（实用深度学习）</a></li><li><a href="https://github.com/Trusted-AI/adversarial-robustness-toolbox" target="_blank">IBM ART（对抗鲁棒性工具箱）</a></li><li><a href="https://owasp.org/www-project-machine-learning-security-top-10/" target="_blank">OWASP ML Top 10</a></li><li><a href="https://atlas.mitre.org/" target="_blank">MITRE ATLAS</a></li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 实现对抗样本攻击（FGSM/PGD）<br>② 训练恶意流量检测模型<br>③ 测试 LLM Prompt Injection 攻击<br>④ 使用 ART 工具箱进行对抗攻防实验</p></div>
+        </div>
+
+        <div class="module" id="m6-5">
+          <div class="mod-head"><div class="mod-title">6.5 IoT 与工控安全</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 掌握 IoT/ICS 安全评估技术，能发现物联网与工控系统漏洞</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>IoT 协议安全（MQTT/CoAP/BLE/ZigBee）</li><li>固件提取与分析（binwalk/firmware-mod-kit）</li><li>嵌入式 Linux 安全</li><li>硬件安全（JTAG/UART/SPI 调试接口）</li><li>工控协议（Modbus/S7comm/OPC UA）</li><li>SCADA 系统安全</li><li>车联网安全</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.attify.com/" target="_blank">Attify（IoT 安全培训）</a></li><li><a href="https://github.com/V33RU/IoTSecurity101" target="_blank">IoT Security 101</a></li><li><a href="https://www.shodan.io/" target="_blank">Shodan（物联网搜索引擎）</a></li><li><a href="https://owasp.org/www-project-firmware-security-testing-methodology/" target="_blank">OWASP FSTM</a></li><li>书籍：《IoT 渗透测试》《揭秘家用路由器 0day 漏洞挖掘技术》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 用 binwalk 提取并分析路由器固件<br>② 用 Shodan 搜索暴露的 IoT 设备<br>③ 搭建 MQTT 测试环境并进行安全评估<br>④ 复现一个 IoT 设备 CVE 漏洞</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m2-3">
-      <div class="mod-head"><div class="mod-title">2.3 密码学与认证</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 理解加密算法原理，能分析和攻击弱加密实现</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>对称加密（AES/DES/ChaCha20）、分组模式（ECB/CBC/GCM）</li>
-          <li>非对称加密（RSA/ECC/Diffie-Hellman）</li>
-          <li>哈希函数（MD5/SHA/bcrypt/scrypt/Argon2）</li>
-          <li>数字签名、数字证书、PKI 体系</li>
-          <li>认证协议：OAuth 2.0/JWT/SAML/Kerberos</li>
-          <li>常见密码攻击：彩虹表/碰撞攻击/Padding Oracle</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://cryptohack.org/" target="_blank">CryptoHack（交互式密码学挑战）</a></li>
-          <li><a href="https://cryptopals.com/" target="_blank">Cryptopals（密码学编程挑战）</a></li>
-          <li><a href="https://www.coursera.org/learn/crypto" target="_blank">Stanford Cryptography I - Coursera</a></li>
-          <li>书籍：《深入浅出密码学》《图解密码技术》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://cryptohack.org/" target="_blank">CryptoHack</a> Introduction 全部挑战<br>② 完成 <a href="https://cryptopals.com/" target="_blank">Cryptopals</a> Set 1-2<br>③ 用 Python 实现 AES-CBC 加解密<br>④ 用 Hashcat 破解常见哈希</p>
+    <!-- ===== Phase 7 Detail ===== -->
+    <div class="phase-detail" id="phase7">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段七：架构领袖</div>
+          <button class="phase-close" onclick="togglePhase(7)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="m7-1">
+          <div class="mod-head"><div class="mod-title">7.1 安全架构设计</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握企业安全架构设计方法论，能规划全局安全体系</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>SABSA 安全架构框架</li><li>TOGAF 企业架构与安全集成</li><li>零信任架构设计与实施</li><li>微服务安全架构</li><li>数据安全架构（分类分级/加密/脱敏/DLP）</li><li>身份与访问管理（IAM）架构</li><li>安全运营中心（SOC）架构设计</li><li>灾难恢复（DR）与业务连续性（BCP）</li><li>安全度量与 KPI 体系</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.isc2.org/Certifications/CISSP" target="_blank">CISSP 认证体系</a></li><li><a href="https://www.nist.gov/cyberframework" target="_blank">NIST 网络安全框架</a></li><li><a href="https://sabsa.org/" target="_blank">SABSA 官方</a></li><li>书籍：《企业安全架构》《CISSP 官方学习指南》《零信任网络》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 为一家中型企业设计完整的安全架构方案<br>② 设计并实施零信任架构 PoC<br>③ 制定数据分类分级方案与数据安全策略<br>④ CISSP 认证备考与模拟考试</p></div>
+        </div>
+
+        <div class="module" id="m7-2">
+          <div class="mod-head"><div class="mod-title">7.2 安全管理与领导力</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 具备安全团队管理与技术领导力，能推动组织安全文化</div>
+          <div class="mod-section"><div class="mod-section-title">核心知识点</div><ul class="mod-list"><li>安全团队建设与人才培养</li><li>安全预算规划与资源管理</li><li>安全意识培训体系</li><li>供应链安全管理</li><li>跨部门沟通与汇报</li><li>安全认证体系（CISSP/OSCP/OSEP/CISM）</li><li>技术演讲与知识分享</li><li>开源社区贡献</li></ul></div>
+          <div class="mod-section"><div class="mod-section-title">推荐教程</div><ul class="mod-list"><li><a href="https://www.isaca.org/credentialing/cism" target="_blank">CISM 认证</a></li><li><a href="https://www.offsec.com/courses/pen-200/" target="_blank">OSCP 认证</a></li><li><a href="https://www.offsec.com/courses/pen-300/" target="_blank">OSEP 认证</a></li><li>书籍：《CISO 的第一年》《安全领导力》</li></ul></div>
+          <div class="mod-practice"><div class="mod-practice-title">🔧 实战练习</div><p>① 制定年度安全规划与预算方案<br>② 设计并执行一次钓鱼演练<br>③ 撰写技术社区文章或博客<br>④ 参与开源安全项目贡献<br>⑤ 备考 OSCP/CISSP 认证</p></div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="m2-4">
-      <div class="mod-head"><div class="mod-title">2.4 网络协议安全</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握网络层攻击手法与防御，能进行中间人攻击与流量分析</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>ARP 欺骗与中间人攻击（MITM）</li>
-          <li>DNS 劫持/投毒/隧道</li>
-          <li>Wi-Fi 安全（WPA2 破解/Evil Twin/Deauth）</li>
-          <li>SSL/TLS 攻击（SSL Strip/BEAST/POODLE/Heartbleed）</li>
-          <li>DDoS 攻击原理与防御（SYN Flood/UDP Flood/反射放大）</li>
-          <li>网络嗅探与流量分析</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/room/dvwa" target="_blank">TryHackMe 网络安全房间</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1WY4y1D7NU" target="_blank">网络安全攻防实战（B站）</a></li>
-          <li><a href="https://www.aircrack-ng.org/doku.php?id=tutorial" target="_blank">Aircrack-ng 官方教程</a></li>
-          <li>书籍：《网络安全攻防技术与实战》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在实验环境中用 <a href="https://www.ettercap-project.org/" target="_blank">Ettercap</a> 进行 ARP 欺骗<br>② 用 Wireshark 分析 HTTPS 握手过程<br>③ 搭建 DNS 服务器并模拟 DNS 投毒<br>④ 用 <a href="https://github.com/bettercap/bettercap" target="_blank">Bettercap</a> 进行网络攻击实验</p>
-      </div>
-    </div>
+  </div><!-- /.wrap -->
 
-    <div class="module" id="m2-5">
-      <div class="mod-head"><div class="mod-title">2.5 操作系统安全</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Linux/Windows 系统加固与提权技术</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Linux 提权（SUID/内核漏洞/Cron/PATH 劫持/Capabilities）</li>
-          <li>Windows 提权（服务漏洞/令牌模拟/UAC 绕过/Potato 系列）</li>
-          <li>系统加固：最小权限原则、补丁管理、审计策略</li>
-          <li>SELinux/AppArmor 强制访问控制</li>
-          <li>Windows 安全：组策略/BitLocker/Windows Defender</li>
-          <li>日志分析与入侵痕迹检测</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/room/linprivesc" target="_blank">TryHackMe - Linux PrivEsc</a></li>
-          <li><a href="https://tryhackme.com/room/windows10privesc" target="_blank">TryHackMe - Windows PrivEsc</a></li>
-          <li><a href="https://gtfobins.github.io/" target="_blank">GTFOBins（Linux 提权速查）</a></li>
-          <li><a href="https://lolbas-project.github.io/" target="_blank">LOLBAS（Windows 提权速查）</a></li>
-          <li>书籍：《权限提升技术》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 TryHackMe Linux/Windows 提权房间<br>② 在 <a href="https://www.vulnhub.com/" target="_blank">VulnHub</a> 下载靶机练习提权<br>③ 使用 <a href="https://github.com/carlospolop/PEASS-ng" target="_blank">LinPEAS/WinPEAS</a> 进行自动化枚举<br>④ 按 CIS Benchmark 加固一台 Linux 服务器</p>
-      </div>
-    </div>
-
-    <div class="module" id="m2-6">
-      <div class="mod-head"><div class="mod-title">2.6 安全法规与合规</div><div class="mod-time">⏱ 15 学时</div></div>
-      <div class="mod-goal">🎯 了解网络安全法律法规，建立合法合规的安全意识</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>《网络安全法》《数据安全法》《个人信息保护法》</li>
-          <li>等级保护 2.0（等保测评流程）</li>
-          <li>GDPR（欧盟通用数据保护条例）</li>
-          <li>渗透测试授权与法律边界</li>
-          <li>漏洞披露规范（负责任披露 vs 全面披露）</li>
-          <li>行业标准：PCI DSS/HIPAA/SOC 2</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.pcsec.gov.cn/" target="_blank">国家网络安全等级保护网</a></li>
-          <li><a href="https://gdpr.eu/" target="_blank">GDPR 官方指南</a></li>
-          <li><a href="https://www.freebuf.com/" target="_blank">FreeBuf（安全资讯与法规解读）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 阅读《网络安全法》全文并整理要点<br>② 模拟编写一份渗透测试授权书<br>③ 了解 SRC（安全应急响应中心）的漏洞提交流程</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段三：渗透进阶 ==================== -->
-  <div class="phase" id="phase3">
-    <h2 class="phase-title">阶段三：渗透进阶（1-2 年）</h2>
-    <p class="phase-meta">深入攻击技术，掌握内网渗透、代码审计与红队作战能力</p>
-
-    <div class="module" id="m3-1">
-      <div class="mod-head"><div class="mod-title">3.1 内网渗透与域攻防</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Active Directory 攻防，能完成从外网到域控的完整渗透链</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>内网信息收集（存活探测/端口扫描/服务识别）</li>
-          <li>横向移动（Pass-the-Hash/Pass-the-Ticket/PsExec/WMI）</li>
-          <li>Active Directory 基础（域/林/信任关系/GPO）</li>
-          <li>Kerberos 攻击（Kerberoasting/AS-REP Roasting/Golden/Silver Ticket）</li>
-          <li>域提权（DCSync/ZeroLogon/PrintNightmare）</li>
-          <li>隧道与代理（frp/Chisel/SSH 隧道/SOCKS 代理）</li>
-          <li>权限维持（后门/计划任务/WMI 事件订阅）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/path/outline/introtohacking" target="_blank">TryHackMe - Offensive Pentesting Path</a></li>
-          <li><a href="https://adsecurity.org/" target="_blank">AD Security（Active Directory 安全博客）</a></li>
-          <li><a href="https://www.thehacker.recipes/" target="_blank">The Hacker Recipes（AD 攻击手册）</a></li>
-          <li><a href="https://github.com/Orange-Cyberdefense/GOAD" target="_blank">GOAD - 域攻防实验环境</a></li>
-          <li>书籍：《内网安全攻防》《Red Team Field Manual》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 <a href="https://github.com/Orange-Cyberdefense/GOAD" target="_blank">GOAD</a> 域环境进行攻防练习<br>② 完成 <a href="https://app.hackthebox.com/" target="_blank">Hack The Box</a> Pro Labs（Dante/Offshore）<br>③ 用 <a href="https://github.com/BloodHoundAD/BloodHound" target="_blank">BloodHound</a> 分析域攻击路径<br>④ 练习使用 Impacket 工具集进行横向移动</p>
-      </div>
-    </div>
-
-    <div class="module" id="m3-2">
-      <div class="mod-head"><div class="mod-title">3.2 代码审计</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 能审计 PHP/Java/Python 代码，发现 0day 漏洞</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>代码审计方法论（正向追踪/逆向追踪/全文搜索）</li>
-          <li>PHP 审计（反序列化/文件包含/变量覆盖/弱类型）</li>
-          <li>Java 审计（反序列化链/JNDI 注入/表达式注入/SSTI）</li>
-          <li>Python 审计（pickle 反序列化/SSTI/命令注入）</li>
-          <li>自动化审计工具：Semgrep/CodeQL/SonarQube</li>
-          <li>CMS 漏洞挖掘（WordPress/ThinkPHP/Spring）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://codeql.github.com/docs/" target="_blank">CodeQL 官方文档</a></li>
-          <li><a href="https://semgrep.dev/docs/" target="_blank">Semgrep 官方文档</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1JZ4y1c7ro" target="_blank">代码审计入门（B站）</a></li>
-          <li>书籍：《代码审计：企业级 Web 代码安全架构》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 审计 DVWA 源码，找出所有漏洞点<br>② 用 CodeQL 分析开源项目漏洞<br>③ 在 GitHub 上找历史 CVE 对应的代码补丁，逆向分析漏洞<br>④ 审计一个 ThinkPHP/Laravel 项目</p>
-      </div>
-    </div>
-
-    <div class="module" id="m3-3">
-      <div class="mod-head"><div class="mod-title">3.3 红队武器化</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 掌握 C2 框架使用与免杀技术，具备红队作战能力</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>C2 框架：Cobalt Strike/Sliver/Havoc/Mythic</li>
-          <li>免杀技术（Shellcode 加载器/混淆/加壳/内存执行）</li>
-          <li>钓鱼攻击（邮件钓鱼/Office 宏/HTA/LNK）</li>
-          <li>EDR 绕过（AMSI Bypass/ETW Patching/Unhooking）</li>
-          <li>持久化技术（注册表/服务/DLL 劫持/COM 劫持）</li>
-          <li>OPSEC（操作安全/流量隐藏/日志清理）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.ired.team/" target="_blank">Red Team Notes（红队笔记）</a></li>
-          <li><a href="https://github.com/BishopFox/sliver" target="_blank">Sliver C2（开源 C2 框架）</a></li>
-          <li><a href="https://github.com/HavocFramework/Havoc" target="_blank">Havoc C2 Framework</a></li>
-          <li><a href="https://maldevacademy.com/" target="_blank">MalDev Academy（恶意软件开发）</a></li>
-          <li>书籍：《Red Team Development and Operations》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 Sliver/Havoc C2 服务器，完成上线与控制<br>② 编写自定义 Shellcode 加载器（C/Go/Rust）<br>③ 制作免杀 Payload 绕过 Windows Defender<br>④ 模拟完整红队攻击链（侦察→入侵→横向→数据窃取）</p>
-      </div>
-    </div>
-
-    <div class="module" id="m3-4">
-      <div class="mod-head"><div class="mod-title">3.4 移动安全</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Android/iOS 应用安全测试方法</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Android 逆向（APK 反编译/Smali/Frida Hook）</li>
-          <li>Android 漏洞（组件暴露/WebView 漏洞/不安全存储）</li>
-          <li>iOS 安全基础（越狱/Objective-C Runtime/Cycript）</li>
-          <li>移动 API 安全测试（证书固定绕过/API 鉴权）</li>
-          <li>OWASP Mobile Top 10</li>
-          <li>移动应用加固与脱壳</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://mas.owasp.org/" target="_blank">OWASP Mobile Application Security</a></li>
-          <li><a href="https://github.com/OWASP/owasp-mastg" target="_blank">OWASP MASTG（移动安全测试指南）</a></li>
-          <li><a href="https://frida.re/docs/home/" target="_blank">Frida 官方文档</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1UE411A7rY" target="_blank">Android 逆向入门（B站）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 jadx 反编译 APK 并分析代码逻辑<br>② 用 Frida Hook 绕过 SSL Pinning<br>③ 完成 <a href="https://github.com/OWASP/owasp-mastg" target="_blank">OWASP MASTG</a> 的 CrackMe 挑战<br>④ 对一个测试 APP 进行完整安全评估</p>
-      </div>
-    </div>
-
-    <div class="module" id="m3-5">
-      <div class="mod-head"><div class="mod-title">3.5 漏洞研究与赏金</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 具备独立挖掘漏洞的能力，能参与 Bug Bounty 赚取赏金</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>漏洞挖掘方法论（攻击面分析/功能点测试/逻辑分析）</li>
-          <li>Bug Bounty 平台规则与技巧</li>
-          <li>漏洞报告编写（POC/影响评估/修复建议）</li>
-          <li>自动化侦察流程（Amass/httpx/nuclei 组合）</li>
-          <li>CVE 申请与漏洞披露流程</li>
-          <li>Fuzzing 基础（AFL/LibFuzzer）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.hackerone.com/hackers" target="_blank">HackerOne（Bug Bounty 平台）</a></li>
-          <li><a href="https://www.bugcrowd.com/" target="_blank">Bugcrowd（Bug Bounty 平台）</a></li>
-          <li><a href="https://pentester.land/list-of-bug-bounty-writeups.html" target="_blank">Bug Bounty Writeups 合集</a></li>
-          <li><a href="https://www.youtube.com/@NahamSec" target="_blank">NahamSec（Bug Bounty YouTube）</a></li>
-          <li>书籍：《Bug Bounty Bootcamp》《Real-World Bug Hunting》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 注册 HackerOne/Bugcrowd，选择一个公开项目开始挖洞<br>② 搭建自动化侦察管道（子域名→端口→指纹→漏洞扫描）<br>③ 阅读 10 篇高质量 Bug Bounty Writeup 并复现<br>④ 提交你的第一个漏洞报告</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段四：安全防御 ==================== -->
-  <div class="phase" id="phase4">
-    <h2 class="phase-title">阶段四：安全防御（2-3 年）</h2>
-    <p class="phase-meta">从攻击转向防御，掌握企业级安全运营与应急响应</p>
-
-    <div class="module" id="m4-1">
-      <div class="mod-head"><div class="mod-title">4.1 SIEM 与安全运营</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 掌握 SIEM 平台部署与告警规则编写，能运营企业 SOC</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>SIEM 原理与架构（日志采集/解析/关联/告警）</li>
-          <li>ELK Stack（Elasticsearch + Logstash + Kibana）</li>
-          <li>Splunk 基础与 SPL 查询语言</li>
-          <li>Wazuh（开源 SIEM + HIDS）</li>
-          <li>告警规则编写（Sigma 规则/YARA 规则）</li>
-          <li>SOC 运营流程（L1/L2/L3 分级响应）</li>
-          <li>日志源管理（Windows Event/Syslog/NetFlow）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/path/outline/soclevel1" target="_blank">TryHackMe - SOC Level 1 Path</a></li>
-          <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank">Elasticsearch 官方文档</a></li>
-          <li><a href="https://documentation.wazuh.com/" target="_blank">Wazuh 官方文档</a></li>
-          <li><a href="https://github.com/SigmaHQ/sigma" target="_blank">Sigma 规则仓库</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 ELK Stack，接入 Linux/Windows 日志<br>② 部署 Wazuh 并配置告警规则<br>③ 编写 Sigma 规则检测常见攻击（暴力破解/提权/横向移动）<br>④ 完成 TryHackMe SOC Level 1 Path</p>
-      </div>
-    </div>
-
-    <div class="module" id="m4-2">
-      <div class="mod-head"><div class="mod-title">4.2 入侵检测与防御</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 部署和调优 IDS/IPS，能检测和阻断网络攻击</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>IDS/IPS 原理（签名检测/异常检测/混合检测）</li>
-          <li>Suricata/Snort 规则编写与调优</li>
-          <li>WAF 原理与部署（ModSecurity/Cloudflare）</li>
-          <li>蜜罐技术（HFish/Cowrie/T-Pot）</li>
-          <li>网络流量分析（Zeek/Arkime）</li>
-          <li>EDR 解决方案（Velociraptor/osquery）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://suricata.readthedocs.io/" target="_blank">Suricata 官方文档</a></li>
-          <li><a href="https://docs.zeek.org/" target="_blank">Zeek 官方文档</a></li>
-          <li><a href="https://github.com/hacklcx/HFish" target="_blank">HFish 蜜罐</a></li>
-          <li><a href="https://docs.velociraptor.app/" target="_blank">Velociraptor 官方文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 Suricata 并编写自定义检测规则<br>② 搭建蜜罐系统，分析攻击者行为<br>③ 用 Zeek 分析 PCAP 流量包<br>④ 部署 ModSecurity WAF 保护 Web 应用</p>
-      </div>
-    </div>
-
-    <div class="module" id="m4-3">
-      <div class="mod-head"><div class="mod-title">4.3 应急响应与取证</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 掌握安全事件应急响应流程，能进行数字取证分析</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>应急响应流程（NIST SP 800-61：准备/检测/遏制/根除/恢复/总结）</li>
-          <li>Windows 取证（注册表/事件日志/预取文件/MFT）</li>
-          <li>Linux 取证（/var/log/auth.log/wtmp/lastlog/进程分析）</li>
-          <li>内存取证（Volatility Framework）</li>
-          <li>磁盘取证（Autopsy/FTK Imager）</li>
-          <li>网络取证（PCAP 分析/流量还原）</li>
-          <li>恶意样本初步分析（沙箱/行为分析）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://tryhackme.com/path/outline/introtocybersecurity" target="_blank">TryHackMe - Cyber Defense Path</a></li>
-          <li><a href="https://www.volatilityfoundation.org/" target="_blank">Volatility Framework</a></li>
-          <li><a href="https://www.autopsy.com/" target="_blank">Autopsy 数字取证平台</a></li>
-          <li><a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs Online</a></li>
-          <li>书籍：《数字取证技术》《应急响应实战》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Volatility 分析内存转储，提取恶意进程和网络连接<br>② 用 Autopsy 分析磁盘镜像，恢复删除文件<br>③ 完成 <a href="https://blueteamlabs.online/" target="_blank">Blue Team Labs</a> 取证挑战<br>④ 模拟一次完整的应急响应流程（从告警到报告）</p>
-      </div>
-    </div>
-
-    <div class="module" id="m4-4">
-      <div class="mod-head"><div class="mod-title">4.4 威胁情报与狩猎</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握威胁情报分析与主动威胁狩猎技术</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>威胁情报类型（战略/战术/运营/技术）</li>
-          <li>MITRE ATT&CK 框架（战术/技术/子技术/程序）</li>
-          <li>IOC（失陷指标）收集与分析</li>
-          <li>威胁狩猎方法论（假设驱动/数据驱动/情报驱动）</li>
-          <li>STIX/TAXII 威胁情报共享标准</li>
-          <li>威胁情报平台：MISP/OpenCTI</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK 官网</a></li>
-          <li><a href="https://www.misp-project.org/" target="_blank">MISP 威胁情报平台</a></li>
-          <li><a href="https://www.opencti.io/" target="_blank">OpenCTI 平台</a></li>
-          <li><a href="https://cyberdefenders.org/" target="_blank">CyberDefenders（蓝队挑战）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 MITRE ATT&CK Navigator 映射一次攻击事件<br>② 部署 MISP 并导入威胁情报源<br>③ 基于 ATT&CK 编写威胁狩猎查询（KQL/SPL）<br>④ 完成 <a href="https://cyberdefenders.org/" target="_blank">CyberDefenders</a> 蓝队挑战</p>
-      </div>
-    </div>
-
-    <div class="module" id="m4-5">
-      <div class="mod-head"><div class="mod-title">4.5 安全框架与合规</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 熟悉主流安全框架，能制定企业安全策略</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>NIST Cybersecurity Framework（识别/保护/检测/响应/恢复）</li>
-          <li>ISO 27001/27002 信息安全管理体系</li>
-          <li>CIS Controls（18 项关键安全控制）</li>
-          <li>零信任架构（Zero Trust Architecture）</li>
-          <li>风险评估方法论（定性/定量分析）</li>
-          <li>安全审计与合规检查</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF 官方</a></li>
-          <li><a href="https://www.cisecurity.org/controls" target="_blank">CIS Controls</a></li>
-          <li><a href="https://csrc.nist.gov/publications/detail/sp/800-207/final" target="_blank">NIST SP 800-207 零信任架构</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 NIST CSF 对一个虚拟企业进行安全评估<br>② 制定一份信息安全策略文档<br>③ 用 CIS Benchmark 加固 Linux/Windows 系统<br>④ 设计一个零信任网络架构方案</p>
-      </div>
-    </div>
-
-    <div class="module" id="m4-6">
-      <div class="mod-head"><div class="mod-title">4.6 DevSecOps</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 将安全融入 CI/CD 流程，实现安全左移</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>DevSecOps 理念与文化</li>
-          <li>SAST（静态分析）：Semgrep/SonarQube/Checkmarx</li>
-          <li>DAST（动态分析）：OWASP ZAP/Burp Suite Enterprise</li>
-          <li>SCA（软件成分分析）：Snyk/Dependabot/Trivy</li>
-          <li>容器安全扫描（Trivy/Grype/Clair）</li>
-          <li>IaC 安全（Checkov/tfsec/KICS）</li>
-          <li>CI/CD 安全（GitHub Actions/GitLab CI 安全集成）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://owasp.org/www-project-devsecops-guideline/" target="_blank">OWASP DevSecOps Guideline</a></li>
-          <li><a href="https://snyk.io/learn/" target="_blank">Snyk Learn（免费安全课程）</a></li>
-          <li><a href="https://www.practical-devsecops.com/" target="_blank">Practical DevSecOps</a></li>
-          <li><a href="https://github.com/sottlmarek/DevSecOps" target="_blank">DevSecOps 资源合集</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在 GitHub Actions 中集成 Semgrep + Trivy 扫描<br>② 用 OWASP ZAP 对 API 进行自动化安全测试<br>③ 配置 Snyk 监控项目依赖漏洞<br>④ 搭建完整的 DevSecOps Pipeline</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段五：全栈开发 ==================== -->
-  <div class="phase" id="phase5">
-    <h2 class="phase-title">阶段五：全栈开发（2-3 年）</h2>
-    <p class="phase-meta">掌握前后端开发与云原生技术，能独立开发安全产品</p>
-
-    <div class="module" id="m5-1">
-      <div class="mod-head"><div class="mod-title">5.1 前端开发</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 掌握现代前端技术栈，能开发安全管理平台界面</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>HTML5/CSS3/JavaScript ES6+ 核心语法</li>
-          <li>TypeScript 类型系统</li>
-          <li>React/Vue.js 框架（组件/状态管理/路由）</li>
-          <li>Tailwind CSS/Ant Design/Element Plus UI 框架</li>
-          <li>前端安全（XSS 防御/CSP/SRI/CORS）</li>
-          <li>构建工具（Vite/Webpack）、包管理（npm/pnpm）</li>
-          <li>前端测试（Jest/Vitest/Cypress）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://javascript.info/" target="_blank">JavaScript.info（现代 JS 教程）</a></li>
-          <li><a href="https://react.dev/learn" target="_blank">React 官方教程</a></li>
-          <li><a href="https://vuejs.org/tutorial/" target="_blank">Vue.js 官方教程</a></li>
-          <li><a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp（免费全栈课程）</a></li>
-          <li><a href="https://frontendmasters.com/" target="_blank">Frontend Masters</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Vue.js/React 开发一个漏洞管理仪表盘<br>② 实现安全的用户认证界面（登录/注册/2FA）<br>③ 完成 <a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp</a> 前端认证<br>④ 开发一个网络拓扑可视化工具</p>
-      </div>
-    </div>
-
-    <div class="module" id="m5-2">
-      <div class="mod-head"><div class="mod-title">5.2 后端开发与 API</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 掌握后端开发与安全 API 设计，能构建生产级服务</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Python 后端（Flask/FastAPI/Django）</li>
-          <li>Go 语言基础与 Web 开发（Gin/Echo）</li>
-          <li>Node.js/Express 后端开发</li>
-          <li>RESTful API 设计与 GraphQL</li>
-          <li>认证与授权（JWT/OAuth2/RBAC）</li>
-          <li>数据库 ORM（SQLAlchemy/GORM/Prisma）</li>
-          <li>API 安全（限流/输入验证/CORS/API Gateway）</li>
-          <li>消息队列（Redis/RabbitMQ/Kafka）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://fastapi.tiangolo.com/zh/" target="_blank">FastAPI 官方文档（中文）</a></li>
-          <li><a href="https://go.dev/tour/" target="_blank">Go 语言之旅</a></li>
-          <li><a href="https://gobyexample.com/" target="_blank">Go by Example</a></li>
-          <li><a href="https://roadmap.sh/backend" target="_blank">Backend Developer Roadmap</a></li>
-          <li>书籍：《Go 语言编程》《Flask Web 开发实战》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 FastAPI 开发一个漏洞管理 REST API<br>② 用 Go 开发一个高性能端口扫描服务<br>③ 实现完整的 JWT 认证系统（注册/登录/刷新/注销）<br>④ 开发一个安全资产管理平台后端</p>
-      </div>
-    </div>
-
-    <div class="module" id="m5-3">
-      <div class="mod-head"><div class="mod-title">5.3 安全工具开发</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 能独立开发实用的安全工具和自动化平台</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Python 安全工具开发（scapy/pwntools/impacket）</li>
-          <li>Go 安全工具开发（高并发扫描器/代理工具）</li>
-          <li>漏洞扫描器开发（POC 框架设计）</li>
-          <li>流量分析工具开发</li>
-          <li>Burp Suite 插件开发（Java/Python）</li>
-          <li>浏览器扩展开发（安全检测插件）</li>
-          <li>自动化渗透框架设计</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://scapy.readthedocs.io/" target="_blank">Scapy 官方文档</a></li>
-          <li><a href="https://docs.pwntools.com/" target="_blank">pwntools 官方文档</a></li>
-          <li><a href="https://portswigger.net/burp/extender" target="_blank">Burp Suite Extender API</a></li>
-          <li>书籍：《Black Hat Python》《Black Hat Go》《Gray Hat Python》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Python 开发一个多线程子域名扫描器<br>② 用 Go 开发一个高速目录爆破工具<br>③ 开发一个 Burp Suite 自动化检测插件<br>④ 开发一个集成化漏洞扫描平台（Web 界面 + 扫描引擎 + 报告生成）</p>
-      </div>
-    </div>
-
-    <div class="module" id="m5-4">
-      <div class="mod-head"><div class="mod-title">5.4 云安全与架构</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 掌握云平台安全架构，能评估和加固云环境</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>云计算基础（IaaS/PaaS/SaaS/共享责任模型）</li>
-          <li>AWS/Azure/GCP 安全服务概览</li>
-          <li>IAM 策略与最小权限原则</li>
-          <li>云存储安全（S3 Bucket 错误配置/数据加密）</li>
-          <li>Serverless 安全（Lambda/Functions 攻击面）</li>
-          <li>云原生安全工具（ScoutSuite/Prowler/CloudSploit）</li>
-          <li>Kubernetes 安全（RBAC/网络策略/Pod 安全）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.cloudgoat.cloud/" target="_blank">CloudGoat（AWS 攻防靶场）</a></li>
-          <li><a href="https://hackingthe.cloud/" target="_blank">Hacking the Cloud（云安全知识库）</a></li>
-          <li><a href="https://kubernetes.io/docs/home/" target="_blank">Kubernetes 官方文档</a></li>
-          <li><a href="https://sysdig.com/learn-cloud-native/" target="_blank">Sysdig 云原生安全学习</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://www.cloudgoat.cloud/" target="_blank">CloudGoat</a> 全部攻击场景<br>② 用 Prowler/ScoutSuite 审计云环境配置<br>③ 搭建 Kubernetes 集群并实施安全加固<br>④ 设计一个安全的云架构方案</p>
-      </div>
-    </div>
-
-    <div class="module" id="m5-5">
-      <div class="mod-head"><div class="mod-title">5.5 容器与 DevOps</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 掌握容器化技术与 CI/CD，能构建安全的交付流水线</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Docker 核心（镜像/容器/网络/存储/Compose）</li>
-          <li>Dockerfile 最佳实践与安全加固</li>
-          <li>Kubernetes 编排（Deployment/Service/Ingress/ConfigMap）</li>
-          <li>Helm Charts 与 GitOps（ArgoCD/Flux）</li>
-          <li>CI/CD 流水线（GitHub Actions/GitLab CI/Jenkins）</li>
-          <li>基础设施即代码（Terraform/Ansible）</li>
-          <li>监控与可观测性（Prometheus/Grafana/ELK）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.docker.com/get-started/" target="_blank">Docker 官方入门</a></li>
-          <li><a href="https://kubernetes.io/docs/tutorials/" target="_blank">Kubernetes 官方教程</a></li>
-          <li><a href="https://learn.hashicorp.com/terraform" target="_blank">Terraform 学习</a></li>
-          <li><a href="https://www.katacoda.com/" target="_blank">Katacoda（交互式 DevOps 学习）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 将安全工具容器化并发布到 Docker Hub<br>② 用 Docker Compose 搭建完整的安全实验环境<br>③ 用 Terraform 自动化部署云基础设施<br>④ 搭建 GitHub Actions CI/CD 流水线（构建→测试→扫描→部署）</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段六：高级专项 ==================== -->
-  <div class="phase" id="phase6">
-    <h2 class="phase-title">阶段六：高级专项（3-5 年）</h2>
-    <p class="phase-meta">深入底层安全与前沿领域，成为细分方向专家</p>
-
-    <div class="module" id="m6-1">
-      <div class="mod-head"><div class="mod-title">6.1 逆向工程</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 掌握 x86/ARM 逆向分析，能分析闭源软件和恶意代码</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>x86/x64 汇编语言基础</li>
-          <li>PE/ELF 文件格式解析</li>
-          <li>静态分析（IDA Pro/Ghidra/Binary Ninja）</li>
-          <li>动态分析（x64dbg/GDB/WinDbg）</li>
-          <li>反混淆与脱壳技术</li>
-          <li>ARM 逆向基础（移动端/IoT）</li>
-          <li>.NET/Java 反编译（dnSpy/JD-GUI）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://beginners.re/" target="_blank">Reverse Engineering for Beginners（免费书籍）</a></li>
-          <li><a href="https://ghidra-sre.org/" target="_blank">Ghidra（NSA 开源逆向工具）</a></li>
-          <li><a href="https://crackmes.one/" target="_blank">Crackmes.one（逆向练习）</a></li>
-          <li><a href="https://malwareunicorn.org/workshops/re101.html" target="_blank">Malware Unicorn RE101</a></li>
-          <li>书籍：《逆向工程核心原理》《加密与解密》《IDA Pro 权威指南》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://crackmes.one/" target="_blank">Crackmes.one</a> 10 个逆向挑战<br>② 用 Ghidra 分析一个简单的恶意样本<br>③ 完成 <a href="https://www.begin.re/" target="_blank">begin.re</a> 逆向工程课程<br>④ 逆向分析一个 CTF 逆向题目</p>
-      </div>
-    </div>
-
-    <div class="module" id="m6-2">
-      <div class="mod-head"><div class="mod-title">6.2 二进制漏洞利用</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 掌握内存漏洞利用技术，能编写 Exploit</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>栈溢出（Buffer Overflow/ROP/ret2libc/ret2shellcode）</li>
-          <li>堆溢出（Use-After-Free/Double Free/Heap Spray）</li>
-          <li>格式化字符串漏洞</li>
-          <li>保护机制绕过（ASLR/DEP/Stack Canary/PIE/RELRO）</li>
-          <li>Linux Kernel 漏洞利用基础</li>
-          <li>Windows 漏洞利用（SEH/SafeSEH 绕过）</li>
-          <li>Fuzzing 技术（AFL++/LibFuzzer/Honggfuzz）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://pwnable.kr/" target="_blank">pwnable.kr（二进制挑战）</a></li>
-          <li><a href="https://pwnable.tw/" target="_blank">pwnable.tw（进阶二进制）</a></li>
-          <li><a href="https://ropemporium.com/" target="_blank">ROP Emporium（ROP 专项练习）</a></li>
-          <li><a href="https://github.com/shellphish/how2heap" target="_blank">how2heap（堆利用教程）</a></li>
-          <li>书籍：《Hacking: The Art of Exploitation》《0day 安全：软件漏洞分析技术》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 完成 <a href="https://pwnable.kr/" target="_blank">pwnable.kr</a> Toddler's Bottle 全部题目<br>② 完成 <a href="https://ropemporium.com/" target="_blank">ROP Emporium</a> 全部挑战<br>③ 用 AFL++ 对开源软件进行 Fuzzing<br>④ 编写一个完整的栈溢出 Exploit（绕过 ASLR+DEP）</p>
-      </div>
-    </div>
-
-    <div class="module" id="m6-3">
-      <div class="mod-head"><div class="mod-title">6.3 恶意软件分析</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 能分析恶意软件行为，编写检测规则和分析报告</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>恶意软件分类（病毒/蠕虫/木马/勒索/挖矿/APT）</li>
-          <li>静态分析（字符串提取/导入表/PE 头/YARA 规则）</li>
-          <li>动态分析（沙箱/API Monitor/Process Monitor）</li>
-          <li>代码分析（IDA/Ghidra 深入分析恶意逻辑）</li>
-          <li>反分析技术（反调试/反虚拟机/加壳/混淆）</li>
-          <li>C2 通信分析（协议逆向/流量解密）</li>
-          <li>YARA 规则编写与威胁检测</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://malwareunicorn.org/" target="_blank">Malware Unicorn（恶意软件分析课程）</a></li>
-          <li><a href="https://www.hybrid-analysis.com/" target="_blank">Hybrid Analysis（在线沙箱）</a></li>
-          <li><a href="https://any.run/" target="_blank">ANY.RUN（交互式沙箱）</a></li>
-          <li><a href="https://github.com/rshipp/awesome-malware-analysis" target="_blank">Awesome Malware Analysis</a></li>
-          <li>书籍：《恶意代码分析实战》《Practical Malware Analysis》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在隔离环境中分析真实恶意样本（<a href="https://bazaar.abuse.ch/" target="_blank">MalwareBazaar</a>）<br>② 编写 YARA 规则检测特定恶意软件家族<br>③ 完成《恶意代码分析实战》全部实验<br>④ 编写一份完整的恶意软件分析报告</p>
-      </div>
-    </div>
-
-    <div class="module" id="m6-4">
-      <div class="mod-head"><div class="mod-title">6.4 AI 安全</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 理解 AI/ML 安全风险，掌握对抗攻击与防御技术</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>机器学习基础（监督/无监督/深度学习）</li>
-          <li>对抗样本攻击（FGSM/PGD/C&W）</li>
-          <li>模型窃取与模型逆向</li>
-          <li>数据投毒与后门攻击</li>
-          <li>LLM 安全（Prompt Injection/越狱/数据泄露）</li>
-          <li>AI 在安全中的应用（异常检测/恶意流量识别/自动化漏洞挖掘）</li>
-          <li>Deepfake 检测</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.fast.ai/" target="_blank">fast.ai（免费深度学习课程）</a></li>
-          <li><a href="https://github.com/Trusted-AI/adversarial-robustness-toolbox" target="_blank">IBM ART（对抗鲁棒性工具箱）</a></li>
-          <li><a href="https://owasp.org/www-project-machine-learning-security-top-10/" target="_blank">OWASP ML Security Top 10</a></li>
-          <li><a href="https://atlas.mitre.org/" target="_blank">MITRE ATLAS（AI 威胁矩阵）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Python 实现对抗样本攻击（欺骗图像分类器）<br>② 训练一个恶意流量检测模型<br>③ 测试 LLM 的 Prompt Injection 漏洞<br>④ 用 ART 工具箱评估模型鲁棒性</p>
-      </div>
-    </div>
-
-    <div class="module" id="m6-5">
-      <div class="mod-head"><div class="mod-title">6.5 IoT 与工控安全</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 掌握 IoT/ICS 安全评估方法，能发现嵌入式设备漏洞</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>IoT 架构与通信协议（MQTT/CoAP/ZigBee/BLE）</li>
-          <li>固件提取与分析（binwalk/firmware-mod-kit）</li>
-          <li>嵌入式 Linux 安全（U-Boot/BusyBox）</li>
-          <li>硬件安全（UART/JTAG/SPI/I2C 调试接口）</li>
-          <li>工控协议（Modbus/OPC UA/S7comm）</li>
-          <li>SCADA/PLC 安全评估</li>
-          <li>车联网安全基础（CAN 总线/V2X）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.attify.com/iot-security-training" target="_blank">Attify IoT 安全培训</a></li>
-          <li><a href="https://github.com/V33RU/IoTSecurity101" target="_blank">IoT Security 101</a></li>
-          <li><a href="https://www.shodan.io/" target="_blank">Shodan（IoT 搜索引擎）</a></li>
-          <li><a href="https://github.com/scriptingxss/owasp-fstm" target="_blank">OWASP Firmware Security Testing</a></li>
-          <li>书籍：《IoT 渗透测试》《揭秘家用路由器 0day 漏洞挖掘技术》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 binwalk 提取路由器固件并分析文件系统<br>② 在 <a href="https://www.shodan.io/" target="_blank">Shodan</a> 上搜索暴露的 IoT 设备（仅观察）<br>③ 搭建 MQTT 实验环境并测试认证绕过<br>④ 分析一个真实 IoT 设备的固件漏洞（CVE 复现）</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段七：架构领袖 ==================== -->
-  <div class="phase" id="phase7">
-    <h2 class="phase-title">阶段七：架构领袖（5 年+）</h2>
-    <p class="phase-meta">站在全局视角设计安全体系，成为安全架构师与技术领袖</p>
-
-    <div class="module" id="m7-1">
-      <div class="mod-head"><div class="mod-title">7.1 安全架构设计</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 能设计企业级安全架构，制定全面的安全防护体系</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>安全架构框架（SABSA/TOGAF/Zachman）</li>
-          <li>零信任架构设计与实施</li>
-          <li>微服务安全架构（Service Mesh/mTLS/API Gateway）</li>
-          <li>数据安全架构（分类分级/加密/脱敏/DLP）</li>
-          <li>身份与访问管理架构（IAM/PAM/SSO/MFA）</li>
-          <li>安全运营中心（SOC）架构设计</li>
-          <li>灾难恢复与业务连续性（DR/BCP）</li>
-          <li>安全度量与 KPI 体系</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.isc2.org/certifications/cissp" target="_blank">CISSP 认证（安全架构师必备）</a></li>
-          <li><a href="https://csrc.nist.gov/publications" target="_blank">NIST 出版物库</a></li>
-          <li><a href="https://www.sabsa.org/" target="_blank">SABSA 安全架构框架</a></li>
-          <li>书籍：《企业安全架构》《CISSP 官方学习指南》《零信任网络》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 为一个中型企业设计完整的安全架构方案<br>② 设计零信任网络架构并编写实施计划<br>③ 制定数据安全分类分级方案<br>④ 备考 CISSP 认证</p>
-      </div>
-    </div>
-
-    <div class="module" id="m7-2">
-      <div class="mod-head"><div class="mod-title">7.2 安全管理与领导力</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 具备安全团队管理能力，能推动组织安全文化建设</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>安全团队建设（红队/蓝队/紫队/安全开发）</li>
-          <li>安全预算规划与资源分配</li>
-          <li>安全意识培训体系</li>
-          <li>供应链安全管理</li>
-          <li>安全事件沟通与汇报（向上管理/跨部门协作）</li>
-          <li>行业认证路径（CISSP/CISM/OSCP/OSEP/CRTO）</li>
-          <li>技术演讲与知识分享</li>
-          <li>开源社区贡献与个人品牌建设</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.isaca.org/credentialing/cism" target="_blank">CISM 认证（安全管理）</a></li>
-          <li><a href="https://www.offensive-security.com/pwk-oscp/" target="_blank">OSCP 认证（渗透测试）</a></li>
-          <li><a href="https://www.offensive-security.com/pen300-osep/" target="_blank">OSEP 认证（高级渗透）</a></li>
-          <li>书籍：《CISO 的第一年》《安全领导力》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 制定一份年度安全规划与预算方案<br>② 设计安全意识培训课程并模拟钓鱼演练<br>③ 在技术社区发表安全研究文章或演讲<br>④ 为开源安全项目贡献代码<br>⑤ 规划并考取 OSCP/CISSP 认证</p>
-      </div>
-    </div>
-  </div>
-
-  </div><!-- end .wrap -->
-
-  <!-- Footer -->
   <footer>
-    <span class="footer-copy">© 2026 BigHeadZuo</span>
+    <p class="footer-copy">© 2026 BigHeadZuo · 网络安全全栈课程体系</p>
   </footer>
 
-  <!-- Side Index -->
-  <nav class="side-index" id="sideIndex">
-    <div class="si-title">索引</div>
-    <div class="si-stage">阶段一 · 基础筑基</div>
-    <a href="#m1-1">1.1 计算机组成</a>
-    <a href="#m1-2">1.2 计算机网络</a>
-    <a href="#m1-3">1.3 Linux 管理</a>
-    <a href="#m1-4">1.4 Python 编程</a>
-    <a href="#m1-5">1.5 数据库 SQL</a>
-    <a href="#m1-6">1.6 Shell 脚本</a>
-    <div class="si-stage">阶段二 · 安全入门</div>
-    <a href="#m2-1">2.1 Web 安全</a>
-    <a href="#m2-2">2.2 渗透工具链</a>
-    <a href="#m2-3">2.3 密码学</a>
-    <a href="#m2-4">2.4 协议安全</a>
-    <a href="#m2-5">2.5 系统安全</a>
-    <a href="#m2-6">2.6 法规合规</a>
-    <div class="si-stage">阶段三 · 渗透进阶</div>
-    <a href="#m3-1">3.1 内网域攻防</a>
-    <a href="#m3-2">3.2 代码审计</a>
-    <a href="#m3-3">3.3 红队武器化</a>
-    <a href="#m3-4">3.4 移动安全</a>
-    <a href="#m3-5">3.5 漏洞赏金</a>
-    <div class="si-stage">阶段四 · 安全防御</div>
-    <a href="#m4-1">4.1 SIEM 运营</a>
-    <a href="#m4-2">4.2 IDS/IPS</a>
-    <a href="#m4-3">4.3 应急取证</a>
-    <a href="#m4-4">4.4 威胁情报</a>
-    <a href="#m4-5">4.5 安全框架</a>
-    <a href="#m4-6">4.6 DevSecOps</a>
-    <div class="si-stage">阶段五 · 全栈开发</div>
-    <a href="#m5-1">5.1 前端开发</a>
-    <a href="#m5-2">5.2 后端 API</a>
-    <a href="#m5-3">5.3 工具开发</a>
-    <a href="#m5-4">5.4 云安全</a>
-    <a href="#m5-5">5.5 容器 DevOps</a>
-    <div class="si-stage">阶段六 · 高级专项</div>
-    <a href="#m6-1">6.1 逆向工程</a>
-    <a href="#m6-2">6.2 二进制利用</a>
-    <a href="#m6-3">6.3 恶意软件</a>
-    <a href="#m6-4">6.4 AI 安全</a>
-    <a href="#m6-5">6.5 IoT 工控</a>
-    <div class="si-stage">阶段七 · 架构领袖</div>
-    <a href="#m7-1">7.1 安全架构</a>
-    <a href="#m7-2">7.2 管理领导力</a>
-  </nav>
-  <button class="si-toggle" id="siToggle" onclick="document.getElementById('sideIndex').classList.remove('collapsed')" aria-label="展开索引">索引</button>
-
-  <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
+  <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
 
   <script>
-  // Back to top button
-  const btn = document.querySelector('.back-top');
-  addEventListener('scroll', () => {
-    btn.classList.toggle('show', scrollY > 400);
-  });
+    function togglePhase(n) {
+      const detail = document.getElementById('phase' + n);
+      const cards = document.querySelectorAll('.phase-card');
+      const card = cards[n - 1];
+      const isOpen = detail.classList.contains('open');
 
-  // Side index active state tracking
-  (function(){
-    const si = document.getElementById('sideIndex');
-    const links = si.querySelectorAll('a[href^="#m"]');
-    const sections = [];
-    links.forEach(a => {
-      const id = a.getAttribute('href').slice(1);
-      const el = document.getElementById(id);
-      if(el) sections.push({el, a});
-    });
-    let ticking = false;
-    addEventListener('scroll', () => {
-      if(!ticking){
-        requestAnimationFrame(() => {
-          let current = null;
-          const offset = window.innerHeight * 0.3;
-          for(let i = sections.length - 1; i >= 0; i--){
-            if(sections[i].el.getBoundingClientRect().top <= offset){
-              current = sections[i];
-              break;
-            }
-          }
-          links.forEach(a => a.classList.remove('active'));
-          if(current) current.a.classList.add('active');
-          ticking = false;
-        });
-        ticking = true;
+      // Close all
+      document.querySelectorAll('.phase-detail').forEach(d => d.classList.remove('open'));
+      document.querySelectorAll('.phase-card').forEach(c => c.classList.remove('active'));
+
+      if (!isOpen) {
+        detail.classList.add('open');
+        card.classList.add('active');
+        setTimeout(() => {
+          detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       }
+    }
+
+    // Back to top
+    const btn = document.querySelector('.back-top');
+    addEventListener('scroll', () => {
+      btn.classList.toggle('show', scrollY > 400);
     });
-  })();
   </script>
+
 </body>
 </html>
