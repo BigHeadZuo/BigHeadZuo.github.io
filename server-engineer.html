@@ -6,7 +6,7 @@
   <title>服务器工程师课程体系 - BigHeadZuo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #000;
@@ -23,1417 +23,1157 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      background: var(--bg); color: var(--text); line-height: 1.7;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     a { text-decoration: none; color: inherit; }
 
-    /* ===== Page Header ===== */
     .page-header {
-      text-align: center;
-      padding: 100px 24px 48px;
-      max-width: 680px;
-      margin: 0 auto;
+      text-align: center; padding: 100px 24px 48px;
+      max-width: 680px; margin: 0 auto;
     }
     .page-header h1 {
-      font-size: 56px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      margin-bottom: 12px;
+      font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.08; margin-bottom: 12px;
       background: linear-gradient(180deg, #fff 40%, #999);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .page-header .subtitle {
-      font-size: 21px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      letter-spacing: -0.01em;
-      margin-bottom: 8px;
+    .page-header .subtitle { font-size: 19px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+    .page-header .stats { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; }
+    .page-header nav { display: flex; justify-content: center; gap: 20px; }
+    .page-header nav a { color: var(--accent); font-size: 15px; transition: color 0.2s; }
+    .page-header nav a:hover { color: var(--accent-hover); }
+
+    .divider { height: 1px; background: var(--border); max-width: 980px; margin: 0 auto; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ===== Phase Cards Grid ===== */
+    .phase-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px; margin: 48px 0;
     }
-    .page-header .stats {
-      font-size: 14px;
-      color: var(--text-dim);
+    .phase-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; cursor: pointer;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .phase-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+    .phase-card.active { border-color: var(--accent); background: rgba(41,151,255,0.04); }
+    .phase-card .phase-num {
+      font-size: 11px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;
+    }
+    .phase-card .phase-name {
+      font-size: 20px; font-weight: 700; color: #fff;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .phase-card .phase-time {
+      font-size: 13px; color: var(--text-dim); margin-bottom: 10px;
+    }
+    .phase-card .phase-desc {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+    }
+    .phase-card .phase-modules {
+      font-size: 12px; color: var(--text-dim); margin-top: 12px;
+      padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .phase-card .arrow {
+      position: absolute; top: 28px; right: 24px;
+      font-size: 18px; color: var(--text-dim); transition: all 0.3s;
+    }
+    .phase-card.active .arrow { color: var(--accent); transform: rotate(90deg); }
+
+    /* ===== Phase Detail (hidden by default) ===== */
+    .phase-detail {
+      max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
       margin-bottom: 0;
     }
-
-    /* ===== Navigation ===== */
-    .nav {
-      text-align: center;
-      padding: 24px;
-      margin-bottom: 8px;
-    }
-    .nav a {
-      color: var(--accent);
-      font-size: 14px;
-      font-weight: 500;
-      margin: 0 8px;
-      transition: color 0.2s;
-    }
-    .nav a:hover { color: var(--accent-hover); }
-    .nav .sep { color: var(--text-dim); font-size: 14px; }
-
-    /* ===== Divider ===== */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    /* ===== Main Wrap ===== */
-    .wrap {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 24px 80px;
-    }
-
-    /* ===== Table of Contents ===== */
-    .toc {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      margin: 48px 0;
-    }
-    .toc h3 {
-      color: #fff;
-      font-size: 20px;
-      font-weight: 600;
+    .phase-detail.open { max-height: none; margin-bottom: 48px; }
+    .phase-detail-inner { padding: 32px 0 0; }
+    .phase-detail-header {
+      display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 24px;
-      letter-spacing: -0.02em;
     }
-    .toc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 8px 32px;
+    .phase-detail-title {
+      font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.03em;
     }
-    .toc .toc-stage {
-      color: var(--text-dim);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-top: 16px;
-      margin-bottom: 4px;
+    .phase-close {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text-dim); cursor: pointer;
+      padding: 6px 14px; font-size: 13px; transition: all 0.2s;
     }
-    .toc a {
-      display: block;
-      color: var(--accent);
-      font-size: 14px;
-      padding: 4px 0;
-      transition: color 0.2s;
-    }
-    .toc a:hover { color: var(--accent-hover); }
-
-    /* ===== Phase ===== */
-    .phase {
-      margin-bottom: 64px;
-    }
-    .phase-title {
-      font-size: 36px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-      padding-top: 48px;
-    }
-    .phase-meta {
-      color: var(--text-secondary);
-      font-size: 17px;
-      margin-bottom: 32px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
+    .phase-close:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
 
     /* ===== Module Card ===== */
     .module {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; margin-bottom: 16px;
       transition: border-color 0.3s;
     }
-    .module:hover {
-      border-color: rgba(255,255,255,0.15);
-    }
-    .mod-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-      gap: 16px;
-    }
-    .mod-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.02em;
-    }
-    .mod-time {
-      font-size: 12px;
-      color: var(--text-dim);
-      background: rgba(255,255,255,0.04);
-      padding: 4px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-      border: 1px solid var(--border);
-    }
-
-    /* ===== Goal ===== */
-    .mod-goal {
-      font-size: 14px;
-      color: var(--green);
-      margin-bottom: 24px;
-      padding: 12px 16px;
-      border-left: 3px solid var(--green);
-      background: rgba(48,209,88,0.04);
-      border-radius: 0 8px 8px 0;
-    }
-
-    /* ===== Section ===== */
-    .mod-section {
-      margin-bottom: 20px;
-    }
-    .mod-section-title {
-      font-size: 11px;
-      color: var(--text-dim);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 12px;
-    }
-    .mod-list {
-      list-style: none;
-      padding: 0;
-    }
-    .mod-list li {
-      font-size: 14px;
-      color: var(--text-secondary);
-      padding: 4px 0 4px 20px;
-      position: relative;
-      line-height: 1.6;
-    }
-    .mod-list li::before {
-      content: '·';
-      position: absolute;
-      left: 4px;
-      color: var(--text-dim);
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 1.3;
-    }
-    .mod-list a {
-      color: var(--accent);
-      transition: color 0.2s;
-    }
+    .module:hover { border-color: rgba(255,255,255,0.15); }
+    .mod-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 16px; }
+    .mod-title { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+    .mod-time { font-size: 12px; color: var(--text-dim); background: rgba(255,255,255,0.04); padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
+    .mod-goal { font-size: 14px; color: var(--green); margin-bottom: 16px; padding: 10px 14px; background: rgba(48,209,88,0.04); border-radius: 8px; border-left: 3px solid rgba(48,209,88,0.4); }
+    .mod-section { margin-bottom: 16px; }
+    .mod-section-title { font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .mod-list { list-style: none; padding: 0; }
+    .mod-list li { font-size: 14px; color: var(--text-secondary); padding: 4px 0 4px 20px; position: relative; line-height: 1.6; }
+    .mod-list li::before { content: '·'; position: absolute; left: 6px; color: var(--text-dim); font-weight: 700; }
+    .mod-list a { color: var(--accent); transition: color 0.2s; }
     .mod-list a:hover { color: var(--accent-hover); }
-
-    /* ===== Practice ===== */
-    .mod-practice {
-      background: rgba(255,159,10,0.04);
-      border: 1px solid rgba(255,159,10,0.12);
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-top: 8px;
-    }
-    .mod-practice-title {
-      font-size: 12px;
-      color: var(--amber);
-      font-weight: 600;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .mod-practice p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-    .mod-practice a {
-      color: var(--accent);
-      transition: color 0.2s;
-    }
+    .mod-practice { background: rgba(255,159,10,0.03); border: 1px solid rgba(255,159,10,0.1); border-radius: 10px; padding: 14px 18px; margin-top: 8px; }
+    .mod-practice-title { font-size: 12px; font-weight: 600; color: var(--amber); margin-bottom: 6px; }
+    .mod-practice p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+    .mod-practice a { color: var(--accent); transition: color 0.2s; }
     .mod-practice a:hover { color: var(--accent-hover); }
-    .mod-practice code {
-      font-size: 13px;
-      background: rgba(255,255,255,0.06);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--text);
-    }
+    .mod-practice code { font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; font-size: 13px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; }
 
-    /* ===== Side Index ===== */
-    .side-index {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 30;
-      background: #111;
-      border: 1px solid var(--border);
-      border-left: none;
-      border-radius: 0 12px 12px 0;
-      padding: 16px 12px;
-      max-height: 80vh;
-      overflow-y: auto;
-      transition: opacity 0.3s;
-    }
-    .side-index::-webkit-scrollbar { width: 3px; }
-    .side-index::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-    .side-index .si-title {
-      font-size: 10px;
-      color: var(--text-dim);
-      text-align: center;
-      margin-bottom: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    .side-index a {
-      display: block;
-      font-size: 12px;
-      color: var(--text-dim);
-      padding: 3px 12px 3px 10px;
-      border-radius: 6px;
-      transition: all 0.2s;
-      white-space: nowrap;
-      border-left: 2px solid transparent;
-      margin-bottom: 1px;
-    }
-    .side-index a:hover {
-      color: var(--text);
-      background: rgba(255,255,255,0.04);
-    }
-    .side-index a.active {
-      color: var(--accent);
-      border-left-color: var(--accent);
-      background: rgba(41,151,255,0.06);
-    }
-    .side-index .si-stage {
-      font-size: 10px;
-      color: rgba(255,255,255,0.2);
-      margin-top: 10px;
-      margin-bottom: 4px;
-      padding-left: 10px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    @media(max-width:1200px) { .side-index { display: none; } }
+    footer { max-width: 980px; margin: 0 auto; padding: 32px 24px 48px; border-top: 1px solid var(--border); text-align: center; }
+    .footer-copy { font-size: 12px; color: var(--text-dim); }
 
-    /* ===== Back to Top ===== */
-    .back-top {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 20;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 18px;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-    .back-top:hover {
-      background: #1a1a1a;
-      color: var(--text);
-      border-color: rgba(255,255,255,0.15);
-    }
+    .back-top { position: fixed; bottom: 32px; right: 32px; z-index: 20; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); font-size: 16px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: all 0.3s; }
+    .back-top:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
     .back-top.show { display: flex; }
 
-    /* ===== Responsive ===== */
-    @media(max-width:768px) {
+    @media (max-width: 768px) {
       .page-header { padding: 64px 20px 32px; }
-      .page-header h1 { font-size: 36px; }
-      .page-header .subtitle { font-size: 17px; }
-      .toc { padding: 24px; }
-      .toc-grid { grid-template-columns: 1fr; }
-      .phase-title { font-size: 28px; padding-top: 32px; }
-      .module { padding: 24px; }
-      .mod-head { flex-direction: column; gap: 8px; }
-      .mod-title { font-size: 18px; }
-      .wrap { padding: 0 16px 60px; }
-    }
-    @media(max-width:480px) {
-      .page-header h1 { font-size: 28px; }
-      .nav a { font-size: 13px; margin: 0 4px; }
+      .page-header h1 { font-size: 32px; }
+      .wrap { padding: 0 20px 60px; }
+      .phase-grid { grid-template-columns: 1fr; }
+      .phase-detail-title { font-size: 22px; }
+      .module { padding: 20px; }
+      .mod-head { flex-direction: column; gap: 6px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <h1>🖥️ 服务器工程师课程体系</h1>
+  <section class="page-header">
+    <h1>服务器工程师课程体系</h1>
     <p class="subtitle">从零基础到高级系统架构师 · 完整学习路径</p>
     <p class="stats">6 大阶段 · 30 课程模块 · 480+ 学时 · 覆盖运维到云原生</p>
-  </header>
-
-  <nav class="nav">
-    <a href="index.html">← 主页</a>
-    <span class="sep">·</span>
-    <a href="courses.html">安全课程</a>
-    <span class="sep">·</span>
-    <a href="network-engineer.html">网络</a>
-    <span class="sep">·</span>
-    <a href="tools.html">工具箱</a>
-  </nav>
+    <nav>
+      <a href="index.html">← 主页</a>
+      <a href="courses.html">安全课程</a>
+      <a href="network-engineer.html">网络</a>
+      <a href="tools.html">工具箱</a>
+    </nav>
+  </section>
 
   <div class="divider"></div>
 
-  <main class="wrap">
+  <div class="wrap">
 
-  <!-- Table of Contents -->
-  <div class="toc">
-    <h3>📑 课程目录</h3>
-    <div class="toc-grid">
-      <div>
-        <div class="toc-stage">阶段一 · 系统基础</div>
-        <a href="#s1-1">1.1 Linux 系统管理</a>
-        <a href="#s1-2">1.2 Windows Server</a>
-        <a href="#s1-3">1.3 Shell 脚本编程</a>
-        <a href="#s1-4">1.4 计算机硬件基础</a>
-        <a href="#s1-5">1.5 存储技术基础</a>
-        <div class="toc-stage">阶段二 · 服务部署</div>
-        <a href="#s2-1">2.1 Web 服务器</a>
-        <a href="#s2-2">2.2 数据库服务</a>
-        <a href="#s2-3">2.3 邮件与通信服务</a>
-        <a href="#s2-4">2.4 文件与目录服务</a>
-        <a href="#s2-5">2.5 缓存与消息队列</a>
+    <!-- ===== Phase Cards ===== -->
+    <div class="phase-grid">
+      <div class="phase-card" onclick="togglePhase(1)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段一</div>
+        <div class="phase-name">系统基础</div>
+        <div class="phase-time">0-4 个月</div>
+        <div class="phase-desc">精通Linux/Windows系统管理，打好运维基本功</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
-      <div>
-        <div class="toc-stage">阶段三 · 自动化运维</div>
-        <a href="#s3-1">3.1 配置管理</a>
-        <a href="#s3-2">3.2 监控告警体系</a>
-        <a href="#s3-3">3.3 日志管理</a>
-        <a href="#s3-4">3.4 CI/CD 流水线</a>
-        <a href="#s3-5">3.5 Python 运维开发</a>
-        <div class="toc-stage">阶段四 · 虚拟化与容器</div>
-        <a href="#s4-1">4.1 服务器虚拟化</a>
-        <a href="#s4-2">4.2 Docker 容器</a>
-        <a href="#s4-3">4.3 Kubernetes 编排</a>
-        <a href="#s4-4">4.4 微服务架构</a>
-        <a href="#s4-5">4.5 服务网格</a>
+      <div class="phase-card" onclick="togglePhase(2)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段二</div>
+        <div class="phase-name">服务部署</div>
+        <div class="phase-time">4-10 个月</div>
+        <div class="phase-desc">掌握企业核心服务的部署、配置与优化</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
-      <div>
-        <div class="toc-stage">阶段五 · 云计算</div>
-        <a href="#s5-1">5.1 公有云平台</a>
-        <a href="#s5-2">5.2 基础设施即代码</a>
-        <a href="#s5-3">5.3 Serverless</a>
-        <a href="#s5-4">5.4 云数据库与存储</a>
-        <a href="#s5-5">5.5 混合云与多云</a>
-        <div class="toc-stage">阶段六 · 架构与管理</div>
-        <a href="#s6-1">6.1 高可用架构</a>
-        <a href="#s6-2">6.2 性能优化</a>
-        <a href="#s6-3">6.3 安全加固</a>
-        <a href="#s6-4">6.4 灾备与容灾</a>
-        <a href="#s6-5">6.5 认证与发展</a>
+      <div class="phase-card" onclick="togglePhase(3)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段三</div>
+        <div class="phase-name">自动化运维</div>
+        <div class="phase-time">10-18 个月</div>
+        <div class="phase-desc">告别手工运维，用代码和工具实现自动化管理</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
-    </div>
-  </div>
-
-  <!-- ==================== 阶段一：系统基础 ==================== -->
-  <div class="phase" id="phase1">
-    <h2 class="phase-title">🐧 阶段一：系统基础（0-4 个月）</h2>
-    <p class="phase-meta">精通 Linux/Windows 系统管理，打好运维基本功</p>
-
-    <div class="module" id="s1-1">
-      <div class="mod-head"><div class="mod-title">1.1 Linux 系统管理</div><div class="mod-time">⏱ 60 学时</div></div>
-      <div class="mod-goal">🎯 精通 Linux 系统管理，能独立运维生产服务器</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Linux 发行版选择（CentOS/Rocky/Ubuntu/Debian/RHEL）</li>
-          <li>文件系统层级（FHS）与目录结构</li>
-          <li>用户/组管理、权限管理（chmod/chown/ACL/SUID/SGID/Sticky）</li>
-          <li>软件包管理（yum/dnf/apt/rpm/dpkg）</li>
-          <li>systemd 服务管理（unit 文件编写/依赖管理）</li>
-          <li>进程管理（ps/top/htop/kill/nice/cgroups）</li>
-          <li>磁盘管理（fdisk/parted/LVM/RAID/fstab）</li>
-          <li>网络配置（ip/ss/nmcli/NetworkManager/netplan）</li>
-          <li>SSH 配置与密钥管理（跳板机/ProxyJump）</li>
-          <li>SELinux/AppArmor 安全模块</li>
-          <li>内核参数调优（sysctl）</li>
-        </ul>
+      <div class="phase-card" onclick="togglePhase(4)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段四</div>
+        <div class="phase-name">虚拟化与容器</div>
+        <div class="phase-time">18-28 个月</div>
+        <div class="phase-desc">掌握虚拟化与容器编排，迈入云原生时代</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://linuxjourney.com/" target="_blank">Linux Journey（交互式学习）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1Sv411r7vd" target="_blank">兄弟连 Linux 教程（B站）</a></li>
-          <li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9" target="_blank">RHEL 9 官方文档</a></li>
-          <li><a href="https://www.linuxfromscratch.org/" target="_blank">Linux From Scratch</a></li>
-          <li>书籍：《鸟哥的 Linux 私房菜》《UNIX/Linux 系统管理技术手册》</li>
-        </ul>
+      <div class="phase-card" onclick="togglePhase(5)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段五</div>
+        <div class="phase-name">云计算</div>
+        <div class="phase-time">2-3 年</div>
+        <div class="phase-desc">掌握公有云平台与云原生技术，成为云计算专家</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 安装 Rocky Linux 9，配置网络/用户/SSH 密钥登录<br>② 配置 LVM 逻辑卷并在线扩容<br>③ 编写 systemd service 文件管理自定义服务<br>④ 完成 <a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit</a> 全部关卡</p>
+      <div class="phase-card" onclick="togglePhase(6)">
+        <span class="arrow">›</span>
+        <div class="phase-num">阶段六</div>
+        <div class="phase-name">架构与管理</div>
+        <div class="phase-time">3-5 年</div>
+        <div class="phase-desc">站在全局视角设计系统架构，成为高级系统架构师</div>
+        <div class="phase-modules">5 门课程</div>
       </div>
     </div>
 
-    <div class="module" id="s1-2">
-      <div class="mod-head"><div class="mod-title">1.2 Windows Server</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Windows Server 管理，能运维 AD 域环境</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Windows Server 2022 安装与基础配置</li>
-          <li>Active Directory 域服务（AD DS/OU/GPO）</li>
-          <li>DNS/DHCP/WINS 服务配置</li>
-          <li>文件服务器与 DFS 分布式文件系统</li>
-          <li>IIS Web 服务器配置</li>
-          <li>PowerShell 系统管理</li>
-          <li>Windows 备份与恢复（WSB/System State）</li>
-          <li>Hyper-V 虚拟化基础</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://learn.microsoft.com/en-us/windows-server/" target="_blank">Microsoft Windows Server 文档</a></li>
-          <li><a href="https://learn.microsoft.com/en-us/powershell/" target="_blank">PowerShell 官方文档</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1pW411y7HQ" target="_blank">Windows Server 教程（B站）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 AD 域控制器，创建 OU 和组策略<br>② 配置 DFS 实现文件共享与复制<br>③ 用 PowerShell 批量创建用户和管理权限<br>④ 配置 IIS 部署 Web 应用</p>
+    <!-- ===== Phase 1 Detail ===== -->
+    <div class="phase-detail" id="phase1">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段一：系统基础</div>
+          <button class="phase-close" onclick="togglePhase(1)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="s1-1">
+          <div class="mod-head"><div class="mod-title">1.1 Linux 系统管理</div><div class="mod-time">⏱ 60 学时</div></div>
+          <div class="mod-goal">🎯 精通 Linux 系统管理，能独立运维生产服务器</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Linux 发行版选择（CentOS/Rocky/Ubuntu/Debian/RHEL）</li>
+              <li>文件系统层级（FHS）与目录结构</li>
+              <li>用户/组管理、权限管理（chmod/chown/ACL/SUID/SGID/Sticky）</li>
+              <li>软件包管理（yum/dnf/apt/rpm/dpkg）</li>
+              <li>systemd 服务管理（unit 文件编写/依赖管理）</li>
+              <li>进程管理（ps/top/htop/kill/nice/cgroups）</li>
+              <li>磁盘管理（fdisk/parted/LVM/RAID/fstab）</li>
+              <li>网络配置（ip/ss/nmcli/NetworkManager/netplan）</li>
+              <li>SSH 配置与密钥管理（跳板机/ProxyJump）</li>
+              <li>SELinux/AppArmor 安全模块</li>
+              <li>内核参数调优（sysctl）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://linuxjourney.com/" target="_blank">Linux Journey（交互式学习）</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1Sv411r7vd" target="_blank">兄弟连 Linux 教程（B站）</a></li>
+              <li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9" target="_blank">RHEL 9 官方文档</a></li>
+              <li><a href="https://www.linuxfromscratch.org/" target="_blank">Linux From Scratch</a></li>
+              <li>书籍：《鸟哥的 Linux 私房菜》《UNIX/Linux 系统管理技术手册》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 安装 Rocky Linux 9，配置网络/用户/SSH 密钥登录<br>② 配置 LVM 逻辑卷并在线扩容<br>③ 编写 systemd service 文件管理自定义服务<br>④ 完成 <a href="https://overthewire.org/wargames/bandit/" target="_blank">OverTheWire Bandit</a> 全部关卡</p>
+          </div>
+        </div>
+
+        <div class="module" id="s1-2">
+          <div class="mod-head"><div class="mod-title">1.2 Windows Server</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Windows Server 管理，能运维 AD 域环境</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Windows Server 2022 安装与基础配置</li>
+              <li>Active Directory 域服务（AD DS/OU/GPO）</li>
+              <li>DNS/DHCP/WINS 服务配置</li>
+              <li>文件服务器与 DFS 分布式文件系统</li>
+              <li>IIS Web 服务器配置</li>
+              <li>PowerShell 系统管理</li>
+              <li>Windows 备份与恢复（WSB/System State）</li>
+              <li>Hyper-V 虚拟化基础</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://learn.microsoft.com/en-us/windows-server/" target="_blank">Microsoft Windows Server 文档</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/powershell/" target="_blank">PowerShell 官方文档</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1pW411y7HQ" target="_blank">Windows Server 教程（B站）</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 搭建 AD 域控制器，创建 OU 和组策略<br>② 配置 DFS 实现文件共享与复制<br>③ 用 PowerShell 批量创建用户和管理权限<br>④ 配置 IIS 部署 Web 应用</p>
+          </div>
+        </div>
+
+        <div class="module" id="s1-3">
+          <div class="mod-head"><div class="mod-title">1.3 Shell 脚本编程</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 编写高质量运维脚本，自动化日常管理任务</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Bash 语法（变量/数组/条件/循环/函数/信号处理）</li>
+              <li>文本处理（grep/sed/awk/sort/uniq/cut/tr）</li>
+              <li>正则表达式（基础/扩展/Perl 兼容）</li>
+              <li>脚本调试（set -euxo pipefail/shellcheck）</li>
+              <li>常用运维脚本模式（日志轮转/备份/监控/巡检）</li>
+              <li>PowerShell 脚本编程</li>
+              <li>expect 自动化交互</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.shellscript.sh/" target="_blank">Shell Scripting Tutorial</a></li>
+              <li><a href="https://www.shellcheck.net/" target="_blank">ShellCheck（在线检查）</a></li>
+              <li><a href="https://explainshell.com/" target="_blank">ExplainShell（命令解析）</a></li>
+              <li>书籍：《Linux 命令行与 Shell 脚本编程大全》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 编写服务器巡检脚本（CPU/内存/磁盘/进程/端口）<br>② 编写自动化备份脚本（增量备份+远程同步+邮件通知）<br>③ 编写日志分析脚本（统计 PV/UV/错误率/慢请求）<br>④ 完成 <a href="https://cmdchallenge.com/" target="_blank">CMD Challenge</a></p>
+          </div>
+        </div>
+
+        <div class="module" id="s1-4">
+          <div class="mod-head"><div class="mod-title">1.4 计算机硬件基础</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 了解服务器硬件架构，能进行硬件选型和故障排查</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>服务器类型（塔式/机架式/刀片式）</li>
+              <li>CPU 架构（x86/ARM/多路/超线程/NUMA）</li>
+              <li>内存技术（DDR4/DDR5/ECC/RDIMM）</li>
+              <li>存储介质（HDD/SSD/NVMe/SAS/SATA）</li>
+              <li>RAID 技术（0/1/5/6/10/50/60）</li>
+              <li>服务器管理（IPMI/iLO/iDRAC/BMC）</li>
+              <li>数据中心基础（机柜/UPS/空调/布线）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.dell.com/support/kbdoc/en-us/000131486/idrac-home" target="_blank">Dell iDRAC 文档</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1YW411T7GX" target="_blank">服务器硬件基础（B站）</a></li>
+              <li>书籍：《数据中心基础设施》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 <code>lscpu/lsmem/lsblk/dmidecode</code> 查看服务器硬件信息<br>② 配置硬件 RAID 并测试性能<br>③ 通过 IPMI/iDRAC 远程管理服务器<br>④ 为一个项目做服务器硬件选型方案</p>
+          </div>
+        </div>
+
+        <div class="module" id="s1-5">
+          <div class="mod-head"><div class="mod-title">1.5 存储技术基础</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握企业存储技术，能规划和管理存储系统</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>存储类型（DAS/NAS/SAN）</li>
+              <li>文件系统（ext4/XFS/ZFS/Btrfs）</li>
+              <li>NFS/CIFS/SMB 网络文件共享</li>
+              <li>iSCSI/FC SAN 存储网络</li>
+              <li>分布式存储（Ceph/GlusterFS/MinIO）</li>
+              <li>备份策略（全量/增量/差异/3-2-1 原则）</li>
+              <li>存储性能指标（IOPS/吞吐量/延迟）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://docs.ceph.com/" target="_blank">Ceph 官方文档</a></li>
+              <li><a href="https://min.io/docs/minio/linux/index.html" target="_blank">MinIO 文档</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1Jb4y1z7Gq" target="_blank">存储技术入门（B站）</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 搭建 NFS 服务器实现文件共享<br>② 部署 MinIO 对象存储<br>③ 搭建 Ceph 集群（3 节点）<br>④ 用 fio 测试存储性能并对比不同文件系统</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s1-3">
-      <div class="mod-head"><div class="mod-title">1.3 Shell 脚本编程</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 编写高质量运维脚本，自动化日常管理任务</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Bash 语法（变量/数组/条件/循环/函数/信号处理）</li>
-          <li>文本处理（grep/sed/awk/sort/uniq/cut/tr）</li>
-          <li>正则表达式（基础/扩展/Perl 兼容）</li>
-          <li>脚本调试（set -euxo pipefail/shellcheck）</li>
-          <li>常用运维脚本模式（日志轮转/备份/监控/巡检）</li>
-          <li>PowerShell 脚本编程</li>
-          <li>expect 自动化交互</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.shellscript.sh/" target="_blank">Shell Scripting Tutorial</a></li>
-          <li><a href="https://www.shellcheck.net/" target="_blank">ShellCheck（在线检查）</a></li>
-          <li><a href="https://explainshell.com/" target="_blank">ExplainShell（命令解析）</a></li>
-          <li>书籍：《Linux 命令行与 Shell 脚本编程大全》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 编写服务器巡检脚本（CPU/内存/磁盘/进程/端口）<br>② 编写自动化备份脚本（增量备份+远程同步+邮件通知）<br>③ 编写日志分析脚本（统计 PV/UV/错误率/慢请求）<br>④ 完成 <a href="https://cmdchallenge.com/" target="_blank">CMD Challenge</a></p>
+    <!-- ===== Phase 2 Detail ===== -->
+    <div class="phase-detail" id="phase2">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段二：服务部署</div>
+          <button class="phase-close" onclick="togglePhase(2)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="s2-1">
+          <div class="mod-head"><div class="mod-title">2.1 Web 服务器</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 精通 Nginx/Apache 配置，能搭建高性能 Web 服务</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Nginx 核心配置（server/location/upstream/rewrite）</li>
+              <li>Nginx 反向代理与负载均衡（轮询/权重/IP Hash/最少连接）</li>
+              <li>Nginx HTTPS 配置（Let's Encrypt/证书链/HSTS/OCSP Stapling）</li>
+              <li>Nginx 性能调优（worker/连接数/缓存/gzip/sendfile）</li>
+              <li>Apache httpd 配置（VirtualHost/mod_rewrite/.htaccess）</li>
+              <li>Tomcat/JBoss Java 应用服务器</li>
+              <li>PHP-FPM 配置与优化</li>
+              <li>CDN 原理与配置</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://nginx.org/en/docs/" target="_blank">Nginx 官方文档</a></li>
+              <li><a href="https://www.digitalocean.com/community/tags/nginx" target="_blank">DigitalOcean Nginx 教程</a></li>
+              <li><a href="https://letsencrypt.org/docs/" target="_blank">Let's Encrypt 文档</a></li>
+              <li>书籍：《深入理解 Nginx》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 配置 Nginx 反向代理多个后端服务<br>② 配置 Let's Encrypt 自动续签 HTTPS 证书<br>③ 搭建 LNMP 环境部署 WordPress<br>④ 用 ab/wrk 压测并调优 Nginx 性能</p>
+          </div>
+        </div>
+
+        <div class="module" id="s2-2">
+          <div class="mod-head"><div class="mod-title">2.2 数据库服务</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握 MySQL/PostgreSQL/Redis 部署与运维</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>MySQL 安装配置与参数调优（innodb_buffer_pool/连接数/慢查询）</li>
+              <li>MySQL 主从复制（异步/半同步/GTID）</li>
+              <li>MySQL 高可用（MHA/MGR/InnoDB Cluster）</li>
+              <li>MySQL 备份恢复（mysqldump/xtrabackup/binlog 恢复）</li>
+              <li>PostgreSQL 基础管理与复制</li>
+              <li>Redis 部署（主从/哨兵/Cluster）</li>
+              <li>MongoDB 基础管理与副本集</li>
+              <li>数据库监控（PMM/Grafana）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://dev.mysql.com/doc/" target="_blank">MySQL 官方文档</a></li>
+              <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL 官方文档</a></li>
+              <li><a href="https://redis.io/docs/" target="_blank">Redis 官方文档</a></li>
+              <li>书籍：《高性能 MySQL》《Redis 设计与实现》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 搭建 MySQL 主从复制并测试故障切换<br>② 配置 xtrabackup 自动化备份策略<br>③ 部署 Redis Cluster（6 节点）<br>④ 用 sysbench 压测数据库性能并调优</p>
+          </div>
+        </div>
+
+        <div class="module" id="s2-3">
+          <div class="mod-head"><div class="mod-title">2.3 邮件与通信服务</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 能搭建企业邮件系统和即时通信服务</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>邮件系统架构（MTA/MDA/MUA）</li>
+              <li>Postfix + Dovecot 邮件服务器</li>
+              <li>邮件安全（SPF/DKIM/DMARC/TLS）</li>
+              <li>反垃圾邮件（SpamAssassin/Rspamd）</li>
+              <li>企业邮箱方案（iRedMail/Zimbra/Exchange）</li>
+              <li>即时通信（Mattermost/Rocket.Chat）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.iredmail.org/docs/" target="_blank">iRedMail 文档</a></li>
+              <li><a href="https://docs.mattermost.com/" target="_blank">Mattermost 文档</a></li>
+              <li><a href="https://www.postfix.org/documentation.html" target="_blank">Postfix 官方文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 iRedMail 搭建完整邮件系统<br>② 配置 SPF/DKIM/DMARC 邮件安全<br>③ 部署 Mattermost 团队通信平台<br>④ 测试邮件收发并排查投递问题</p>
+          </div>
+        </div>
+
+        <div class="module" id="s2-4">
+          <div class="mod-head"><div class="mod-title">2.4 文件与目录服务</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 搭建企业文件共享与统一认证系统</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Samba 文件共享（与 AD 集成）</li>
+              <li>NFS v4 配置与 Kerberos 认证</li>
+              <li>LDAP 目录服务（OpenLDAP/389 DS）</li>
+              <li>FreeIPA 统一身份管理</li>
+              <li>Nextcloud 企业网盘</li>
+              <li>GitLab 代码仓库</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.freeipa.org/page/Documentation" target="_blank">FreeIPA 文档</a></li>
+              <li><a href="https://docs.nextcloud.com/" target="_blank">Nextcloud 文档</a></li>
+              <li><a href="https://docs.gitlab.com/" target="_blank">GitLab 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 FreeIPA 实现统一身份认证<br>② 搭建 Samba 文件服务器并与 LDAP 集成<br>③ 部署 Nextcloud 企业网盘<br>④ 部署 GitLab 并配置 CI/CD Runner</p>
+          </div>
+        </div>
+
+        <div class="module" id="s2-5">
+          <div class="mod-head"><div class="mod-title">2.5 缓存与消息队列</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握缓存和消息中间件的部署与运维</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Redis 高级（持久化/淘汰策略/Pipeline/Lua 脚本）</li>
+              <li>Memcached 部署与使用</li>
+              <li>RabbitMQ（Exchange/Queue/Binding/集群/镜像队列）</li>
+              <li>Kafka（Topic/Partition/Consumer Group/集群部署）</li>
+              <li>Elasticsearch 集群部署与管理</li>
+              <li>中间件监控与告警</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.rabbitmq.com/docs" target="_blank">RabbitMQ 官方文档</a></li>
+              <li><a href="https://kafka.apache.org/documentation/" target="_blank">Kafka 官方文档</a></li>
+              <li><a href="https://www.elastic.co/guide/" target="_blank">Elasticsearch 官方指南</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 RabbitMQ 集群（3 节点镜像队列）<br>② 部署 Kafka 集群并测试消息吞吐<br>③ 部署 Elasticsearch 集群并配置索引生命周期<br>④ 搭建 Redis + Kafka + ES 的完整数据管道</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s1-4">
-      <div class="mod-head"><div class="mod-title">1.4 计算机硬件基础</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 了解服务器硬件架构，能进行硬件选型和故障排查</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>服务器类型（塔式/机架式/刀片式）</li>
-          <li>CPU 架构（x86/ARM/多路/超线程/NUMA）</li>
-          <li>内存技术（DDR4/DDR5/ECC/RDIMM）</li>
-          <li>存储介质（HDD/SSD/NVMe/SAS/SATA）</li>
-          <li>RAID 技术（0/1/5/6/10/50/60）</li>
-          <li>服务器管理（IPMI/iLO/iDRAC/BMC）</li>
-          <li>数据中心基础（机柜/UPS/空调/布线）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.dell.com/support/kbdoc/en-us/000131486/idrac-home" target="_blank">Dell iDRAC 文档</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1YW411T7GX" target="_blank">服务器硬件基础（B站）</a></li>
-          <li>书籍：《数据中心基础设施》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 <code>lscpu/lsmem/lsblk/dmidecode</code> 查看服务器硬件信息<br>② 配置硬件 RAID 并测试性能<br>③ 通过 IPMI/iDRAC 远程管理服务器<br>④ 为一个项目做服务器硬件选型方案</p>
+    <!-- ===== Phase 3 Detail ===== -->
+    <div class="phase-detail" id="phase3">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段三：自动化运维</div>
+          <button class="phase-close" onclick="togglePhase(3)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="s3-1">
+          <div class="mod-head"><div class="mod-title">3.1 配置管理</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 用 Ansible/Puppet/SaltStack 实现批量配置管理</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Ansible 核心（Inventory/Playbook/Role/Galaxy）</li>
+              <li>Ansible 高级（Vault/动态 Inventory/自定义模块/AWX）</li>
+              <li>Puppet 基础（Manifest/Module/Hiera）</li>
+              <li>SaltStack 基础（State/Pillar/Grain）</li>
+              <li>配置管理最佳实践（幂等性/版本控制/测试）</li>
+              <li>Packer 镜像构建</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://docs.ansible.com/" target="_blank">Ansible 官方文档</a></li>
+              <li><a href="https://www.ansible.com/resources/get-started" target="_blank">Ansible 入门指南</a></li>
+              <li><a href="https://www.packer.io/docs" target="_blank">Packer 文档</a></li>
+              <li>书籍：《Ansible 权威指南》《Ansible for DevOps》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Ansible Playbook 自动化部署 LNMP 环境<br>② 编写 Ansible Role 管理 MySQL 主从复制<br>③ 用 Ansible Vault 管理敏感配置<br>④ 用 Packer 构建标准化系统镜像</p>
+          </div>
+        </div>
+
+        <div class="module" id="s3-2">
+          <div class="mod-head"><div class="mod-title">3.2 监控告警体系</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 搭建完整的监控告警体系，实现全方位可观测性</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Prometheus 架构（采集/存储/查询/告警）</li>
+              <li>PromQL 查询语言</li>
+              <li>Grafana 仪表盘设计</li>
+              <li>Alertmanager 告警路由（邮件/钉钉/企微/PagerDuty）</li>
+              <li>Node Exporter/MySQL Exporter/自定义 Exporter</li>
+              <li>Zabbix 企业级监控</li>
+              <li>APM 应用性能监控（SkyWalking/Jaeger）</li>
+              <li>可观测性三支柱（Metrics/Logs/Traces）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://prometheus.io/docs/" target="_blank">Prometheus 官方文档</a></li>
+              <li><a href="https://grafana.com/docs/" target="_blank">Grafana 官方文档</a></li>
+              <li><a href="https://www.zabbix.com/documentation" target="_blank">Zabbix 官方文档</a></li>
+              <li>书籍：《Prometheus 监控实战》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 Prometheus + Grafana 监控 Linux 服务器<br>② 编写 PromQL 查询并创建告警规则<br>③ 配置 Alertmanager 发送告警到钉钉/企微<br>④ 搭建完整监控体系（主机+数据库+中间件+应用）</p>
+          </div>
+        </div>
+
+        <div class="module" id="s3-3">
+          <div class="mod-head"><div class="mod-title">3.3 日志管理</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 搭建集中式日志平台，实现日志采集、分析与告警</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>ELK Stack（Elasticsearch + Logstash + Kibana）</li>
+              <li>Filebeat/Fluentd/Fluent Bit 日志采集</li>
+              <li>Logstash 管道配置（Input/Filter/Output）</li>
+              <li>Kibana 可视化与仪表盘</li>
+              <li>Loki + Promtail + Grafana（轻量日志方案）</li>
+              <li>日志规范与结构化日志</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.elastic.co/guide/en/elastic-stack/current/index.html" target="_blank">Elastic Stack 官方指南</a></li>
+              <li><a href="https://grafana.com/docs/loki/latest/" target="_blank">Grafana Loki 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 ELK Stack 收集 Nginx/系统日志<br>② 配置 Logstash 解析结构化日志<br>③ 在 Kibana 中创建日志分析仪表盘<br>④ 部署 Loki 并对比 ELK 方案</p>
+          </div>
+        </div>
+
+        <div class="module" id="s3-4">
+          <div class="mod-head"><div class="mod-title">3.4 CI/CD 流水线</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 搭建自动化构建、测试、部署流水线</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Jenkins 安装配置（Pipeline/Jenkinsfile/Blue Ocean）</li>
+              <li>GitLab CI/CD（.gitlab-ci.yml/Runner/Stage/Job）</li>
+              <li>GitHub Actions 工作流</li>
+              <li>ArgoCD GitOps 持续部署</li>
+              <li>制品管理（Nexus/Harbor/JFrog）</li>
+              <li>蓝绿部署/金丝雀发布/滚动更新</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.jenkins.io/doc/" target="_blank">Jenkins 官方文档</a></li>
+              <li><a href="https://docs.gitlab.com/ee/ci/" target="_blank">GitLab CI/CD 文档</a></li>
+              <li><a href="https://argo-cd.readthedocs.io/" target="_blank">ArgoCD 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 搭建 Jenkins 并编写 Pipeline 自动化构建项目<br>② 配置 GitLab CI 实现代码提交自动测试+部署<br>③ 部署 ArgoCD 实现 GitOps 持续部署<br>④ 搭建 Harbor 私有镜像仓库</p>
+          </div>
+        </div>
+
+        <div class="module" id="s3-5">
+          <div class="mod-head"><div class="mod-title">3.5 Python 运维开发</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 用 Python 开发运维工具和自动化平台</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Python 运维库（paramiko/fabric/psutil/requests）</li>
+              <li>Flask/FastAPI 开发运维 Web 平台</li>
+              <li>CMDB 资产管理系统开发</li>
+              <li>自动化发布平台开发</li>
+              <li>运维 API 开发（RESTful 接口）</li>
+              <li>定时任务调度（APScheduler/Celery）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI 官方文档</a></li>
+              <li><a href="https://docs.celeryq.dev/" target="_blank">Celery 官方文档</a></li>
+              <li>书籍：《Python 自动化运维》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Python 开发服务器批量管理工具<br>② 用 FastAPI 开发 CMDB 资产管理 API<br>③ 开发自动化巡检报告生成工具<br>④ 用 Celery 实现异步任务调度</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s1-5">
-      <div class="mod-head"><div class="mod-title">1.5 存储技术基础</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握企业存储技术，能规划和管理存储系统</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>存储类型（DAS/NAS/SAN）</li>
-          <li>文件系统（ext4/XFS/ZFS/Btrfs）</li>
-          <li>NFS/CIFS/SMB 网络文件共享</li>
-          <li>iSCSI/FC SAN 存储网络</li>
-          <li>分布式存储（Ceph/GlusterFS/MinIO）</li>
-          <li>备份策略（全量/增量/差异/3-2-1 原则）</li>
-          <li>存储性能指标（IOPS/吞吐量/延迟）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.ceph.com/" target="_blank">Ceph 官方文档</a></li>
-          <li><a href="https://min.io/docs/minio/linux/index.html" target="_blank">MinIO 文档</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1Jb4y1z7Gq" target="_blank">存储技术入门（B站）</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 NFS 服务器实现文件共享<br>② 部署 MinIO 对象存储<br>③ 搭建 Ceph 集群（3 节点）<br>④ 用 fio 测试存储性能并对比不同文件系统</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
+    <!-- ===== Phase 4 Detail ===== -->
+    <div class="phase-detail" id="phase4">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段四：虚拟化与容器</div>
+          <button class="phase-close" onclick="togglePhase(4)">收起 ↑</button>
+        </div>
 
-  <!-- ==================== 阶段二：服务部署 ==================== -->
-  <div class="phase" id="phase2">
-    <h2 class="phase-title">⚙️ 阶段二：服务部署（4-10 个月）</h2>
-    <p class="phase-meta">掌握企业核心服务的部署、配置与优化</p>
+        <div class="module" id="s4-1">
+          <div class="mod-head"><div class="mod-title">4.1 服务器虚拟化</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 掌握主流虚拟化平台的部署与管理</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>虚拟化原理（全虚拟化/半虚拟化/硬件辅助）</li>
+              <li>KVM/QEMU/libvirt 管理</li>
+              <li>VMware vSphere（ESXi/vCenter/vMotion/HA/DRS）</li>
+              <li>Proxmox VE 开源虚拟化</li>
+              <li>虚拟机模板与克隆</li>
+              <li>虚拟网络与存储配置</li>
+              <li>OpenStack 基础（Nova/Neutron/Cinder/Glance）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://pve.proxmox.com/wiki/Main_Page" target="_blank">Proxmox VE 文档</a></li>
+              <li><a href="https://docs.vmware.com/" target="_blank">VMware 官方文档</a></li>
+              <li><a href="https://docs.openstack.org/" target="_blank">OpenStack 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 Proxmox VE 并创建虚拟机集群<br>② 配置 KVM 虚拟机并用 virsh 管理<br>③ 搭建 vSphere 实验环境（ESXi + vCenter）<br>④ 部署 OpenStack 单节点（DevStack）</p>
+          </div>
+        </div>
 
-    <div class="module" id="s2-1">
-      <div class="mod-head"><div class="mod-title">2.1 Web 服务器</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 精通 Nginx/Apache 配置，能搭建高性能 Web 服务</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Nginx 核心配置（server/location/upstream/rewrite）</li>
-          <li>Nginx 反向代理与负载均衡（轮询/权重/IP Hash/最少连接）</li>
-          <li>Nginx HTTPS 配置（Let's Encrypt/证书链/HSTS/OCSP Stapling）</li>
-          <li>Nginx 性能调优（worker/连接数/缓存/gzip/sendfile）</li>
-          <li>Apache httpd 配置（VirtualHost/mod_rewrite/.htaccess）</li>
-          <li>Tomcat/JBoss Java 应用服务器</li>
-          <li>PHP-FPM 配置与优化</li>
-          <li>CDN 原理与配置</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://nginx.org/en/docs/" target="_blank">Nginx 官方文档</a></li>
-          <li><a href="https://www.digitalocean.com/community/tags/nginx" target="_blank">DigitalOcean Nginx 教程</a></li>
-          <li><a href="https://letsencrypt.org/docs/" target="_blank">Let's Encrypt 文档</a></li>
-          <li>书籍：《深入理解 Nginx》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 配置 Nginx 反向代理多个后端服务<br>② 配置 Let's Encrypt 自动续签 HTTPS 证书<br>③ 搭建 LNMP 环境部署 WordPress<br>④ 用 ab/wrk 压测并调优 Nginx 性能</p>
-      </div>
-    </div>
+        <div class="module" id="s4-2">
+          <div class="mod-head"><div class="mod-title">4.2 Docker 容器</div><div class="mod-time">⏱ 35 学时</div></div>
+          <div class="mod-goal">🎯 精通 Docker 容器技术，能容器化任意应用</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Docker 架构（镜像/容器/仓库/网络/存储）</li>
+              <li>Dockerfile 最佳实践（多阶段构建/层缓存/安全）</li>
+              <li>Docker Compose 多容器编排</li>
+              <li>Docker 网络模式（bridge/host/overlay/macvlan）</li>
+              <li>Docker 存储（volume/bind mount/tmpfs）</li>
+              <li>容器安全（rootless/seccomp/AppArmor/镜像扫描）</li>
+              <li>私有镜像仓库（Harbor/Registry）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://docs.docker.com/" target="_blank">Docker 官方文档</a></li>
+              <li><a href="https://labs.play-with-docker.com/" target="_blank">Play with Docker（在线实验）</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1og4y1q7M4" target="_blank">Docker 入门到实践（B站）</a></li>
+              <li>书籍：《Docker 技术入门与实战》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 编写 Dockerfile 容器化一个 Python/Node.js 应用<br>② 用 Docker Compose 搭建完整开发环境（Web+DB+Cache+MQ）<br>③ 部署 Harbor 私有镜像仓库<br>④ 用 Trivy 扫描镜像安全漏洞</p>
+          </div>
+        </div>
 
-    <div class="module" id="s2-2">
-      <div class="mod-head"><div class="mod-title">2.2 数据库服务</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 掌握 MySQL/PostgreSQL/Redis 部署与运维</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>MySQL 安装配置与参数调优（innodb_buffer_pool/连接数/慢查询）</li>
-          <li>MySQL 主从复制（异步/半同步/GTID）</li>
-          <li>MySQL 高可用（MHA/MGR/InnoDB Cluster）</li>
-          <li>MySQL 备份恢复（mysqldump/xtrabackup/binlog 恢复）</li>
-          <li>PostgreSQL 基础管理与复制</li>
-          <li>Redis 部署（主从/哨兵/Cluster）</li>
-          <li>MongoDB 基础管理与副本集</li>
-          <li>数据库监控（PMM/Grafana）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://dev.mysql.com/doc/" target="_blank">MySQL 官方文档</a></li>
-          <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL 官方文档</a></li>
-          <li><a href="https://redis.io/docs/" target="_blank">Redis 官方文档</a></li>
-          <li>书籍：《高性能 MySQL》《Redis 设计与实现》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 MySQL 主从复制并测试故障切换<br>② 配置 xtrabackup 自动化备份策略<br>③ 部署 Redis Cluster（6 节点）<br>④ 用 sysbench 压测数据库性能并调优</p>
-      </div>
-    </div>
+        <div class="module" id="s4-3">
+          <div class="mod-head"><div class="mod-title">4.3 Kubernetes 编排</div><div class="mod-time">⏱ 50 学时</div></div>
+          <div class="mod-goal">🎯 精通 K8s 集群管理，能运维生产级 Kubernetes</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>K8s 架构（Master/Node/etcd/API Server/Scheduler/Controller）</li>
+              <li>核心资源（Pod/Deployment/Service/Ingress/ConfigMap/Secret）</li>
+              <li>存储（PV/PVC/StorageClass/CSI）</li>
+              <li>网络（CNI/Service/Ingress Controller/NetworkPolicy）</li>
+              <li>调度策略（亲和性/污点/容忍/资源限制）</li>
+              <li>Helm Charts 包管理</li>
+              <li>K8s 集群部署（kubeadm/kubespray/RKE2）</li>
+              <li>K8s 监控（Prometheus Operator/kube-state-metrics）</li>
+              <li>K8s 故障排查（kubectl debug/日志/事件）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://kubernetes.io/docs/" target="_blank">Kubernetes 官方文档</a></li>
+              <li><a href="https://killer.sh/" target="_blank">Killer.sh（CKA 模拟考试）</a></li>
+              <li><a href="https://www.bilibili.com/video/BV1Qv41167ck" target="_blank">K8s 入门到实践（B站）</a></li>
+              <li>书籍：《Kubernetes 权威指南》《Kubernetes in Action》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 kubeadm 搭建 3 节点 K8s 集群<br>② 部署一个完整应用（Deployment+Service+Ingress+HPA）<br>③ 配置 Prometheus Operator 监控集群<br>④ 备考 <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" target="_blank">CKA 认证</a></p>
+          </div>
+        </div>
 
-    <div class="module" id="s2-3">
-      <div class="mod-head"><div class="mod-title">2.3 邮件与通信服务</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 能搭建企业邮件系统和即时通信服务</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>邮件系统架构（MTA/MDA/MUA）</li>
-          <li>Postfix + Dovecot 邮件服务器</li>
-          <li>邮件安全（SPF/DKIM/DMARC/TLS）</li>
-          <li>反垃圾邮件（SpamAssassin/Rspamd）</li>
-          <li>企业邮箱方案（iRedMail/Zimbra/Exchange）</li>
-          <li>即时通信（Mattermost/Rocket.Chat）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.iredmail.org/docs/" target="_blank">iRedMail 文档</a></li>
-          <li><a href="https://docs.mattermost.com/" target="_blank">Mattermost 文档</a></li>
-          <li><a href="https://www.postfix.org/documentation.html" target="_blank">Postfix 官方文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 iRedMail 搭建完整邮件系统<br>② 配置 SPF/DKIM/DMARC 邮件安全<br>③ 部署 Mattermost 团队通信平台<br>④ 测试邮件收发并排查投递问题</p>
-      </div>
-    </div>
+        <div class="module" id="s4-4">
+          <div class="mod-head"><div class="mod-title">4.4 微服务架构</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 理解微服务架构，能运维微服务基础设施</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>微服务架构原则（单一职责/独立部署/去中心化）</li>
+              <li>服务注册与发现（Consul/Nacos/etcd）</li>
+              <li>API 网关（Kong/APISIX/Traefik）</li>
+              <li>配置中心（Nacos/Apollo/Consul KV）</li>
+              <li>分布式链路追踪（Jaeger/Zipkin/SkyWalking）</li>
+              <li>熔断限流（Sentinel/Hystrix）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://docs.konghq.com/" target="_blank">Kong API Gateway 文档</a></li>
+              <li><a href="https://www.consul.io/docs" target="_blank">Consul 文档</a></li>
+              <li><a href="https://www.jaegertracing.io/docs/" target="_blank">Jaeger 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 Consul 服务注册中心<br>② 部署 Kong/APISIX API 网关<br>③ 部署 Jaeger 实现分布式链路追踪<br>④ 搭建完整微服务基础设施（注册+网关+配置+监控+追踪）</p>
+          </div>
+        </div>
 
-    <div class="module" id="s2-4">
-      <div class="mod-head"><div class="mod-title">2.4 文件与目录服务</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 搭建企业文件共享与统一认证系统</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Samba 文件共享（与 AD 集成）</li>
-          <li>NFS v4 配置与 Kerberos 认证</li>
-          <li>LDAP 目录服务（OpenLDAP/389 DS）</li>
-          <li>FreeIPA 统一身份管理</li>
-          <li>Nextcloud 企业网盘</li>
-          <li>GitLab 代码仓库</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.freeipa.org/page/Documentation" target="_blank">FreeIPA 文档</a></li>
-          <li><a href="https://docs.nextcloud.com/" target="_blank">Nextcloud 文档</a></li>
-          <li><a href="https://docs.gitlab.com/" target="_blank">GitLab 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 FreeIPA 实现统一身份认证<br>② 搭建 Samba 文件服务器并与 LDAP 集成<br>③ 部署 Nextcloud 企业网盘<br>④ 部署 GitLab 并配置 CI/CD Runner</p>
-      </div>
-    </div>
-
-    <div class="module" id="s2-5">
-      <div class="mod-head"><div class="mod-title">2.5 缓存与消息队列</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握缓存和消息中间件的部署与运维</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Redis 高级（持久化/淘汰策略/Pipeline/Lua 脚本）</li>
-          <li>Memcached 部署与使用</li>
-          <li>RabbitMQ（Exchange/Queue/Binding/集群/镜像队列）</li>
-          <li>Kafka（Topic/Partition/Consumer Group/集群部署）</li>
-          <li>Elasticsearch 集群部署与管理</li>
-          <li>中间件监控与告警</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.rabbitmq.com/docs" target="_blank">RabbitMQ 官方文档</a></li>
-          <li><a href="https://kafka.apache.org/documentation/" target="_blank">Kafka 官方文档</a></li>
-          <li><a href="https://www.elastic.co/guide/" target="_blank">Elasticsearch 官方指南</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 RabbitMQ 集群（3 节点镜像队列）<br>② 部署 Kafka 集群并测试消息吞吐<br>③ 部署 Elasticsearch 集群并配置索引生命周期<br>④ 搭建 Redis + Kafka + ES 的完整数据管道</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段三：自动化运维 ==================== -->
-  <div class="phase" id="phase3">
-    <h2 class="phase-title">🤖 阶段三：自动化运维（10-18 个月）</h2>
-    <p class="phase-meta">告别手工运维，用代码和工具实现自动化管理</p>
-
-    <div class="module" id="s3-1">
-      <div class="mod-head"><div class="mod-title">3.1 配置管理</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 用 Ansible/Puppet/SaltStack 实现批量配置管理</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Ansible 核心（Inventory/Playbook/Role/Galaxy）</li>
-          <li>Ansible 高级（Vault/动态 Inventory/自定义模块/AWX）</li>
-          <li>Puppet 基础（Manifest/Module/Hiera）</li>
-          <li>SaltStack 基础（State/Pillar/Grain）</li>
-          <li>配置管理最佳实践（幂等性/版本控制/测试）</li>
-          <li>Packer 镜像构建</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.ansible.com/" target="_blank">Ansible 官方文档</a></li>
-          <li><a href="https://www.ansible.com/resources/get-started" target="_blank">Ansible 入门指南</a></li>
-          <li><a href="https://www.packer.io/docs" target="_blank">Packer 文档</a></li>
-          <li>书籍：《Ansible 权威指南》《Ansible for DevOps》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Ansible Playbook 自动化部署 LNMP 环境<br>② 编写 Ansible Role 管理 MySQL 主从复制<br>③ 用 Ansible Vault 管理敏感配置<br>④ 用 Packer 构建标准化系统镜像</p>
+        <div class="module" id="s4-5">
+          <div class="mod-head"><div class="mod-title">4.5 服务网格</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 掌握 Service Mesh 技术，实现零侵入的服务治理</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Service Mesh 架构（数据平面/控制平面）</li>
+              <li>Istio 核心功能（流量管理/安全/可观测性）</li>
+              <li>Envoy Sidecar 代理</li>
+              <li>Linkerd 轻量级 Service Mesh</li>
+              <li>mTLS 服务间加密通信</li>
+              <li>金丝雀发布与流量镜像</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://istio.io/latest/docs/" target="_blank">Istio 官方文档</a></li>
+              <li><a href="https://linkerd.io/2/overview/" target="_blank">Linkerd 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 在 K8s 中部署 Istio 并注入 Sidecar<br>② 配置 Istio 流量管理（金丝雀发布/故障注入）<br>③ 配置 mTLS 实现服务间加密<br>④ 用 Kiali 可视化服务网格拓扑</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s3-2">
-      <div class="mod-head"><div class="mod-title">3.2 监控告警体系</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 搭建完整的监控告警体系，实现全方位可观测性</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Prometheus 架构（采集/存储/查询/告警）</li>
-          <li>PromQL 查询语言</li>
-          <li>Grafana 仪表盘设计</li>
-          <li>Alertmanager 告警路由（邮件/钉钉/企微/PagerDuty）</li>
-          <li>Node Exporter/MySQL Exporter/自定义 Exporter</li>
-          <li>Zabbix 企业级监控</li>
-          <li>APM 应用性能监控（SkyWalking/Jaeger）</li>
-          <li>可观测性三支柱（Metrics/Logs/Traces）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://prometheus.io/docs/" target="_blank">Prometheus 官方文档</a></li>
-          <li><a href="https://grafana.com/docs/" target="_blank">Grafana 官方文档</a></li>
-          <li><a href="https://www.zabbix.com/documentation" target="_blank">Zabbix 官方文档</a></li>
-          <li>书籍：《Prometheus 监控实战》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 Prometheus + Grafana 监控 Linux 服务器<br>② 编写 PromQL 查询并创建告警规则<br>③ 配置 Alertmanager 发送告警到钉钉/企微<br>④ 搭建完整监控体系（主机+数据库+中间件+应用）</p>
+    <!-- ===== Phase 5 Detail ===== -->
+    <div class="phase-detail" id="phase5">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段五：云计算</div>
+          <button class="phase-close" onclick="togglePhase(5)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="s5-1">
+          <div class="mod-head"><div class="mod-title">5.1 公有云平台</div><div class="mod-time">⏱ 40 学时</div></div>
+          <div class="mod-goal">🎯 掌握主流云平台核心服务，能设计云上架构</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>AWS 核心服务（EC2/S3/RDS/VPC/IAM/Lambda/EKS）</li>
+              <li>Azure 核心服务（VM/Blob/SQL/VNet/AAD/AKS）</li>
+              <li>阿里云/腾讯云核心服务</li>
+              <li>云计算计费模型（按需/预留/Spot）</li>
+              <li>云上网络架构（VPC/子网/安全组/NAT/LB）</li>
+              <li>云上安全最佳实践（IAM/加密/审计）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://aws.amazon.com/training/" target="_blank">AWS 培训与认证</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/azure/" target="_blank">Microsoft Learn - Azure</a></li>
+              <li><a href="https://www.coursera.org/professional-certificates/aws-cloud-solutions-architect" target="_blank">AWS Solutions Architect - Coursera</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 在 AWS 免费套餐中搭建完整 Web 应用架构<br>② 配置 Auto Scaling + ALB 实现弹性伸缩<br>③ 用 CloudFormation/ARM 模板部署基础设施<br>④ 备考 AWS SAA / Azure AZ-104 认证</p>
+          </div>
+        </div>
+
+        <div class="module" id="s5-2">
+          <div class="mod-head"><div class="mod-title">5.2 基础设施即代码</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 用代码管理云基础设施，实现可重复的环境部署</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Terraform 核心（Provider/Resource/Module/State）</li>
+              <li>Terraform 高级（Workspace/Remote State/Sentinel）</li>
+              <li>Pulumi（用编程语言写 IaC）</li>
+              <li>CloudFormation / ARM Templates / CDK</li>
+              <li>IaC 最佳实践（模块化/状态管理/CI/CD 集成）</li>
+              <li>IaC 安全扫描（Checkov/tfsec/KICS）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://developer.hashicorp.com/terraform/tutorials" target="_blank">Terraform 官方教程</a></li>
+              <li><a href="https://www.pulumi.com/docs/" target="_blank">Pulumi 文档</a></li>
+              <li>书籍：《Terraform: Up & Running》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Terraform 部署完整的 VPC + EC2 + RDS 环境<br>② 编写 Terraform Module 实现可复用基础设施<br>③ 配置 Terraform Remote State（S3 + DynamoDB）<br>④ 在 CI/CD 中集成 Terraform Plan/Apply</p>
+          </div>
+        </div>
+
+        <div class="module" id="s5-3">
+          <div class="mod-head"><div class="mod-title">5.3 Serverless</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 掌握无服务器架构，能设计事件驱动的应用</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>FaaS（AWS Lambda/Azure Functions/阿里云函数计算）</li>
+              <li>事件驱动架构（API Gateway + Lambda + DynamoDB）</li>
+              <li>Serverless Framework / SAM</li>
+              <li>Knative（K8s 上的 Serverless）</li>
+              <li>Serverless 最佳实践（冷启动/并发/成本优化）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.serverless.com/framework/docs" target="_blank">Serverless Framework 文档</a></li>
+              <li><a href="https://docs.aws.amazon.com/lambda/" target="_blank">AWS Lambda 文档</a></li>
+              <li><a href="https://knative.dev/docs/" target="_blank">Knative 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Lambda + API Gateway 构建 REST API<br>② 用 Serverless Framework 部署完整应用<br>③ 在 K8s 上部署 Knative 并运行函数<br>④ 设计一个事件驱动的数据处理管道</p>
+          </div>
+        </div>
+
+        <div class="module" id="s5-4">
+          <div class="mod-head"><div class="mod-title">5.4 云数据库与存储</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 掌握云上数据服务的选型与运维</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>云数据库（RDS/Aurora/Cloud SQL/PolarDB）</li>
+              <li>NoSQL 云服务（DynamoDB/CosmosDB/MongoDB Atlas）</li>
+              <li>对象存储（S3/Blob/OSS）与生命周期管理</li>
+              <li>云缓存（ElastiCache/Azure Cache）</li>
+              <li>数据迁移（DMS/DataSync）</li>
+              <li>数据湖架构基础</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://docs.aws.amazon.com/rds/" target="_blank">AWS RDS 文档</a></li>
+              <li><a href="https://docs.aws.amazon.com/s3/" target="_blank">AWS S3 文档</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 部署 RDS 多可用区实例并配置只读副本<br>② 配置 S3 存储桶策略、版本控制和生命周期<br>③ 用 DMS 迁移本地数据库到云上<br>④ 设计一个云上数据存储方案（热/温/冷分层）</p>
+          </div>
+        </div>
+
+        <div class="module" id="s5-5">
+          <div class="mod-head"><div class="mod-title">5.5 混合云与多云</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 设计混合云/多云架构，避免厂商锁定</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>混合云架构模式（突发上云/灾备上云/分层部署）</li>
+              <li>多云管理平台（Rancher/Crossplane）</li>
+              <li>云间网络互联（专线/VPN/云联网）</li>
+              <li>多云 Kubernetes（Rancher/Anthos/Arc）</li>
+              <li>云成本优化（FinOps 实践）</li>
+              <li>云厂商对比与选型</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.rancher.com/docs/" target="_blank">Rancher 文档</a></li>
+              <li><a href="https://www.finops.org/" target="_blank">FinOps Foundation</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Rancher 管理多个 K8s 集群（本地+云上）<br>② 设计混合云灾备架构方案<br>③ 实施云成本分析与优化<br>④ 编写多云架构选型评估报告</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s3-3">
-      <div class="mod-head"><div class="mod-title">3.3 日志管理</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 搭建集中式日志平台，实现日志采集、分析与告警</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>ELK Stack（Elasticsearch + Logstash + Kibana）</li>
-          <li>Filebeat/Fluentd/Fluent Bit 日志采集</li>
-          <li>Logstash 管道配置（Input/Filter/Output）</li>
-          <li>Kibana 可视化与仪表盘</li>
-          <li>Loki + Promtail + Grafana（轻量日志方案）</li>
-          <li>日志规范与结构化日志</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.elastic.co/guide/en/elastic-stack/current/index.html" target="_blank">Elastic Stack 官方指南</a></li>
-          <li><a href="https://grafana.com/docs/loki/latest/" target="_blank">Grafana Loki 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 ELK Stack 收集 Nginx/系统日志<br>② 配置 Logstash 解析结构化日志<br>③ 在 Kibana 中创建日志分析仪表盘<br>④ 部署 Loki 并对比 ELK 方案</p>
+    <!-- ===== Phase 6 Detail ===== -->
+    <div class="phase-detail" id="phase6">
+      <div class="phase-detail-inner">
+        <div class="phase-detail-header">
+          <div class="phase-detail-title">阶段六：架构与管理</div>
+          <button class="phase-close" onclick="togglePhase(6)">收起 ↑</button>
+        </div>
+
+        <div class="module" id="s6-1">
+          <div class="mod-head"><div class="mod-title">6.1 高可用架构</div><div class="mod-time">⏱ 30 学时</div></div>
+          <div class="mod-goal">🎯 设计 99.99% 可用性的系统架构</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>高可用设计原则（冗余/故障转移/降级/限流/熔断）</li>
+              <li>负载均衡架构（四层/七层/全局负载均衡）</li>
+              <li>数据库高可用（主从/MGR/PXC/Patroni）</li>
+              <li>缓存架构（多级缓存/缓存穿透/雪崩/击穿）</li>
+              <li>分布式系统理论（CAP/BASE/一致性协议）</li>
+              <li>SLA 设计与度量（可用性/RTO/RPO）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://github.com/donnemartin/system-design-primer" target="_blank">System Design Primer</a></li>
+              <li><a href="https://sre.google/books/" target="_blank">Google SRE Books（免费）</a></li>
+              <li>书籍：《大型网站技术架构》《SRE: Google 运维解密》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 设计一个高可用 Web 应用架构（LB+Web+DB+Cache）<br>② 搭建 Keepalived + Nginx 高可用负载均衡<br>③ 模拟故障并验证自动切换<br>④ 编写系统架构设计文档</p>
+          </div>
+        </div>
+
+        <div class="module" id="s6-2">
+          <div class="mod-head"><div class="mod-title">6.2 性能优化</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握系统性能分析与优化方法论</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>性能分析方法论（USE/RED/黄金信号）</li>
+              <li>Linux 性能工具（perf/strace/sar/vmstat/iostat/bpftrace）</li>
+              <li>CPU 优化（上下文切换/中断/NUMA 绑定）</li>
+              <li>内存优化（OOM/Swap/大页/内存泄漏排查）</li>
+              <li>磁盘 I/O 优化（调度器/预读/直接 I/O）</li>
+              <li>网络优化（内核参数/连接数/缓冲区/TCP 调优）</li>
+              <li>JVM 调优基础（GC/堆/线程）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.brendangregg.com/" target="_blank">Brendan Gregg 性能博客</a></li>
+              <li><a href="https://www.brendangregg.com/linuxperf.html" target="_blank">Linux Performance Tools</a></li>
+              <li>书籍：《性能之巅》《BPF Performance Tools》</li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 USE 方法分析服务器性能瓶颈<br>② 用 perf/bpftrace 定位 CPU 热点<br>③ 调优 Linux 内核参数提升网络性能<br>④ 对一个慢查询数据库进行全面优化</p>
+          </div>
+        </div>
+
+        <div class="module" id="s6-3">
+          <div class="mod-head"><div class="mod-title">6.3 安全加固</div><div class="mod-time">⏱ 25 学时</div></div>
+          <div class="mod-goal">🎯 掌握服务器安全加固与合规基线</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>CIS Benchmark 安全基线</li>
+              <li>SSH 加固（密钥认证/端口/Fail2ban/2FA）</li>
+              <li>防火墙配置（iptables/nftables/firewalld）</li>
+              <li>入侵检测（AIDE/OSSEC/Wazuh）</li>
+              <li>漏洞管理（CVE 跟踪/补丁管理/自动更新）</li>
+              <li>容器安全（镜像签名/运行时安全/Falco）</li>
+              <li>密钥管理（Vault/SOPS/Sealed Secrets）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.cisecurity.org/benchmark" target="_blank">CIS Benchmarks</a></li>
+              <li><a href="https://www.vaultproject.io/docs" target="_blank">HashiCorp Vault 文档</a></li>
+              <li><a href="https://falco.org/docs/" target="_blank">Falco 运行时安全</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 按 CIS Benchmark 加固 Linux 服务器<br>② 部署 Wazuh 实现入侵检测<br>③ 部署 Vault 管理应用密钥<br>④ 部署 Falco 监控容器运行时安全</p>
+          </div>
+        </div>
+
+        <div class="module" id="s6-4">
+          <div class="mod-head"><div class="mod-title">6.4 灾备与容灾</div><div class="mod-time">⏱ 20 学时</div></div>
+          <div class="mod-goal">🎯 设计灾备方案，保障业务连续性</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>灾备等级（同城双活/异地灾备/两地三中心）</li>
+              <li>RTO/RPO 设计与实现</li>
+              <li>数据备份策略（3-2-1/增量/快照/CDP）</li>
+              <li>备份工具（Bacula/Veeam/Restic/Velero）</li>
+              <li>灾备演练与切换流程</li>
+              <li>业务连续性计划（BCP/DRP）</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://velero.io/docs/" target="_blank">Velero（K8s 备份）</a></li>
+              <li><a href="https://restic.net/" target="_blank">Restic 备份工具</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 用 Velero 备份和恢复 K8s 集群<br>② 用 Restic 实现服务器增量备份到远程<br>③ 设计两地三中心灾备方案<br>④ 编写灾备演练方案并执行切换测试</p>
+          </div>
+        </div>
+
+        <div class="module" id="s6-5">
+          <div class="mod-head"><div class="mod-title">6.5 认证与发展</div><div class="mod-time">⏱ 15 学时</div></div>
+          <div class="mod-goal">🎯 规划职业认证路径，持续提升竞争力</div>
+          <div class="mod-section">
+            <div class="mod-section-title">核心知识点</div>
+            <ul class="mod-list">
+              <li>Linux 认证（RHCSA → RHCE → RHCA）</li>
+              <li>Kubernetes 认证（CKA → CKAD → CKS）</li>
+              <li>云认证（AWS SAA/SAP、Azure AZ-104/305）</li>
+              <li>DevOps 认证（Docker DCA）</li>
+              <li>软考（系统架构设计师）</li>
+              <li>SRE 文化与实践</li>
+              <li>技术写作与社区贡献</li>
+            </ul>
+          </div>
+          <div class="mod-section">
+            <div class="mod-section-title">推荐教程</div>
+            <ul class="mod-list">
+              <li><a href="https://www.redhat.com/en/services/certification" target="_blank">Red Hat 认证</a></li>
+              <li><a href="https://training.linuxfoundation.org/certification/" target="_blank">Linux Foundation 认证</a></li>
+              <li><a href="https://sre.google/" target="_blank">Google SRE</a></li>
+            </ul>
+          </div>
+          <div class="mod-practice">
+            <div class="mod-practice-title">🔧 实战练习</div>
+            <p>① 制定个人认证规划时间表<br>② 考取 CKA/RHCE 认证<br>③ 在技术社区发表运维实战文章<br>④ 为开源运维项目贡献代码<br>⑤ 编写团队运维手册与知识库</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="module" id="s3-4">
-      <div class="mod-head"><div class="mod-title">3.4 CI/CD 流水线</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 搭建自动化构建、测试、部署流水线</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Jenkins 安装配置（Pipeline/Jenkinsfile/Blue Ocean）</li>
-          <li>GitLab CI/CD（.gitlab-ci.yml/Runner/Stage/Job）</li>
-          <li>GitHub Actions 工作流</li>
-          <li>ArgoCD GitOps 持续部署</li>
-          <li>制品管理（Nexus/Harbor/JFrog）</li>
-          <li>蓝绿部署/金丝雀发布/滚动更新</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.jenkins.io/doc/" target="_blank">Jenkins 官方文档</a></li>
-          <li><a href="https://docs.gitlab.com/ee/ci/" target="_blank">GitLab CI/CD 文档</a></li>
-          <li><a href="https://argo-cd.readthedocs.io/" target="_blank">ArgoCD 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 搭建 Jenkins 并编写 Pipeline 自动化构建项目<br>② 配置 GitLab CI 实现代码提交自动测试+部署<br>③ 部署 ArgoCD 实现 GitOps 持续部署<br>④ 搭建 Harbor 私有镜像仓库</p>
-      </div>
-    </div>
+  </div><!-- end .wrap -->
 
-    <div class="module" id="s3-5">
-      <div class="mod-head"><div class="mod-title">3.5 Python 运维开发</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 用 Python 开发运维工具和自动化平台</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Python 运维库（paramiko/fabric/psutil/requests）</li>
-          <li>Flask/FastAPI 开发运维 Web 平台</li>
-          <li>CMDB 资产管理系统开发</li>
-          <li>自动化发布平台开发</li>
-          <li>运维 API 开发（RESTful 接口）</li>
-          <li>定时任务调度（APScheduler/Celery）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI 官方文档</a></li>
-          <li><a href="https://docs.celeryq.dev/" target="_blank">Celery 官方文档</a></li>
-          <li>书籍：《Python 自动化运维》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Python 开发服务器批量管理工具<br>② 用 FastAPI 开发 CMDB 资产管理 API<br>③ 开发自动化巡检报告生成工具<br>④ 用 Celery 实现异步任务调度</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
+  <footer>
+    <p class="footer-copy">© 2026 BigHeadZuo · 服务器工程师课程体系</p>
+  </footer>
 
-  <!-- ==================== 阶段四：虚拟化与容器 ==================== -->
-  <div class="phase" id="phase4">
-    <h2 class="phase-title">📦 阶段四：虚拟化与容器（18-28 个月）</h2>
-    <p class="phase-meta">掌握虚拟化与容器编排，迈入云原生时代</p>
+  <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
 
-    <div class="module" id="s4-1">
-      <div class="mod-head"><div class="mod-title">4.1 服务器虚拟化</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 掌握主流虚拟化平台的部署与管理</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>虚拟化原理（全虚拟化/半虚拟化/硬件辅助）</li>
-          <li>KVM/QEMU/libvirt 管理</li>
-          <li>VMware vSphere（ESXi/vCenter/vMotion/HA/DRS）</li>
-          <li>Proxmox VE 开源虚拟化</li>
-          <li>虚拟机模板与克隆</li>
-          <li>虚拟网络与存储配置</li>
-          <li>OpenStack 基础（Nova/Neutron/Cinder/Glance）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://pve.proxmox.com/wiki/Main_Page" target="_blank">Proxmox VE 文档</a></li>
-          <li><a href="https://docs.vmware.com/" target="_blank">VMware 官方文档</a></li>
-          <li><a href="https://docs.openstack.org/" target="_blank">OpenStack 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 Proxmox VE 并创建虚拟机集群<br>② 配置 KVM 虚拟机并用 virsh 管理<br>③ 搭建 vSphere 实验环境（ESXi + vCenter）<br>④ 部署 OpenStack 单节点（DevStack）</p>
-      </div>
-    </div>
+  <script>
+    function togglePhase(n) {
+      const allCards = document.querySelectorAll('.phase-card');
+      const allDetails = document.querySelectorAll('.phase-detail');
+      const target = document.getElementById('phase' + n);
+      const isOpen = target.classList.contains('open');
 
-    <div class="module" id="s4-2">
-      <div class="mod-head"><div class="mod-title">4.2 Docker 容器</div><div class="mod-time">⏱ 35 学时</div></div>
-      <div class="mod-goal">🎯 精通 Docker 容器技术，能容器化任意应用</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Docker 架构（镜像/容器/仓库/网络/存储）</li>
-          <li>Dockerfile 最佳实践（多阶段构建/层缓存/安全）</li>
-          <li>Docker Compose 多容器编排</li>
-          <li>Docker 网络模式（bridge/host/overlay/macvlan）</li>
-          <li>Docker 存储（volume/bind mount/tmpfs）</li>
-          <li>容器安全（rootless/seccomp/AppArmor/镜像扫描）</li>
-          <li>私有镜像仓库（Harbor/Registry）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.docker.com/" target="_blank">Docker 官方文档</a></li>
-          <li><a href="https://labs.play-with-docker.com/" target="_blank">Play with Docker（在线实验）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1og4y1q7M4" target="_blank">Docker 入门到实践（B站）</a></li>
-          <li>书籍：《Docker 技术入门与实战》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 编写 Dockerfile 容器化一个 Python/Node.js 应用<br>② 用 Docker Compose 搭建完整开发环境（Web+DB+Cache+MQ）<br>③ 部署 Harbor 私有镜像仓库<br>④ 用 Trivy 扫描镜像安全漏洞</p>
-      </div>
-    </div>
+      allCards.forEach((c, i) => { if (i !== n - 1) c.classList.remove('active'); });
+      allDetails.forEach(d => { if (d !== target) d.classList.remove('open'); });
 
-    <div class="module" id="s4-3">
-      <div class="mod-head"><div class="mod-title">4.3 Kubernetes 编排</div><div class="mod-time">⏱ 50 学时</div></div>
-      <div class="mod-goal">🎯 精通 K8s 集群管理，能运维生产级 Kubernetes</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>K8s 架构（Master/Node/etcd/API Server/Scheduler/Controller）</li>
-          <li>核心资源（Pod/Deployment/Service/Ingress/ConfigMap/Secret）</li>
-          <li>存储（PV/PVC/StorageClass/CSI）</li>
-          <li>网络（CNI/Service/Ingress Controller/NetworkPolicy）</li>
-          <li>调度策略（亲和性/污点/容忍/资源限制）</li>
-          <li>Helm Charts 包管理</li>
-          <li>K8s 集群部署（kubeadm/kubespray/RKE2）</li>
-          <li>K8s 监控（Prometheus Operator/kube-state-metrics）</li>
-          <li>K8s 故障排查（kubectl debug/日志/事件）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://kubernetes.io/docs/" target="_blank">Kubernetes 官方文档</a></li>
-          <li><a href="https://killer.sh/" target="_blank">Killer.sh（CKA 模拟考试）</a></li>
-          <li><a href="https://www.bilibili.com/video/BV1Qv41167ck" target="_blank">K8s 入门到实践（B站）</a></li>
-          <li>书籍：《Kubernetes 权威指南》《Kubernetes in Action》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 kubeadm 搭建 3 节点 K8s 集群<br>② 部署一个完整应用（Deployment+Service+Ingress+HPA）<br>③ 配置 Prometheus Operator 监控集群<br>④ 备考 <a href="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/" target="_blank">CKA 认证</a></p>
-      </div>
-    </div>
-
-    <div class="module" id="s4-4">
-      <div class="mod-head"><div class="mod-title">4.4 微服务架构</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 理解微服务架构，能运维微服务基础设施</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>微服务架构原则（单一职责/独立部署/去中心化）</li>
-          <li>服务注册与发现（Consul/Nacos/etcd）</li>
-          <li>API 网关（Kong/APISIX/Traefik）</li>
-          <li>配置中心（Nacos/Apollo/Consul KV）</li>
-          <li>分布式链路追踪（Jaeger/Zipkin/SkyWalking）</li>
-          <li>熔断限流（Sentinel/Hystrix）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.konghq.com/" target="_blank">Kong API Gateway 文档</a></li>
-          <li><a href="https://www.consul.io/docs" target="_blank">Consul 文档</a></li>
-          <li><a href="https://www.jaegertracing.io/docs/" target="_blank">Jaeger 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 Consul 服务注册中心<br>② 部署 Kong/APISIX API 网关<br>③ 部署 Jaeger 实现分布式链路追踪<br>④ 搭建完整微服务基础设施（注册+网关+配置+监控+追踪）</p>
-      </div>
-    </div>
-
-    <div class="module" id="s4-5">
-      <div class="mod-head"><div class="mod-title">4.5 服务网格</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 掌握 Service Mesh 技术，实现零侵入的服务治理</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Service Mesh 架构（数据平面/控制平面）</li>
-          <li>Istio 核心功能（流量管理/安全/可观测性）</li>
-          <li>Envoy Sidecar 代理</li>
-          <li>Linkerd 轻量级 Service Mesh</li>
-          <li>mTLS 服务间加密通信</li>
-          <li>金丝雀发布与流量镜像</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://istio.io/latest/docs/" target="_blank">Istio 官方文档</a></li>
-          <li><a href="https://linkerd.io/2/overview/" target="_blank">Linkerd 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在 K8s 中部署 Istio 并注入 Sidecar<br>② 配置 Istio 流量管理（金丝雀发布/故障注入）<br>③ 配置 mTLS 实现服务间加密<br>④ 用 Kiali 可视化服务网格拓扑</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段五：云计算 ==================== -->
-  <div class="phase" id="phase5">
-    <h2 class="phase-title">☁️ 阶段五：云计算（2-3 年）</h2>
-    <p class="phase-meta">掌握公有云平台与云原生技术，成为云计算专家</p>
-
-    <div class="module" id="s5-1">
-      <div class="mod-head"><div class="mod-title">5.1 公有云平台</div><div class="mod-time">⏱ 40 学时</div></div>
-      <div class="mod-goal">🎯 掌握主流云平台核心服务，能设计云上架构</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>AWS 核心服务（EC2/S3/RDS/VPC/IAM/Lambda/EKS）</li>
-          <li>Azure 核心服务（VM/Blob/SQL/VNet/AAD/AKS）</li>
-          <li>阿里云/腾讯云核心服务</li>
-          <li>云计算计费模型（按需/预留/Spot）</li>
-          <li>云上网络架构（VPC/子网/安全组/NAT/LB）</li>
-          <li>云上安全最佳实践（IAM/加密/审计）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://aws.amazon.com/training/" target="_blank">AWS 培训与认证</a></li>
-          <li><a href="https://learn.microsoft.com/en-us/training/azure/" target="_blank">Microsoft Learn - Azure</a></li>
-          <li><a href="https://www.coursera.org/professional-certificates/aws-cloud-solutions-architect" target="_blank">AWS Solutions Architect - Coursera</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 在 AWS 免费套餐中搭建完整 Web 应用架构<br>② 配置 Auto Scaling + ALB 实现弹性伸缩<br>③ 用 CloudFormation/ARM 模板部署基础设施<br>④ 备考 AWS SAA / Azure AZ-104 认证</p>
-      </div>
-    </div>
-
-    <div class="module" id="s5-2">
-      <div class="mod-head"><div class="mod-title">5.2 基础设施即代码</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 用代码管理云基础设施，实现可重复的环境部署</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Terraform 核心（Provider/Resource/Module/State）</li>
-          <li>Terraform 高级（Workspace/Remote State/Sentinel）</li>
-          <li>Pulumi（用编程语言写 IaC）</li>
-          <li>CloudFormation / ARM Templates / CDK</li>
-          <li>IaC 最佳实践（模块化/状态管理/CI/CD 集成）</li>
-          <li>IaC 安全扫描（Checkov/tfsec/KICS）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://developer.hashicorp.com/terraform/tutorials" target="_blank">Terraform 官方教程</a></li>
-          <li><a href="https://www.pulumi.com/docs/" target="_blank">Pulumi 文档</a></li>
-          <li>书籍：《Terraform: Up & Running》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Terraform 部署完整的 VPC + EC2 + RDS 环境<br>② 编写 Terraform Module 实现可复用基础设施<br>③ 配置 Terraform Remote State（S3 + DynamoDB）<br>④ 在 CI/CD 中集成 Terraform Plan/Apply</p>
-      </div>
-    </div>
-
-    <div class="module" id="s5-3">
-      <div class="mod-head"><div class="mod-title">5.3 Serverless</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 掌握无服务器架构，能设计事件驱动的应用</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>FaaS（AWS Lambda/Azure Functions/阿里云函数计算）</li>
-          <li>事件驱动架构（API Gateway + Lambda + DynamoDB）</li>
-          <li>Serverless Framework / SAM</li>
-          <li>Knative（K8s 上的 Serverless）</li>
-          <li>Serverless 最佳实践（冷启动/并发/成本优化）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.serverless.com/framework/docs" target="_blank">Serverless Framework 文档</a></li>
-          <li><a href="https://docs.aws.amazon.com/lambda/" target="_blank">AWS Lambda 文档</a></li>
-          <li><a href="https://knative.dev/docs/" target="_blank">Knative 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Lambda + API Gateway 构建 REST API<br>② 用 Serverless Framework 部署完整应用<br>③ 在 K8s 上部署 Knative 并运行函数<br>④ 设计一个事件驱动的数据处理管道</p>
-      </div>
-    </div>
-
-    <div class="module" id="s5-4">
-      <div class="mod-head"><div class="mod-title">5.4 云数据库与存储</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 掌握云上数据服务的选型与运维</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>云数据库（RDS/Aurora/Cloud SQL/PolarDB）</li>
-          <li>NoSQL 云服务（DynamoDB/CosmosDB/MongoDB Atlas）</li>
-          <li>对象存储（S3/Blob/OSS）与生命周期管理</li>
-          <li>云缓存（ElastiCache/Azure Cache）</li>
-          <li>数据迁移（DMS/DataSync）</li>
-          <li>数据湖架构基础</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://docs.aws.amazon.com/rds/" target="_blank">AWS RDS 文档</a></li>
-          <li><a href="https://docs.aws.amazon.com/s3/" target="_blank">AWS S3 文档</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 部署 RDS 多可用区实例并配置只读副本<br>② 配置 S3 存储桶策略、版本控制和生命周期<br>③ 用 DMS 迁移本地数据库到云上<br>④ 设计一个云上数据存储方案（热/温/冷分层）</p>
-      </div>
-    </div>
-
-    <div class="module" id="s5-5">
-      <div class="mod-head"><div class="mod-title">5.5 混合云与多云</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 设计混合云/多云架构，避免厂商锁定</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>混合云架构模式（突发上云/灾备上云/分层部署）</li>
-          <li>多云管理平台（Rancher/Crossplane）</li>
-          <li>云间网络互联（专线/VPN/云联网）</li>
-          <li>多云 Kubernetes（Rancher/Anthos/Arc）</li>
-          <li>云成本优化（FinOps 实践）</li>
-          <li>云厂商对比与选型</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.rancher.com/docs/" target="_blank">Rancher 文档</a></li>
-          <li><a href="https://www.finops.org/" target="_blank">FinOps Foundation</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Rancher 管理多个 K8s 集群（本地+云上）<br>② 设计混合云灾备架构方案<br>③ 实施云成本分析与优化<br>④ 编写多云架构选型评估报告</p>
-      </div>
-    </div>
-  </div>
-  <div class="divider"></div>
-
-  <!-- ==================== 阶段六：架构与管理 ==================== -->
-  <div class="phase" id="phase6">
-    <h2 class="phase-title">👑 阶段六：架构与管理（3-5 年）</h2>
-    <p class="phase-meta">站在全局视角设计系统架构，成为高级系统架构师</p>
-
-    <div class="module" id="s6-1">
-      <div class="mod-head"><div class="mod-title">6.1 高可用架构</div><div class="mod-time">⏱ 30 学时</div></div>
-      <div class="mod-goal">🎯 设计 99.99% 可用性的系统架构</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>高可用设计原则（冗余/故障转移/降级/限流/熔断）</li>
-          <li>负载均衡架构（四层/七层/全局负载均衡）</li>
-          <li>数据库高可用（主从/MGR/PXC/Patroni）</li>
-          <li>缓存架构（多级缓存/缓存穿透/雪崩/击穿）</li>
-          <li>分布式系统理论（CAP/BASE/一致性协议）</li>
-          <li>SLA 设计与度量（可用性/RTO/RPO）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://github.com/donnemartin/system-design-primer" target="_blank">System Design Primer</a></li>
-          <li><a href="https://sre.google/books/" target="_blank">Google SRE Books（免费）</a></li>
-          <li>书籍：《大型网站技术架构》《SRE: Google 运维解密》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 设计一个高可用 Web 应用架构（LB+Web+DB+Cache）<br>② 搭建 Keepalived + Nginx 高可用负载均衡<br>③ 模拟故障并验证自动切换<br>④ 编写系统架构设计文档</p>
-      </div>
-    </div>
-
-    <div class="module" id="s6-2">
-      <div class="mod-head"><div class="mod-title">6.2 性能优化</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握系统性能分析与优化方法论</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>性能分析方法论（USE/RED/黄金信号）</li>
-          <li>Linux 性能工具（perf/strace/sar/vmstat/iostat/bpftrace）</li>
-          <li>CPU 优化（上下文切换/中断/NUMA 绑定）</li>
-          <li>内存优化（OOM/Swap/大页/内存泄漏排查）</li>
-          <li>磁盘 I/O 优化（调度器/预读/直接 I/O）</li>
-          <li>网络优化（内核参数/连接数/缓冲区/TCP 调优）</li>
-          <li>JVM 调优基础（GC/堆/线程）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.brendangregg.com/" target="_blank">Brendan Gregg 性能博客</a></li>
-          <li><a href="https://www.brendangregg.com/linuxperf.html" target="_blank">Linux Performance Tools</a></li>
-          <li>书籍：《性能之巅》《BPF Performance Tools》</li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 USE 方法分析服务器性能瓶颈<br>② 用 perf/bpftrace 定位 CPU 热点<br>③ 调优 Linux 内核参数提升网络性能<br>④ 对一个慢查询数据库进行全面优化</p>
-      </div>
-    </div>
-
-    <div class="module" id="s6-3">
-      <div class="mod-head"><div class="mod-title">6.3 安全加固</div><div class="mod-time">⏱ 25 学时</div></div>
-      <div class="mod-goal">🎯 掌握服务器安全加固与合规基线</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>CIS Benchmark 安全基线</li>
-          <li>SSH 加固（密钥认证/端口/Fail2ban/2FA）</li>
-          <li>防火墙配置（iptables/nftables/firewalld）</li>
-          <li>入侵检测（AIDE/OSSEC/Wazuh）</li>
-          <li>漏洞管理（CVE 跟踪/补丁管理/自动更新）</li>
-          <li>容器安全（镜像签名/运行时安全/Falco）</li>
-          <li>密钥管理（Vault/SOPS/Sealed Secrets）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.cisecurity.org/benchmark" target="_blank">CIS Benchmarks</a></li>
-          <li><a href="https://www.vaultproject.io/docs" target="_blank">HashiCorp Vault 文档</a></li>
-          <li><a href="https://falco.org/docs/" target="_blank">Falco 运行时安全</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 按 CIS Benchmark 加固 Linux 服务器<br>② 部署 Wazuh 实现入侵检测<br>③ 部署 Vault 管理应用密钥<br>④ 部署 Falco 监控容器运行时安全</p>
-      </div>
-    </div>
-
-    <div class="module" id="s6-4">
-      <div class="mod-head"><div class="mod-title">6.4 灾备与容灾</div><div class="mod-time">⏱ 20 学时</div></div>
-      <div class="mod-goal">🎯 设计灾备方案，保障业务连续性</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>灾备等级（同城双活/异地灾备/两地三中心）</li>
-          <li>RTO/RPO 设计与实现</li>
-          <li>数据备份策略（3-2-1/增量/快照/CDP）</li>
-          <li>备份工具（Bacula/Veeam/Restic/Velero）</li>
-          <li>灾备演练与切换流程</li>
-          <li>业务连续性计划（BCP/DRP）</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://velero.io/docs/" target="_blank">Velero（K8s 备份）</a></li>
-          <li><a href="https://restic.net/" target="_blank">Restic 备份工具</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 用 Velero 备份和恢复 K8s 集群<br>② 用 Restic 实现服务器增量备份到远程<br>③ 设计两地三中心灾备方案<br>④ 编写灾备演练方案并执行切换测试</p>
-      </div>
-    </div>
-
-    <div class="module" id="s6-5">
-      <div class="mod-head"><div class="mod-title">6.5 认证与发展</div><div class="mod-time">⏱ 15 学时</div></div>
-      <div class="mod-goal">🎯 规划职业认证路径，持续提升竞争力</div>
-      <div class="mod-section">
-        <div class="mod-section-title">核心知识点</div>
-        <ul class="mod-list">
-          <li>Linux 认证（RHCSA → RHCE → RHCA）</li>
-          <li>Kubernetes 认证（CKA → CKAD → CKS）</li>
-          <li>云认证（AWS SAA/SAP、Azure AZ-104/305）</li>
-          <li>DevOps 认证（Docker DCA）</li>
-          <li>软考（系统架构设计师）</li>
-          <li>SRE 文化与实践</li>
-          <li>技术写作与社区贡献</li>
-        </ul>
-      </div>
-      <div class="mod-section">
-        <div class="mod-section-title">推荐教程</div>
-        <ul class="mod-list">
-          <li><a href="https://www.redhat.com/en/services/certification" target="_blank">Red Hat 认证</a></li>
-          <li><a href="https://training.linuxfoundation.org/certification/" target="_blank">Linux Foundation 认证</a></li>
-          <li><a href="https://sre.google/" target="_blank">Google SRE</a></li>
-        </ul>
-      </div>
-      <div class="mod-practice">
-        <div class="mod-practice-title">🔧 实战练习</div>
-        <p>① 制定个人认证规划时间表<br>② 考取 CKA/RHCE 认证<br>③ 在技术社区发表运维实战文章<br>④ 为开源运维项目贡献代码<br>⑤ 编写团队运维手册与知识库</p>
-      </div>
-    </div>
-  </div>
-
-  </main><!-- end .wrap -->
-
-<!-- 侧边浮动索引 -->
-<nav class="side-index" id="sideIndex">
-  <div class="si-title">📍 索引</div>
-  <div class="si-stage">阶段一 · 系统基础</div>
-  <a href="#s1-1">1.1 Linux 管理</a>
-  <a href="#s1-2">1.2 Windows Server</a>
-  <a href="#s1-3">1.3 Shell 脚本</a>
-  <a href="#s1-4">1.4 硬件基础</a>
-  <a href="#s1-5">1.5 存储技术</a>
-  <div class="si-stage">阶段二 · 服务部署</div>
-  <a href="#s2-1">2.1 Web 服务器</a>
-  <a href="#s2-2">2.2 数据库</a>
-  <a href="#s2-3">2.3 邮件通信</a>
-  <a href="#s2-4">2.4 文件目录</a>
-  <a href="#s2-5">2.5 缓存消息队列</a>
-  <div class="si-stage">阶段三 · 自动化运维</div>
-  <a href="#s3-1">3.1 配置管理</a>
-  <a href="#s3-2">3.2 监控告警</a>
-  <a href="#s3-3">3.3 日志管理</a>
-  <a href="#s3-4">3.4 CI/CD</a>
-  <a href="#s3-5">3.5 Python 运维</a>
-  <div class="si-stage">阶段四 · 虚拟化容器</div>
-  <a href="#s4-1">4.1 虚拟化</a>
-  <a href="#s4-2">4.2 Docker</a>
-  <a href="#s4-3">4.3 Kubernetes</a>
-  <a href="#s4-4">4.4 微服务</a>
-  <a href="#s4-5">4.5 Service Mesh</a>
-  <div class="si-stage">阶段五 · 云计算</div>
-  <a href="#s5-1">5.1 公有云</a>
-  <a href="#s5-2">5.2 IaC</a>
-  <a href="#s5-3">5.3 Serverless</a>
-  <a href="#s5-4">5.4 云数据库</a>
-  <a href="#s5-5">5.5 混合多云</a>
-  <div class="si-stage">阶段六 · 架构管理</div>
-  <a href="#s6-1">6.1 高可用</a>
-  <a href="#s6-2">6.2 性能优化</a>
-  <a href="#s6-3">6.3 安全加固</a>
-  <a href="#s6-4">6.4 灾备容灾</a>
-  <a href="#s6-5">6.5 认证发展</a>
-</nav>
-
-<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
-
-<script>
-// Back to top button
-const btn = document.querySelector('.back-top');
-addEventListener('scroll', () => {
-  btn.classList.toggle('show', scrollY > 400);
-});
-
-// Side index active state
-(function() {
-  const si = document.getElementById('sideIndex');
-  const links = si.querySelectorAll('a[href^="#s"]');
-  const sections = [];
-  links.forEach(a => {
-    const id = a.getAttribute('href').slice(1);
-    const el = document.getElementById(id);
-    if (el) sections.push({ el, a });
-  });
-  let ticking = false;
-  addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        let current = null;
-        const offset = window.innerHeight * 0.3;
-        for (let i = sections.length - 1; i >= 0; i--) {
-          if (sections[i].el.getBoundingClientRect().top <= offset) {
-            current = sections[i];
-            break;
-          }
-        }
-        links.forEach(a => a.classList.remove('active'));
-        if (current) current.a.classList.add('active');
-        ticking = false;
-      });
-      ticking = true;
+      if (isOpen) {
+        target.classList.remove('open');
+        allCards[n - 1].classList.remove('active');
+      } else {
+        target.classList.add('open');
+        allCards[n - 1].classList.add('active');
+        setTimeout(() => { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+      }
     }
-  });
-})();
-</script>
+
+    const backBtn = document.querySelector('.back-top');
+    addEventListener('scroll', () => { backBtn.classList.toggle('show', scrollY > 400); });
+  </script>
 </body>
 </html>
