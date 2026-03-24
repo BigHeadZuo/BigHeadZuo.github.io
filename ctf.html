@@ -5,239 +5,337 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTF 资源与练习 - BigHeadZuo</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg: #000;
+      --surface: #111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-dim: #6e6e73;
+      --accent: #2997ff;
+      --accent-hover: #0077ed;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0a0a1a; color: #e0e0e0; min-height: 100vh; }
-    canvas#bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-    .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 3rem 1rem 4rem; }
-    h1 { text-align: center; font-size: 2rem; color: #fff; text-shadow: 0 0 20px rgba(100,140,255,0.4); margin-bottom: 0.4rem; }
-    .subtitle { text-align: center; color: #6688cc; margin-bottom: 1.5rem; }
-    .nav-back { text-align: center; margin-bottom: 2rem; }
-    .nav-back a { color: #6688cc; text-decoration: none; font-size: 0.9rem; }
-    .nav-back a:hover { color: #88aaee; }
-    .section { margin-bottom: 2.5rem; }
-    .sec-title { font-size: 1.15rem; color: #fff; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
-    .card {
-      background: rgba(15,15,35,0.85); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 10px; padding: 1.2rem; backdrop-filter: blur(6px);
-      transition: all 0.3s; text-decoration: none; color: inherit; display: block;
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
-    .card:hover { border-color: rgba(100,140,255,0.3); transform: translateY(-3px); box-shadow: 0 6px 25px rgba(100,140,255,0.1); }
-    .card-name { font-weight: 600; color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
-    .card-desc { font-size: 0.83rem; color: #8888aa; line-height: 1.6; margin-bottom: 0.5rem; }
-    .card-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); color: #7777aa; }
-    .tag.green { background: rgba(76,175,80,0.12); color: #81c784; }
-    .tag.blue { background: rgba(33,150,243,0.12); color: #64b5f6; }
-    .tag.orange { background: rgba(255,152,0,0.12); color: #ffb74d; }
-    .tag.red { background: rgba(244,67,54,0.12); color: #ef9a9a; }
-    .tag.purple { background: rgba(156,39,176,0.12); color: #ce93d8; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Wrapper ===== */
+    .wrapper { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== Header ===== */
+    .hero {
+      text-align: center; padding: 100px 24px 48px;
+      max-width: 680px; margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
+      line-height: 1.1; margin-bottom: 12px;
+      background: linear-gradient(180deg, #fff 40%, #999);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 19px; font-weight: 400; color: var(--text-secondary);
+      line-height: 1.5; letter-spacing: -0.01em;
+    }
+
+    /* ===== Nav ===== */
+    .nav-back {
+      text-align: center; margin-bottom: 48px; margin-top: 16px;
+    }
+    .nav-back a {
+      color: var(--accent); font-size: 14px; font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-back a:hover { color: var(--accent-hover); }
+    .nav-back .nav-sep { color: var(--text-dim); margin: 0 8px; }
+
+    /* ===== Tip Box ===== */
     .tip-box {
-      background: rgba(100,140,255,0.06); border: 1px solid rgba(100,140,255,0.15);
-      border-radius: 10px; padding: 1.2rem; margin-bottom: 2rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 28px; margin-bottom: 48px;
     }
-    .tip-box h3 { color: #88aaee; font-size: 1rem; margin-bottom: 0.5rem; }
-    .tip-box p { font-size: 0.85rem; color: #9090b0; line-height: 1.8; }
-    .tip-box a { color: #7cacf8; text-decoration: none; border-bottom: 1px dashed rgba(124,172,248,0.3); }
-    .tip-box a:hover { color: #a0c4ff; }
-    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+    .tip-box h3 {
+      color: #fff; font-size: 17px; font-weight: 600;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .tip-box p {
+      font-size: 14px; color: var(--text-secondary); line-height: 1.8;
+    }
+    .tip-box a {
+      color: var(--accent); border-bottom: none;
+      transition: color 0.2s;
+    }
+    .tip-box a:hover { color: var(--accent-hover); }
+
+    /* ===== Sections ===== */
+    .section { margin-bottom: 48px; }
+    .sec-title {
+      font-size: 21px; font-weight: 600; color: #fff;
+      letter-spacing: -0.02em; margin-bottom: 20px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+
+    /* ===== Grid ===== */
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    /* ===== Cards ===== */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: all 0.3s; display: block; color: inherit;
+    }
+    .card:hover {
+      background: #1a1a1a; border-color: rgba(255,255,255,0.12);
+      transform: scale(1.02);
+    }
+    .card-name {
+      font-weight: 600; color: #fff; font-size: 17px;
+      letter-spacing: -0.01em; margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    /* ===== Tags ===== */
+    .tag {
+      font-size: 11px; font-weight: 500; padding: 3px 10px;
+      border-radius: 100px; background: rgba(255,255,255,0.06);
+      color: var(--text-dim);
+    }
+    .tag.green { background: rgba(48,209,88,0.1); color: #30d158; }
+    .tag.blue { background: rgba(41,151,255,0.1); color: #2997ff; }
+    .tag.orange { background: rgba(255,159,10,0.1); color: #ff9f0a; }
+    .tag.red { background: rgba(255,69,58,0.1); color: #ff453a; }
+    .tag.purple { background: rgba(175,130,255,0.1); color: #af82ff; }
+
+    /* ===== Footer ===== */
+    .footer {
+      text-align: center; padding: 40px 24px 48px;
+      border-top: 1px solid var(--border); margin-top: 16px;
+    }
+    .footer p {
+      font-size: 12px; color: var(--text-dim);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hero { padding: 64px 20px 40px; }
+      .hero h1 { font-size: 36px; }
+      .subtitle { font-size: 17px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .sec-title { font-size: 19px; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 28px; }
+      .grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="wrapper">
-  <h1>🚩 CTF 资源与练习平台</h1>
-  <p class="subtitle">Capture The Flag · 从入门到竞赛的实战指南</p>
-  <nav class="nav-back"><a href="index.html">← 返回主页</a> · <a href="roadmap.html">发展路线</a> · <a href="tools.html">安全工具箱</a></nav>
 
-  <div class="tip-box">
-    <h3>💡 CTF 新手入门建议</h3>
-    <p>CTF 比赛通常分为 5 大方向：<strong style="color:#fff;">Web</strong>（Web漏洞利用）、<strong style="color:#fff;">Pwn</strong>（二进制漏洞利用）、<strong style="color:#fff;">Reverse</strong>（逆向工程）、<strong style="color:#fff;">Crypto</strong>（密码学）、<strong style="color:#fff;">Misc</strong>（杂项/取证/隐写）。建议先从 Web 和 Misc 入手，门槛较低。推荐学习路径：<a href="https://ctf-wiki.org" target="_blank" rel="noopener">CTF Wiki</a> → <a href="https://buuoj.cn" target="_blank" rel="noopener">BUUCTF 刷题</a> → <a href="https://ctftime.org" target="_blank" rel="noopener">CTFtime 参赛</a></p>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>🚩 CTF 资源与练习平台</h1>
+    <p class="subtitle">Capture The Flag · 从入门到竞赛的实战指南</p>
+    <nav class="nav-back">
+      <a href="index.html">← 返回主页</a><span class="nav-sep">·</span><a href="roadmap.html">发展路线</a><span class="nav-sep">·</span><a href="tools.html">安全工具箱</a>
+    </nav>
+  </section>
+
+  <div class="wrapper">
+
+    <div class="tip-box">
+      <h3>💡 CTF 新手入门建议</h3>
+      <p>CTF 比赛通常分为 5 大方向：<strong style="color:#fff;">Web</strong>（Web漏洞利用）、<strong style="color:#fff;">Pwn</strong>（二进制漏洞利用）、<strong style="color:#fff;">Reverse</strong>（逆向工程）、<strong style="color:#fff;">Crypto</strong>（密码学）、<strong style="color:#fff;">Misc</strong>（杂项/取证/隐写）。建议先从 Web 和 Misc 入手，门槛较低。推荐学习路径：<a href="https://ctf-wiki.org" target="_blank" rel="noopener">CTF Wiki</a> → <a href="https://buuoj.cn" target="_blank" rel="noopener">BUUCTF 刷题</a> → <a href="https://ctftime.org" target="_blank" rel="noopener">CTFtime 参赛</a></p>
+    </div>
+
+    <!-- 在线练习平台 -->
+    <div class="section">
+      <h2 class="sec-title">🎮 在线练习平台</h2>
+      <div class="grid">
+        <a class="card" href="https://www.hackthebox.com" target="_blank" rel="noopener">
+          <div class="card-name">Hack The Box</div>
+          <div class="card-desc">全球最热门的渗透测试靶场，真实场景模拟，从简单到疯狂难度，支持 VPN 接入实战环境</div>
+          <div class="card-meta"><span class="tag orange">部分免费</span><span class="tag">渗透测试</span><span class="tag">全球排名</span></div>
+        </a>
+        <a class="card" href="https://tryhackme.com" target="_blank" rel="noopener">
+          <div class="card-name">TryHackMe</div>
+          <div class="card-desc">最适合新手的安全学习平台，引导式学习路径，浏览器内直接操作，无需本地环境</div>
+          <div class="card-meta"><span class="tag green">部分免费</span><span class="tag">新手友好</span><span class="tag">学习路径</span></div>
+        </a>
+        <a class="card" href="https://buuoj.cn" target="_blank" rel="noopener">
+          <div class="card-name">BUUCTF</div>
+          <div class="card-desc">国内最大 CTF 刷题平台，收录历年各大比赛真题，支持在线靶机环境，题目分类清晰</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">国内平台</span><span class="tag">历年真题</span></div>
+        </a>
+        <a class="card" href="https://portswigger.net/web-security" target="_blank" rel="noopener">
+          <div class="card-name">PortSwigger Web Security Academy</div>
+          <div class="card-desc">Burp Suite 官方出品，系统化 Web 安全学习，从基础到专家级，每个漏洞类型都有实验室</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">Web安全</span><span class="tag blue">必刷</span></div>
+        </a>
+        <a class="card" href="https://picoctf.org" target="_blank" rel="noopener">
+          <div class="card-name">picoCTF</div>
+          <div class="card-desc">CMU 出品的 CTF 入门平台，面向初学者和学生，题目由浅入深，有完整的学习引导</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">入门级</span><span class="tag">学生推荐</span></div>
+        </a>
+        <a class="card" href="https://www.vulnhub.com" target="_blank" rel="noopener">
+          <div class="card-name">VulnHub</div>
+          <div class="card-desc">提供可下载的漏洞靶机镜像，在本地虚拟机中练习，模拟真实渗透测试场景</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">离线靶机</span><span class="tag">本地练习</span></div>
+        </a>
+        <a class="card" href="https://www.root-me.org" target="_blank" rel="noopener">
+          <div class="card-name">Root Me</div>
+          <div class="card-desc">法国老牌安全挑战平台，400+ 挑战题目，涵盖 Web/系统/网络/密码学/逆向等方向</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">多方向</span><span class="tag">国际平台</span></div>
+        </a>
+        <a class="card" href="https://pwnable.kr" target="_blank" rel="noopener">
+          <div class="card-name">pwnable.kr</div>
+          <div class="card-desc">专注 Pwn 方向的练习平台，从 Toddler 到 Grotesque 难度递进，二进制安全入门必刷</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag red">Pwn专项</span><span class="tag">难度递进</span></div>
+        </a>
+        <a class="card" href="https://cryptohack.org" target="_blank" rel="noopener">
+          <div class="card-name">CryptoHack</div>
+          <div class="card-desc">密码学专项练习平台，交互式学习现代密码学，从基础数学到高级攻击</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag purple">密码学</span><span class="tag">交互式</span></div>
+        </a>
+        <a class="card" href="https://overthewire.org/wargames/" target="_blank" rel="noopener">
+          <div class="card-name">OverTheWire Wargames</div>
+          <div class="card-desc">经典 Linux 安全挑战，通过 SSH 连接闯关，Bandit 系列是 Linux 入门必玩</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">Linux</span><span class="tag">经典</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 比赛与社区 -->
+    <div class="section">
+      <h2 class="sec-title">🏆 比赛平台与社区</h2>
+      <div class="grid">
+        <a class="card" href="https://ctftime.org" target="_blank" rel="noopener">
+          <div class="card-name">CTFtime</div>
+          <div class="card-desc">全球 CTF 赛事日历和排名，查看即将举办的比赛、历史赛题 Writeup、战队排名</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">赛事日历</span><span class="tag">全球排名</span></div>
+        </a>
+        <a class="card" href="https://adworld.xctf.org.cn" target="_blank" rel="noopener">
+          <div class="card-name">攻防世界 (XCTF)</div>
+          <div class="card-desc">国内知名 CTF 平台，收录国内外赛题，支持在线练习，有新手区和进阶区</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">国内平台</span><span class="tag">赛题丰富</span></div>
+        </a>
+        <a class="card" href="https://www.ichunqiu.com" target="_blank" rel="noopener">
+          <div class="card-name">i春秋</div>
+          <div class="card-desc">国内网络安全在线教育平台，CTF 实验室、安全课程、实战靶场一体化</div>
+          <div class="card-meta"><span class="tag orange">部分免费</span><span class="tag">课程+靶场</span><span class="tag">国内平台</span></div>
+        </a>
+        <a class="card" href="https://www.holidayhackchallenge.com" target="_blank" rel="noopener">
+          <div class="card-name">SANS Holiday Hack Challenge</div>
+          <div class="card-desc">SANS 每年圣诞节举办的免费安全挑战赛，趣味性强，题目质量高，适合各水平选手</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">年度赛事</span><span class="tag">趣味性强</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- CTF 工具 -->
+    <div class="section">
+      <h2 class="sec-title">🔧 CTF 常用工具</h2>
+      <div class="grid">
+        <a class="card" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">
+          <div class="card-name">CyberChef</div>
+          <div class="card-desc">GCHQ 出品的「网络安全瑞士军刀」，编解码、加解密、数据转换一站式在线工具</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">必备</span><span class="tag">编解码</span></div>
+        </a>
+        <a class="card" href="https://github.com/RsaCtfTool/RsaCtfTool" target="_blank" rel="noopener">
+          <div class="card-name">RsaCtfTool</div>
+          <div class="card-desc">RSA 攻击自动化工具，支持多种 RSA 攻击方式，CTF Crypto 方向必备</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag purple">密码学</span><span class="tag">RSA攻击</span></div>
+        </a>
+        <a class="card" href="https://github.com/zsteg/zsteg" target="_blank" rel="noopener">
+          <div class="card-name">zsteg / stegsolve</div>
+          <div class="card-desc">图片隐写分析工具，检测 PNG/BMP 中的隐藏数据，Misc 方向常用</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag">隐写术</span><span class="tag">Misc</span></div>
+        </a>
+        <a class="card" href="https://github.com/pwndbg/pwndbg" target="_blank" rel="noopener">
+          <div class="card-name">pwndbg</div>
+          <div class="card-desc">GDB 增强插件，专为漏洞利用和逆向设计，Pwn 方向调试必备</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag red">Pwn</span><span class="tag">调试器</span></div>
+        </a>
+        <a class="card" href="https://github.com/Gallopsled/pwntools" target="_blank" rel="noopener">
+          <div class="card-name">pwntools</div>
+          <div class="card-desc">Python CTF 框架，快速编写漏洞利用脚本，支持远程交互、Shellcode 生成、ROP 链构造</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag red">Pwn</span><span class="tag">Python框架</span></div>
+        </a>
+        <a class="card" href="https://github.com/volatilityfoundation/volatility3" target="_blank" rel="noopener">
+          <div class="card-name">Volatility 3</div>
+          <div class="card-desc">内存取证框架，分析内存转储文件，提取进程、网络连接、密码等信息</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag">取证</span><span class="tag">内存分析</span></div>
+        </a>
+        <a class="card" href="https://github.com/angr/angr" target="_blank" rel="noopener">
+          <div class="card-name">angr</div>
+          <div class="card-desc">二进制分析框架，支持符号执行、约束求解，自动化逆向和漏洞发现</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag">逆向</span><span class="tag">符号执行</span></div>
+        </a>
+        <a class="card" href="https://github.com/JohnHammond/ctf-katana" target="_blank" rel="noopener">
+          <div class="card-name">ctf-katana</div>
+          <div class="card-desc">CTF 工具速查手册，按题目类型整理常用工具和命令，比赛时快速查阅</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag blue">速查手册</span><span class="tag">综合</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 学习资源 -->
+    <div class="section">
+      <h2 class="sec-title">📚 学习资源与 Writeup</h2>
+      <div class="grid">
+        <a class="card" href="https://ctf-wiki.org" target="_blank" rel="noopener">
+          <div class="card-name">CTF Wiki</div>
+          <div class="card-desc">最全面的中文 CTF 知识库，涵盖 Web/Pwn/Reverse/Crypto/Misc 各方向基础知识和技巧</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">必读</span><span class="tag">知识库</span></div>
+        </a>
+        <a class="card" href="https://book.hacktricks.xyz" target="_blank" rel="noopener">
+          <div class="card-name">HackTricks</div>
+          <div class="card-desc">渗透测试和 CTF 技巧大全，按场景分类的攻击手法速查，持续更新</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">技巧大全</span><span class="tag">英文</span></div>
+        </a>
+        <a class="card" href="https://github.com/apsdehal/awesome-ctf" target="_blank" rel="noopener">
+          <div class="card-name">Awesome CTF</div>
+          <div class="card-desc">GitHub 上的 CTF 资源精选列表，工具、框架、教程、Writeup 合集</div>
+          <div class="card-meta"><span class="tag green">开源</span><span class="tag">资源合集</span><span class="tag">GitHub</span></div>
+        </a>
+        <a class="card" href="https://www.youtube.com/@_JohnHammond" target="_blank" rel="noopener">
+          <div class="card-name">John Hammond (YouTube)</div>
+          <div class="card-desc">知名安全 YouTuber，大量 CTF Writeup 视频讲解，讲解清晰易懂</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">视频教程</span><span class="tag">英文</span></div>
+        </a>
+        <a class="card" href="https://www.youtube.com/@LiveOverflow" target="_blank" rel="noopener">
+          <div class="card-name">LiveOverflow (YouTube)</div>
+          <div class="card-desc">深入浅出讲解二进制安全和 CTF，从浏览器漏洞到硬件黑客，内容硬核</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">视频教程</span><span class="tag red">硬核</span></div>
+        </a>
+        <a class="card" href="https://bbs.kanxue.com" target="_blank" rel="noopener">
+          <div class="card-name">看雪论坛</div>
+          <div class="card-desc">国内顶级安全技术社区，逆向工程、漏洞分析、CTF Writeup 高质量文章</div>
+          <div class="card-meta"><span class="tag green">免费</span><span class="tag">中文社区</span><span class="tag">逆向/Pwn</span></div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
-  <!-- 在线练习平台 -->
-  <div class="section">
-    <h2 class="sec-title">🎮 在线练习平台</h2>
-    <div class="grid">
-      <a class="card" href="https://www.hackthebox.com" target="_blank" rel="noopener">
-        <div class="card-name">Hack The Box</div>
-        <div class="card-desc">全球最热门的渗透测试靶场，真实场景模拟，从简单到疯狂难度，支持 VPN 接入实战环境</div>
-        <div class="card-meta"><span class="tag orange">部分免费</span><span class="tag">渗透测试</span><span class="tag">全球排名</span></div>
-      </a>
-      <a class="card" href="https://tryhackme.com" target="_blank" rel="noopener">
-        <div class="card-name">TryHackMe</div>
-        <div class="card-desc">最适合新手的安全学习平台，引导式学习路径，浏览器内直接操作，无需本地环境</div>
-        <div class="card-meta"><span class="tag green">部分免费</span><span class="tag">新手友好</span><span class="tag">学习路径</span></div>
-      </a>
-      <a class="card" href="https://buuoj.cn" target="_blank" rel="noopener">
-        <div class="card-name">BUUCTF</div>
-        <div class="card-desc">国内最大 CTF 刷题平台，收录历年各大比赛真题，支持在线靶机环境，题目分类清晰</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">国内平台</span><span class="tag">历年真题</span></div>
-      </a>
-      <a class="card" href="https://portswigger.net/web-security" target="_blank" rel="noopener">
-        <div class="card-name">PortSwigger Web Security Academy</div>
-        <div class="card-desc">Burp Suite 官方出品，系统化 Web 安全学习，从基础到专家级，每个漏洞类型都有实验室</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">Web安全</span><span class="tag blue">必刷</span></div>
-      </a>
-      <a class="card" href="https://picoctf.org" target="_blank" rel="noopener">
-        <div class="card-name">picoCTF</div>
-        <div class="card-desc">CMU 出品的 CTF 入门平台，面向初学者和学生，题目由浅入深，有完整的学习引导</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">入门级</span><span class="tag">学生推荐</span></div>
-      </a>
-      <a class="card" href="https://www.vulnhub.com" target="_blank" rel="noopener">
-        <div class="card-name">VulnHub</div>
-        <div class="card-desc">提供可下载的漏洞靶机镜像，在本地虚拟机中练习，模拟真实渗透测试场景</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">离线靶机</span><span class="tag">本地练习</span></div>
-      </a>
-      <a class="card" href="https://www.root-me.org" target="_blank" rel="noopener">
-        <div class="card-name">Root Me</div>
-        <div class="card-desc">法国老牌安全挑战平台，400+ 挑战题目，涵盖 Web/系统/网络/密码学/逆向等方向</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">多方向</span><span class="tag">国际平台</span></div>
-      </a>
-      <a class="card" href="https://pwnable.kr" target="_blank" rel="noopener">
-        <div class="card-name">pwnable.kr</div>
-        <div class="card-desc">专注 Pwn 方向的练习平台，从 Toddler 到 Grotesque 难度递进，二进制安全入门必刷</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag red">Pwn专项</span><span class="tag">难度递进</span></div>
-      </a>
-      <a class="card" href="https://cryptohack.org" target="_blank" rel="noopener">
-        <div class="card-name">CryptoHack</div>
-        <div class="card-desc">密码学专项练习平台，交互式学习现代密码学，从基础数学到高级攻击</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag purple">密码学</span><span class="tag">交互式</span></div>
-      </a>
-      <a class="card" href="https://overthewire.org/wargames/" target="_blank" rel="noopener">
-        <div class="card-name">OverTheWire Wargames</div>
-        <div class="card-desc">经典 Linux 安全挑战，通过 SSH 连接闯关，Bandit 系列是 Linux 入门必玩</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">Linux</span><span class="tag">经典</span></div>
-      </a>
+  <!-- Footer -->
+  <div class="wrapper">
+    <div class="footer">
+      <p>✨ BigHeadZuo 的 CTF 资源库 · 持续收录中</p>
     </div>
   </div>
 
-  <!-- 比赛与社区 -->
-  <div class="section">
-    <h2 class="sec-title">🏆 比赛平台与社区</h2>
-    <div class="grid">
-      <a class="card" href="https://ctftime.org" target="_blank" rel="noopener">
-        <div class="card-name">CTFtime</div>
-        <div class="card-desc">全球 CTF 赛事日历和排名，查看即将举办的比赛、历史赛题 Writeup、战队排名</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">赛事日历</span><span class="tag">全球排名</span></div>
-      </a>
-      <a class="card" href="https://adworld.xctf.org.cn" target="_blank" rel="noopener">
-        <div class="card-name">攻防世界 (XCTF)</div>
-        <div class="card-desc">国内知名 CTF 平台，收录国内外赛题，支持在线练习，有新手区和进阶区</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">国内平台</span><span class="tag">赛题丰富</span></div>
-      </a>
-      <a class="card" href="https://www.ichunqiu.com" target="_blank" rel="noopener">
-        <div class="card-name">i春秋</div>
-        <div class="card-desc">国内网络安全在线教育平台，CTF 实验室、安全课程、实战靶场一体化</div>
-        <div class="card-meta"><span class="tag orange">部分免费</span><span class="tag">课程+靶场</span><span class="tag">国内平台</span></div>
-      </a>
-      <a class="card" href="https://www.holidayhackchallenge.com" target="_blank" rel="noopener">
-        <div class="card-name">SANS Holiday Hack Challenge</div>
-        <div class="card-desc">SANS 每年圣诞节举办的免费安全挑战赛，趣味性强，题目质量高，适合各水平选手</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">年度赛事</span><span class="tag">趣味性强</span></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- CTF 工具 -->
-  <div class="section">
-    <h2 class="sec-title">🔧 CTF 常用工具</h2>
-    <div class="grid">
-      <a class="card" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">
-        <div class="card-name">CyberChef</div>
-        <div class="card-desc">GCHQ 出品的「网络安全瑞士军刀」，编解码、加解密、数据转换一站式在线工具</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">必备</span><span class="tag">编解码</span></div>
-      </a>
-      <a class="card" href="https://github.com/RsaCtfTool/RsaCtfTool" target="_blank" rel="noopener">
-        <div class="card-name">RsaCtfTool</div>
-        <div class="card-desc">RSA 攻击自动化工具，支持多种 RSA 攻击方式，CTF Crypto 方向必备</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag purple">密码学</span><span class="tag">RSA攻击</span></div>
-      </a>
-      <a class="card" href="https://github.com/zsteg/zsteg" target="_blank" rel="noopener">
-        <div class="card-name">zsteg / stegsolve</div>
-        <div class="card-desc">图片隐写分析工具，检测 PNG/BMP 中的隐藏数据，Misc 方向常用</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag">隐写术</span><span class="tag">Misc</span></div>
-      </a>
-      <a class="card" href="https://github.com/pwndbg/pwndbg" target="_blank" rel="noopener">
-        <div class="card-name">pwndbg</div>
-        <div class="card-desc">GDB 增强插件，专为漏洞利用和逆向设计，Pwn 方向调试必备</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag red">Pwn</span><span class="tag">调试器</span></div>
-      </a>
-      <a class="card" href="https://github.com/Gallopsled/pwntools" target="_blank" rel="noopener">
-        <div class="card-name">pwntools</div>
-        <div class="card-desc">Python CTF 框架，快速编写漏洞利用脚本，支持远程交互、Shellcode 生成、ROP 链构造</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag red">Pwn</span><span class="tag">Python框架</span></div>
-      </a>
-      <a class="card" href="https://github.com/volatilityfoundation/volatility3" target="_blank" rel="noopener">
-        <div class="card-name">Volatility 3</div>
-        <div class="card-desc">内存取证框架，分析内存转储文件，提取进程、网络连接、密码等信息</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag">取证</span><span class="tag">内存分析</span></div>
-      </a>
-      <a class="card" href="https://github.com/angr/angr" target="_blank" rel="noopener">
-        <div class="card-name">angr</div>
-        <div class="card-desc">二进制分析框架，支持符号执行、约束求解，自动化逆向和漏洞发现</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag">逆向</span><span class="tag">符号执行</span></div>
-      </a>
-      <a class="card" href="https://github.com/JohnHammond/ctf-katana" target="_blank" rel="noopener">
-        <div class="card-name">ctf-katana</div>
-        <div class="card-desc">CTF 工具速查手册，按题目类型整理常用工具和命令，比赛时快速查阅</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag blue">速查手册</span><span class="tag">综合</span></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 学习资源 -->
-  <div class="section">
-    <h2 class="sec-title">📚 学习资源与 Writeup</h2>
-    <div class="grid">
-      <a class="card" href="https://ctf-wiki.org" target="_blank" rel="noopener">
-        <div class="card-name">CTF Wiki</div>
-        <div class="card-desc">最全面的中文 CTF 知识库，涵盖 Web/Pwn/Reverse/Crypto/Misc 各方向基础知识和技巧</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag blue">必读</span><span class="tag">知识库</span></div>
-      </a>
-      <a class="card" href="https://book.hacktricks.xyz" target="_blank" rel="noopener">
-        <div class="card-name">HackTricks</div>
-        <div class="card-desc">渗透测试和 CTF 技巧大全，按场景分类的攻击手法速查，持续更新</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">技巧大全</span><span class="tag">英文</span></div>
-      </a>
-      <a class="card" href="https://github.com/apsdehal/awesome-ctf" target="_blank" rel="noopener">
-        <div class="card-name">Awesome CTF</div>
-        <div class="card-desc">GitHub 上的 CTF 资源精选列表，工具、框架、教程、Writeup 合集</div>
-        <div class="card-meta"><span class="tag green">开源</span><span class="tag">资源合集</span><span class="tag">GitHub</span></div>
-      </a>
-      <a class="card" href="https://www.youtube.com/@_JohnHammond" target="_blank" rel="noopener">
-        <div class="card-name">John Hammond (YouTube)</div>
-        <div class="card-desc">知名安全 YouTuber，大量 CTF Writeup 视频讲解，讲解清晰易懂</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">视频教程</span><span class="tag">英文</span></div>
-      </a>
-      <a class="card" href="https://www.youtube.com/@LiveOverflow" target="_blank" rel="noopener">
-        <div class="card-name">LiveOverflow (YouTube)</div>
-        <div class="card-desc">深入浅出讲解二进制安全和 CTF，从浏览器漏洞到硬件黑客，内容硬核</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">视频教程</span><span class="tag red">硬核</span></div>
-      </a>
-      <a class="card" href="https://bbs.kanxue.com" target="_blank" rel="noopener">
-        <div class="card-name">看雪论坛</div>
-        <div class="card-desc">国内顶级安全技术社区，逆向工程、漏洞分析、CTF Writeup 高质量文章</div>
-        <div class="card-meta"><span class="tag green">免费</span><span class="tag">中文社区</span><span class="tag">逆向/Pwn</span></div>
-      </a>
-    </div>
-  </div>
-
-  <p style="text-align:center;color:#4a4a6a;font-size:0.85rem;margin-top:3rem;">
-    ✨ BigHeadZuo 的 CTF 资源库 · 持续收录中
-  </p>
-</div>
-
-<script>
-const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
-function r(){c.width=innerWidth;c.height=document.documentElement.scrollHeight;s=[];
-const n=Math.floor(c.width*c.height/10000);
-for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+0.3,a:Math.random()*0.7+0.2,sp:Math.random()*0.004+0.002});}
-function d(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
-s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
-requestAnimationFrame(d);}
-addEventListener('resize',r);r();d();
-new ResizeObserver(()=>{c.height=document.documentElement.scrollHeight}).observe(document.body);
-</script>
 </body>
 </html>

@@ -4,69 +4,373 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>网络工程师课程体系 - BigHeadZuo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0a0a1a;color:#e0e0e0;line-height:1.7}
-    canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-    .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2.5rem 1rem 4rem}
-    h1{text-align:center;font-size:2rem;color:#fff;text-shadow:0 0 20px rgba(100,140,255,0.4);margin-bottom:.3rem}
-    .sub{text-align:center;color:#6688cc;margin-bottom:.8rem;font-size:.95rem}
-    .stats{text-align:center;color:#555577;font-size:.82rem;margin-bottom:1.5rem}
-    .nav{text-align:center;margin-bottom:1.5rem}
-    .nav a{color:#6688cc;text-decoration:none;font-size:.88rem;margin:0 .4rem}
-    .nav a:hover{color:#88aaee}
-    .toc{background:rgba(15,15,35,.85);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:2.5rem;backdrop-filter:blur(6px)}
-    .toc h3{color:#fff;font-size:1rem;margin-bottom:.8rem}
-    .toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.5rem}
-    .toc a{display:block;color:#7cacf8;text-decoration:none;font-size:.85rem;padding:4px 8px;border-radius:6px;transition:all .2s}
-    .toc a:hover{background:rgba(100,140,255,.1);color:#a0c4ff}
-    .toc .toc-stage{color:#555577;font-size:.75rem;margin-top:.5rem;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:1px}
-    .phase{margin-bottom:3rem}
-    .phase-title{font-size:1.4rem;color:#fff;margin-bottom:.3rem;padding-top:2rem}
-    .phase-meta{color:#6677aa;font-size:.85rem;margin-bottom:1.5rem}
-    .module{background:rgba(15,15,35,.85);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.3rem;margin-bottom:1.2rem;backdrop-filter:blur(6px);transition:all .3s}
-    .module:hover{border-color:rgba(255,255,255,.15)}
-    .mod-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;gap:1rem}
-    .mod-title{font-size:1.05rem;font-weight:600;color:#fff}
-    .mod-time{font-size:.75rem;color:#555577;background:rgba(255,255,255,.04);padding:3px 10px;border-radius:12px;white-space:nowrap}
-    .mod-goal{font-size:.83rem;color:#81c784;margin-bottom:.8rem;padding:6px 10px;background:rgba(76,175,80,.06);border-radius:6px;border-left:3px solid rgba(76,175,80,.3)}
-    .mod-section{margin-bottom:.8rem}
-    .mod-section-title{font-size:.82rem;color:#8888aa;font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px}
-    .mod-list{list-style:none;padding:0}
-    .mod-list li{font-size:.85rem;color:#9999bb;padding:3px 0;padding-left:1.2rem;position:relative}
-    .mod-list li::before{content:'▸';position:absolute;left:0;color:#555577}
-    .mod-list a{color:#7cacf8;text-decoration:none;border-bottom:1px dashed rgba(124,172,248,.3)}
-    .mod-list a:hover{color:#a0c4ff;border-bottom-color:rgba(160,196,255,.6)}
-    .mod-practice{background:rgba(255,183,77,.04);border:1px dashed rgba(255,183,77,.2);border-radius:8px;padding:.7rem .9rem;margin-top:.5rem}
-    .mod-practice-title{font-size:.8rem;color:#ffb74d;font-weight:600;margin-bottom:.3rem}
-    .mod-practice p{font-size:.83rem;color:#9090b0}
-    .mod-practice a{color:#7cacf8;text-decoration:none;border-bottom:1px dashed rgba(124,172,248,.3)}
-    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(100,140,255,.2),transparent);margin:2rem 0}
-    .back-top{position:fixed;bottom:2rem;right:2rem;z-index:20;width:44px;height:44px;border-radius:50%;background:rgba(100,140,255,.2);border:1px solid rgba(100,140,255,.3);color:#88aaee;font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:all .3s}
-    .back-top:hover{background:rgba(100,140,255,.35);transform:translateY(-2px)}
-    .back-top.show{display:flex}
-    .side-index{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:30;background:rgba(10,10,30,.92);border:1px solid rgba(255,255,255,.08);border-left:none;border-radius:0 12px 12px 0;padding:10px 8px;backdrop-filter:blur(8px);transition:all .3s;max-height:80vh;overflow-y:auto}
-    .side-index::-webkit-scrollbar{width:3px}
-    .side-index::-webkit-scrollbar-thumb{background:rgba(100,140,255,.3);border-radius:3px}
-    .side-index .si-title{font-size:.65rem;color:#555577;text-align:center;margin-bottom:6px;letter-spacing:1px}
-    .side-index a{display:block;font-size:.7rem;color:#6677aa;text-decoration:none;padding:3px 10px 3px 8px;border-radius:4px;transition:all .2s;white-space:nowrap;border-left:2px solid transparent;margin-bottom:1px}
-    .side-index a:hover{color:#88aaee;background:rgba(100,140,255,.1)}
-    .side-index a.active{color:#a0c4ff;border-left-color:#7cacf8;background:rgba(100,140,255,.08)}
-    .side-index .si-stage{font-size:.6rem;color:#444466;margin-top:6px;margin-bottom:2px;padding-left:8px;font-weight:600}
-    @media(max-width:1200px){.side-index{display:none}}
-    @media(max-width:600px){h1{font-size:1.5rem}.toc-grid{grid-template-columns:1fr}.mod-head{flex-direction:column;gap:.3rem}}
+    :root {
+      --bg: #000;
+      --surface: #111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-dim: #6e6e73;
+      --accent: #2997ff;
+      --accent-hover: #0077ed;
+      --green: #30d158;
+      --amber: #ff9f0a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Header ===== */
+    .header {
+      text-align: center;
+      padding: 100px 24px 60px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #fff 30%, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header .subtitle {
+      font-size: 21px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .header .stats {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent-hover); }
+
+    /* ===== Divider ===== */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* ===== Main Wrap ===== */
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ===== TOC ===== */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin: 48px 0;
+    }
+    .toc h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px 32px;
+    }
+    .toc .toc-stage {
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+    .toc a {
+      display: block;
+      color: var(--accent);
+      font-size: 14px;
+      padding: 3px 0;
+      transition: opacity 0.2s;
+    }
+    .toc a:hover { opacity: 0.7; }
+
+    /* ===== Phase ===== */
+    .phase {
+      margin-bottom: 64px;
+    }
+    .phase-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.03em;
+      padding-top: 48px;
+      margin-bottom: 6px;
+    }
+    .phase-meta {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 32px;
+    }
+
+    /* ===== Module Card ===== */
+    .module {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }
+    .module:hover {
+      border-color: rgba(255,255,255,0.15);
+    }
+    .mod-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .mod-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .mod-time {
+      font-size: 12px;
+      color: var(--text-dim);
+      background: rgba(255,255,255,0.04);
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* ===== Goal ===== */
+    .mod-goal {
+      font-size: 14px;
+      color: var(--green);
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      border-left: 3px solid var(--green);
+      background: rgba(48,209,88,0.04);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ===== Sections ===== */
+    .mod-section {
+      margin-bottom: 16px;
+    }
+    .mod-section-title {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .mod-list {
+      list-style: none;
+      padding: 0;
+    }
+    .mod-list li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 4px 0 4px 20px;
+      position: relative;
+    }
+    .mod-list li::before {
+      content: '·';
+      position: absolute;
+      left: 6px;
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+    .mod-list a {
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
+    .mod-list a:hover { opacity: 0.7; }
+
+    /* ===== Practice ===== */
+    .mod-practice {
+      border: 1px solid rgba(255,159,10,0.15);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin-top: 8px;
+      background: rgba(255,159,10,0.03);
+    }
+    .mod-practice-title {
+      font-size: 12px;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .mod-practice p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .mod-practice a {
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
+    .mod-practice a:hover { opacity: 0.7; }
+    .mod-practice code {
+      font-size: 13px;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ===== Side Index ===== */
+    .side-index {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+      padding: 14px 10px;
+      max-height: 80vh;
+      overflow-y: auto;
+      transition: opacity 0.3s;
+    }
+    .side-index::-webkit-scrollbar { width: 2px; }
+    .side-index::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .side-index .si-title {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .side-index a {
+      display: block;
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 3px 12px 3px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      border-left: 2px solid transparent;
+      margin-bottom: 1px;
+    }
+    .side-index a:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+    .side-index a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(41,151,255,0.05); }
+    .side-index .si-stage {
+      font-size: 9px;
+      color: rgba(255,255,255,0.2);
+      margin-top: 8px;
+      margin-bottom: 2px;
+      padding-left: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== Back to Top ===== */
+    .back-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .back-top:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+    .back-top.show { display: flex; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1200px) { .side-index { display: none; } }
+    @media (max-width: 768px) {
+      .header { padding: 64px 20px 40px; }
+      .header h1 { font-size: 36px; }
+      .header .subtitle { font-size: 17px; }
+      .phase-title { font-size: 26px; padding-top: 32px; }
+      .toc { padding: 20px; }
+      .toc-grid { grid-template-columns: 1fr; }
+      .module { padding: 20px; }
+      .mod-head { flex-direction: column; gap: 6px; }
+    }
   </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="wrap">
-  <h1>🌐 网络工程师课程体系</h1>
-  <p class="sub">从零基础到高级网络架构师 · 完整学习路径</p>
-  <p class="stats">6 大阶段 · 30 课程模块 · 450+ 学时 · 覆盖路由交换到 SD-WAN</p>
-  <nav class="nav"><a href="index.html">← 主页</a> · <a href="courses.html">安全课程</a> · <a href="server-engineer.html">服务器</a> · <a href="tools.html">工具箱</a></nav>
 
+  <!-- Header -->
+  <section class="header">
+    <h1>网络工程师课程体系</h1>
+    <p class="subtitle">从零基础到高级网络架构师 · 完整学习路径</p>
+    <p class="stats">6 大阶段 · 30 课程模块 · 450+ 学时 · 覆盖路由交换到 SD-WAN</p>
+    <nav class="nav-links">
+      <a href="index.html">← 主页</a>
+      <a href="courses.html">安全课程</a>
+      <a href="server-engineer.html">服务器</a>
+      <a href="tools.html">工具箱</a>
+    </nav>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="wrap">
+
+  <!-- TOC -->
   <div class="toc">
-    <h3>📑 课程目录</h3>
+    <h3>课程目录</h3>
     <div class="toc-grid">
       <div>
         <div class="toc-stage">阶段一 · 网络基础</div>
@@ -115,11 +419,11 @@
 
   <!-- ==================== 阶段一：网络基础 ==================== -->
   <div class="phase" id="phase1">
-    <h2 class="phase-title">📡 阶段一：网络基础（0-4 个月）</h2>
+    <h2 class="phase-title">阶段一：网络基础（0-4 个月）</h2>
     <p class="phase-meta">掌握网络通信原理，理解数据从发送到接收的完整过程</p>
 
     <div class="module" id="n1-1">
-      <div class="mod-head"><div class="mod-title">1.1 计算机网络概论</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">1.1 计算机网络概论</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 理解网络体系结构，掌握 OSI 与 TCP/IP 模型</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -149,7 +453,7 @@
     </div>
 
     <div class="module" id="n1-2">
-      <div class="mod-head"><div class="mod-title">1.2 以太网与数据链路层</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">1.2 以太网与数据链路层</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握以太网工作原理、MAC 地址、帧结构与交换基础</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -178,7 +482,7 @@
     </div>
 
     <div class="module" id="n1-3">
-      <div class="mod-head"><div class="mod-title">1.3 IP 协议与子网划分</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">1.3 IP 协议与子网划分</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 精通 IP 地址规划与子网划分，能设计任意规模的 IP 方案</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -209,7 +513,7 @@
     </div>
 
     <div class="module" id="n1-4">
-      <div class="mod-head"><div class="mod-title">1.4 传输层协议</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">1.4 传输层协议</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 深入理解 TCP/UDP 工作机制，能分析传输层问题</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -238,7 +542,7 @@
     </div>
 
     <div class="module" id="n1-5">
-      <div class="mod-head"><div class="mod-title">1.5 应用层协议</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">1.5 应用层协议</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握常见应用层协议的工作原理与抓包分析</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -272,11 +576,11 @@
 
   <!-- ==================== 阶段二：路由交换 ==================== -->
   <div class="phase" id="phase2">
-    <h2 class="phase-title">🔀 阶段二：路由交换（4-10 个月）</h2>
+    <h2 class="phase-title">阶段二：路由交换（4-10 个月）</h2>
     <p class="phase-meta">掌握企业级路由交换技术，考取 CCNA/HCIA 认证</p>
 
     <div class="module" id="n2-1">
-      <div class="mod-head"><div class="mod-title">2.1 交换技术</div><div class="mod-time">⏱ 35 学时</div></div>
+      <div class="mod-head"><div class="mod-title">2.1 交换技术</div><div class="mod-time">35 学时</div></div>
       <div class="mod-goal">🎯 精通 VLAN、STP、链路聚合等二层交换技术</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -306,7 +610,7 @@
     </div>
 
     <div class="module" id="n2-2">
-      <div class="mod-head"><div class="mod-title">2.2 路由协议</div><div class="mod-time">⏱ 45 学时</div></div>
+      <div class="mod-head"><div class="mod-title">2.2 路由协议</div><div class="mod-time">45 学时</div></div>
       <div class="mod-goal">🎯 掌握静态路由与动态路由协议，能设计企业路由方案</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -337,7 +641,7 @@
     </div>
 
     <div class="module" id="n2-3">
-      <div class="mod-head"><div class="mod-title">2.3 广域网技术</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">2.3 广域网技术</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 了解广域网接入技术与隧道协议</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -364,7 +668,7 @@
     </div>
 
     <div class="module" id="n2-4">
-      <div class="mod-head"><div class="mod-title">2.4 网络冗余与高可用</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">2.4 网络冗余与高可用</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握网关冗余与链路冗余技术，设计高可用网络</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -391,7 +695,7 @@
     </div>
 
     <div class="module" id="n2-5">
-      <div class="mod-head"><div class="mod-title">2.5 IPv6 技术</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">2.5 IPv6 技术</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 掌握 IPv6 地址规划与路由配置，为网络升级做准备</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -420,11 +724,11 @@
 
   <!-- ==================== 阶段三：网络安全与服务 ==================== -->
   <div class="phase" id="phase3">
-    <h2 class="phase-title">🛡️ 阶段三：网络安全与服务（10-16 个月）</h2>
+    <h2 class="phase-title">阶段三：网络安全与服务（10-16 个月）</h2>
     <p class="phase-meta">掌握网络安全设备配置与核心网络服务部署</p>
 
     <div class="module" id="n3-1">
-      <div class="mod-head"><div class="mod-title">3.1 防火墙与 ACL</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.1 防火墙与 ACL</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 掌握 ACL 与防火墙策略配置，能设计网络安全域</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -453,7 +757,7 @@
     </div>
 
     <div class="module" id="n3-2">
-      <div class="mod-head"><div class="mod-title">3.2 VPN 技术</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.2 VPN 技术</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 掌握各类 VPN 技术，能设计企业远程接入方案</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -482,7 +786,7 @@
     </div>
 
     <div class="module" id="n3-3">
-      <div class="mod-head"><div class="mod-title">3.3 网络服务部署</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.3 网络服务部署</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 能独立部署企业核心网络服务</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -511,7 +815,7 @@
     </div>
 
     <div class="module" id="n3-4">
-      <div class="mod-head"><div class="mod-title">3.4 无线网络</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.4 无线网络</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握企业无线网络规划与部署</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -540,7 +844,7 @@
     </div>
 
     <div class="module" id="n3-5">
-      <div class="mod-head"><div class="mod-title">3.5 网络监控与排障</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.5 网络监控与排障</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握网络监控体系与故障排查方法论</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -571,11 +875,11 @@
 
   <!-- ==================== 阶段四：大规模网络 ==================== -->
   <div class="phase" id="phase4">
-    <h2 class="phase-title">🏗️ 阶段四：大规模网络（16-24 个月）</h2>
+    <h2 class="phase-title">阶段四：大规模网络（16-24 个月）</h2>
     <p class="phase-meta">掌握运营商级网络技术与数据中心网络，考取 CCNP/HCIP</p>
 
     <div class="module" id="n4-1">
-      <div class="mod-head"><div class="mod-title">4.1 BGP 与运营商网络</div><div class="mod-time">⏱ 45 学时</div></div>
+      <div class="mod-head"><div class="mod-title">4.1 BGP 与运营商网络</div><div class="mod-time">45 学时</div></div>
       <div class="mod-goal">🎯 精通 BGP 协议，能设计多出口互联网接入方案</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -605,7 +909,7 @@
     </div>
 
     <div class="module" id="n4-2">
-      <div class="mod-head"><div class="mod-title">4.2 MPLS 技术</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">4.2 MPLS 技术</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 理解 MPLS 标签交换与 VPN 技术</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -633,7 +937,7 @@
     </div>
 
     <div class="module" id="n4-3">
-      <div class="mod-head"><div class="mod-title">4.3 数据中心网络</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">4.3 数据中心网络</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 掌握数据中心网络架构设计与关键技术</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -661,7 +965,7 @@
     </div>
 
     <div class="module" id="n4-4">
-      <div class="mod-head"><div class="mod-title">4.4 网络自动化</div><div class="mod-time">⏱ 35 学时</div></div>
+      <div class="mod-head"><div class="mod-title">4.4 网络自动化</div><div class="mod-time">35 学时</div></div>
       <div class="mod-goal">🎯 用代码管理网络，实现配置自动化与网络即代码</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -691,7 +995,7 @@
     </div>
 
     <div class="module" id="n4-5">
-      <div class="mod-head"><div class="mod-title">4.5 QoS 与流量工程</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">4.5 QoS 与流量工程</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 掌握 QoS 策略配置，保障关键业务网络质量</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -721,11 +1025,11 @@
 
   <!-- ==================== 阶段五：云网融合 ==================== -->
   <div class="phase" id="phase5">
-    <h2 class="phase-title">☁️ 阶段五：云网融合（2-3 年）</h2>
+    <h2 class="phase-title">阶段五：云网融合（2-3 年）</h2>
     <p class="phase-meta">掌握 SDN、SD-WAN 与云网络，拥抱网络新时代</p>
 
     <div class="module" id="n5-1">
-      <div class="mod-head"><div class="mod-title">5.1 SDN 软件定义网络</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">5.1 SDN 软件定义网络</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 理解 SDN 架构，掌握控制器编程与 OpenFlow</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -753,7 +1057,7 @@
     </div>
 
     <div class="module" id="n5-2">
-      <div class="mod-head"><div class="mod-title">5.2 SD-WAN</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">5.2 SD-WAN</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握 SD-WAN 架构与部署，替代传统 MPLS 专线</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -781,7 +1085,7 @@
     </div>
 
     <div class="module" id="n5-3">
-      <div class="mod-head"><div class="mod-title">5.3 云网络架构</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">5.3 云网络架构</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握公有云网络架构与混合云组网</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -809,7 +1113,7 @@
     </div>
 
     <div class="module" id="n5-4">
-      <div class="mod-head"><div class="mod-title">5.4 网络虚拟化</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">5.4 网络虚拟化</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 掌握网络功能虚拟化（NFV）与虚拟网络技术</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -836,7 +1140,7 @@
     </div>
 
     <div class="module" id="n5-5">
-      <div class="mod-head"><div class="mod-title">5.5 容器网络</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">5.5 容器网络</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 掌握 Kubernetes 网络模型与 Service Mesh</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -867,11 +1171,11 @@
 
   <!-- ==================== 阶段六：架构设计 ==================== -->
   <div class="phase" id="phase6">
-    <h2 class="phase-title">👑 阶段六：架构设计（3-5 年）</h2>
+    <h2 class="phase-title">阶段六：架构设计（3-5 年）</h2>
     <p class="phase-meta">站在全局视角设计网络架构，成为网络架构师</p>
 
     <div class="module" id="n6-1">
-      <div class="mod-head"><div class="mod-title">6.1 企业网络架构</div><div class="mod-time">⏱ 30 学时</div></div>
+      <div class="mod-head"><div class="mod-title">6.1 企业网络架构</div><div class="mod-time">30 学时</div></div>
       <div class="mod-goal">🎯 能设计从中小企业到大型园区的完整网络方案</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -899,7 +1203,7 @@
     </div>
 
     <div class="module" id="n6-2">
-      <div class="mod-head"><div class="mod-title">6.2 网络安全架构</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">6.2 网络安全架构</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 设计纵深防御的网络安全体系</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -926,7 +1230,7 @@
     </div>
 
     <div class="module" id="n6-3">
-      <div class="mod-head"><div class="mod-title">6.3 高可用架构设计</div><div class="mod-time">⏱ 25 学时</div></div>
+      <div class="mod-head"><div class="mod-title">6.3 高可用架构设计</div><div class="mod-time">25 学时</div></div>
       <div class="mod-goal">🎯 设计 99.99% 可用性的网络架构</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -953,7 +1257,7 @@
     </div>
 
     <div class="module" id="n6-4">
-      <div class="mod-head"><div class="mod-title">6.4 认证与职业发展</div><div class="mod-time">⏱ 20 学时</div></div>
+      <div class="mod-head"><div class="mod-title">6.4 认证与职业发展</div><div class="mod-time">20 学时</div></div>
       <div class="mod-goal">🎯 规划认证路径，提升职业竞争力</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -981,7 +1285,7 @@
     </div>
 
     <div class="module" id="n6-5">
-      <div class="mod-head"><div class="mod-title">6.5 项目管理</div><div class="mod-time">⏱ 15 学时</div></div>
+      <div class="mod-head"><div class="mod-title">6.5 项目管理</div><div class="mod-time">15 学时</div></div>
       <div class="mod-goal">🎯 掌握网络项目管理能力，能独立交付网络工程项目</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -1008,11 +1312,11 @@
     </div>
   </div>
 
-</div><!-- end .wrap -->
+  </div><!-- end .wrap -->
 
 <!-- 侧边浮动索引 -->
 <nav class="side-index" id="sideIndex">
-  <div class="si-title">📍 索引</div>
+  <div class="si-title">索引</div>
   <div class="si-stage">阶段一 · 网络基础</div>
   <a href="#n1-1">1.1 网络概论</a>
   <a href="#n1-2">1.2 以太网</a>
@@ -1054,26 +1358,41 @@
 <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
 
 <script>
-const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
-function r(){c.width=innerWidth;c.height=innerHeight;s=[];
-const n=Math.floor(c.width*c.height/6000);
-for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5+0.3,a:Math.random()*0.8+0.2,sp:Math.random()*0.005+0.002});}
-function d(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
-s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
-requestAnimationFrame(d);}
-addEventListener('resize',r);r();d();
-const btn=document.querySelector('.back-top');
-addEventListener('scroll',()=>{btn.classList.toggle('show',scrollY>400);});
-(function(){
-  const si=document.getElementById('sideIndex');
-  const links=si.querySelectorAll('a[href^="#n"]');
-  const sections=[];
-  links.forEach(a=>{const id=a.getAttribute('href').slice(1);const el=document.getElementById(id);if(el)sections.push({el,a});});
-  let ticking=false;
-  addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{
-    let current=null;const offset=window.innerHeight*0.3;
-    for(let i=sections.length-1;i>=0;i--){if(sections[i].el.getBoundingClientRect().top<=offset){current=sections[i];break;}}
-    links.forEach(a=>a.classList.remove('active'));if(current)current.a.classList.add('active');ticking=false;});ticking=true;}});
+// Back to top button
+const btn = document.querySelector('.back-top');
+addEventListener('scroll', () => {
+  btn.classList.toggle('show', scrollY > 400);
+});
+
+// Side index active state
+(function() {
+  const si = document.getElementById('sideIndex');
+  const links = si.querySelectorAll('a[href^="#n"]');
+  const sections = [];
+  links.forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ el, a });
+  });
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        let current = null;
+        const offset = window.innerHeight * 0.3;
+        for (let i = sections.length - 1; i >= 0; i--) {
+          if (sections[i].el.getBoundingClientRect().top <= offset) {
+            current = sections[i];
+            break;
+          }
+        }
+        links.forEach(a => a.classList.remove('active'));
+        if (current) current.a.classList.add('active');
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
 })();
 </script>
 </body>

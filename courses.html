@@ -4,74 +4,409 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>网络安全全栈课程体系 - BigHeadZuo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0a0a1a;color:#e0e0e0;line-height:1.7}
-    canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-    .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2.5rem 1rem 4rem}
-    h1{text-align:center;font-size:2rem;color:#fff;text-shadow:0 0 20px rgba(100,140,255,0.4);margin-bottom:.3rem}
-    .sub{text-align:center;color:#6688cc;margin-bottom:.8rem;font-size:.95rem}
-    .stats{text-align:center;color:#555577;font-size:.82rem;margin-bottom:1.5rem}
-    .nav{text-align:center;margin-bottom:1.5rem}
-    .nav a{color:#6688cc;text-decoration:none;font-size:.88rem;margin:0 .4rem}
-    .nav a:hover{color:#88aaee}
-    .toc{background:rgba(15,15,35,.85);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:2.5rem;backdrop-filter:blur(6px)}
-    .toc h3{color:#fff;font-size:1rem;margin-bottom:.8rem}
-    .toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.5rem}
-    .toc a{display:block;color:#7cacf8;text-decoration:none;font-size:.85rem;padding:4px 8px;border-radius:6px;transition:all .2s}
-    .toc a:hover{background:rgba(100,140,255,.1);color:#a0c4ff}
-    .toc .toc-stage{color:#555577;font-size:.75rem;margin-top:.5rem;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:1px}
-    .phase{margin-bottom:3rem}
-    .phase-title{font-size:1.4rem;color:#fff;margin-bottom:.3rem;padding-top:2rem}
-    .phase-meta{color:#6677aa;font-size:.85rem;margin-bottom:1.5rem}
-    .module{background:rgba(15,15,35,.85);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.3rem;margin-bottom:1.2rem;backdrop-filter:blur(6px);transition:all .3s}
-    .module:hover{border-color:rgba(255,255,255,.15)}
-    .mod-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;gap:1rem}
-    .mod-title{font-size:1.05rem;font-weight:600;color:#fff}
-    .mod-time{font-size:.75rem;color:#555577;background:rgba(255,255,255,.04);padding:3px 10px;border-radius:12px;white-space:nowrap}
-    .mod-goal{font-size:.83rem;color:#81c784;margin-bottom:.8rem;padding:6px 10px;background:rgba(76,175,80,.06);border-radius:6px;border-left:3px solid rgba(76,175,80,.3)}
-    .mod-section{margin-bottom:.8rem}
-    .mod-section-title{font-size:.82rem;color:#8888aa;font-weight:600;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px}
-    .mod-list{list-style:none;padding:0}
-    .mod-list li{font-size:.85rem;color:#9999bb;padding:3px 0;padding-left:1.2rem;position:relative}
-    .mod-list li::before{content:'▸';position:absolute;left:0;color:#555577}
-    .mod-list a{color:#7cacf8;text-decoration:none;border-bottom:1px dashed rgba(124,172,248,.3)}
-    .mod-list a:hover{color:#a0c4ff;border-bottom-color:rgba(160,196,255,.6)}
-    .mod-practice{background:rgba(255,183,77,.04);border:1px dashed rgba(255,183,77,.2);border-radius:8px;padding:.7rem .9rem;margin-top:.5rem}
-    .mod-practice-title{font-size:.8rem;color:#ffb74d;font-weight:600;margin-bottom:.3rem}
-    .mod-practice p{font-size:.83rem;color:#9090b0}
-    .mod-practice a{color:#7cacf8;text-decoration:none;border-bottom:1px dashed rgba(124,172,248,.3)}
-    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(100,140,255,.2),transparent);margin:2rem 0}
-    .back-top{position:fixed;bottom:2rem;right:2rem;z-index:20;width:44px;height:44px;border-radius:50%;background:rgba(100,140,255,.2);border:1px solid rgba(100,140,255,.3);color:#88aaee;font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:all .3s}
-    .back-top:hover{background:rgba(100,140,255,.35);transform:translateY(-2px)}
-    .back-top.show{display:flex}
-    /* 侧边浮动索引 */
-    .side-index{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:30;background:rgba(10,10,30,.92);border:1px solid rgba(255,255,255,.08);border-left:none;border-radius:0 12px 12px 0;padding:10px 8px;backdrop-filter:blur(8px);transition:all .3s;max-height:80vh;overflow-y:auto}
-    .side-index::-webkit-scrollbar{width:3px}
-    .side-index::-webkit-scrollbar-thumb{background:rgba(100,140,255,.3);border-radius:3px}
-    .side-index .si-title{font-size:.65rem;color:#555577;text-align:center;margin-bottom:6px;letter-spacing:1px}
-    .side-index a{display:block;font-size:.7rem;color:#6677aa;text-decoration:none;padding:3px 10px 3px 8px;border-radius:4px;transition:all .2s;white-space:nowrap;border-left:2px solid transparent;margin-bottom:1px}
-    .side-index a:hover{color:#88aaee;background:rgba(100,140,255,.1)}
-    .side-index a.active{color:#a0c4ff;border-left-color:#7cacf8;background:rgba(100,140,255,.08)}
-    .side-index .si-stage{font-size:.6rem;color:#444466;margin-top:6px;margin-bottom:2px;padding-left:8px;font-weight:600}
-    .si-toggle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:31;background:rgba(100,140,255,.2);border:1px solid rgba(100,140,255,.3);border-left:none;border-radius:0 8px 8px 0;color:#88aaee;cursor:pointer;padding:8px 4px;font-size:.75rem;display:none;backdrop-filter:blur(6px);writing-mode:vertical-lr}
-    .si-toggle:hover{background:rgba(100,140,255,.35)}
-    .side-index.collapsed{transform:translateY(-50%) translateX(-100%)}
-    .side-index.collapsed+.si-toggle{display:flex}
-    @media(max-width:1200px){.side-index{display:none}.si-toggle{display:none}}
-    @media(max-width:600px){h1{font-size:1.5rem}.toc-grid{grid-template-columns:1fr}.mod-head{flex-direction:column;gap:.3rem}}
+    :root {
+      --bg: #000;
+      --surface: #111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-dim: #6e6e73;
+      --accent: #2997ff;
+      --accent-hover: #0077ed;
+      --green: #30d158;
+      --amber: #ff9f0a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Page Header ===== */
+    .page-header {
+      text-align: center;
+      padding: 100px 24px 48px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .page-header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #fff 40%, #999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-header .subtitle {
+      font-size: 19px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .page-header .stats {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+    .page-header nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .page-header nav a {
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .page-header nav a:hover { color: var(--accent-hover); }
+
+    /* ===== Divider ===== */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    /* ===== Main Content ===== */
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ===== Table of Contents ===== */
+    .toc {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin: 48px 0 64px;
+    }
+    .toc h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px 32px;
+    }
+    .toc .toc-stage {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+    .toc a {
+      display: block;
+      color: var(--accent);
+      font-size: 14px;
+      padding: 3px 0;
+      transition: color 0.2s;
+    }
+    .toc a:hover { color: var(--accent-hover); }
+
+    /* ===== Phase ===== */
+    .phase {
+      margin-bottom: 64px;
+    }
+    .phase-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.03em;
+      padding-top: 48px;
+      margin-bottom: 6px;
+    }
+    .phase-meta {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    /* ===== Module Card ===== */
+    .module {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }
+    .module:hover { border-color: rgba(255,255,255,0.15); }
+    .mod-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 16px;
+    }
+    .mod-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .mod-time {
+      font-size: 12px;
+      color: var(--text-dim);
+      background: rgba(255,255,255,0.04);
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* ===== Goal ===== */
+    .mod-goal {
+      font-size: 14px;
+      color: var(--green);
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: rgba(48,209,88,0.04);
+      border-radius: 8px;
+      border-left: 3px solid rgba(48,209,88,0.4);
+    }
+
+    /* ===== Section ===== */
+    .mod-section { margin-bottom: 16px; }
+    .mod-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    /* ===== Knowledge List ===== */
+    .mod-list {
+      list-style: none;
+      padding: 0;
+    }
+    .mod-list li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 4px 0 4px 20px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .mod-list li::before {
+      content: '·';
+      position: absolute;
+      left: 6px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+    .mod-list a {
+      color: var(--accent);
+      transition: color 0.2s;
+    }
+    .mod-list a:hover { color: var(--accent-hover); }
+
+    /* ===== Practice ===== */
+    .mod-practice {
+      background: rgba(255,159,10,0.03);
+      border: 1px solid rgba(255,159,10,0.1);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 8px;
+    }
+    .mod-practice-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .mod-practice p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .mod-practice a {
+      color: var(--accent);
+      transition: color 0.2s;
+    }
+    .mod-practice a:hover { color: var(--accent-hover); }
+    .mod-practice code {
+      font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
+      font-size: 13px;
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ===== Side Index ===== */
+    .side-index {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 12px 12px 0;
+      padding: 14px 10px;
+      max-height: 80vh;
+      overflow-y: auto;
+      transition: transform 0.3s;
+    }
+    .side-index::-webkit-scrollbar { width: 2px; }
+    .side-index::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .side-index .si-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .side-index a {
+      display: block;
+      font-size: 12px;
+      color: var(--text-dim);
+      padding: 3px 12px 3px 10px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      border-left: 2px solid transparent;
+      margin-bottom: 1px;
+    }
+    .side-index a:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+    .side-index a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(41,151,255,0.05); }
+    .side-index .si-stage {
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.2);
+      margin-top: 8px;
+      margin-bottom: 2px;
+      padding-left: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .si-toggle {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 31;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 8px 4px;
+      font-size: 12px;
+      display: none;
+      writing-mode: vertical-lr;
+      transition: color 0.2s;
+    }
+    .si-toggle:hover { color: var(--text-secondary); }
+    .side-index.collapsed { transform: translateY(-50%) translateX(-100%); }
+    .side-index.collapsed + .si-toggle { display: flex; }
+
+    /* ===== Back to Top ===== */
+    .back-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .back-top:hover { border-color: rgba(255,255,255,0.15); color: var(--text-secondary); }
+    .back-top.show { display: flex; }
+
+    /* ===== Footer ===== */
+    footer {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 1200px) {
+      .side-index { display: none; }
+      .si-toggle { display: none; }
+    }
+    @media (max-width: 768px) {
+      .page-header { padding: 64px 20px 32px; }
+      .page-header h1 { font-size: 32px; }
+      .page-header .subtitle { font-size: 17px; }
+      .page-header nav { gap: 16px; }
+      .wrap { padding: 0 20px 60px; }
+      .toc { padding: 24px; }
+      .toc-grid { grid-template-columns: 1fr; }
+      .phase-title { font-size: 24px; padding-top: 32px; }
+      .module { padding: 20px; }
+      .mod-head { flex-direction: column; gap: 6px; }
+    }
+    @media (max-width: 480px) {
+      .page-header h1 { font-size: 28px; }
+      .page-header nav { flex-wrap: wrap; gap: 12px; }
+    }
   </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="wrap">
-  <h1>📖 网络安全全栈课程体系</h1>
-  <p class="sub">从零基础到超高级全栈安全工程师 · 完整学习路径</p>
-  <p class="stats">7 大阶段 · 35 课程模块 · 500+ 学时 · 覆盖攻防全链路</p>
-  <nav class="nav"><a href="index.html">← 主页</a> · <a href="roadmap.html">路线图</a> · <a href="tools.html">工具箱</a> · <a href="ctf.html">CTF</a></nav>
 
+  <!-- Page Header -->
+  <section class="page-header">
+    <h1>网络安全全栈课程体系</h1>
+    <p class="subtitle">从零基础到超高级全栈安全工程师 · 完整学习路径</p>
+    <p class="stats">7 大阶段 · 35 课程模块 · 500+ 学时 · 覆盖攻防全链路</p>
+    <nav>
+      <a href="index.html">← 主页</a>
+      <a href="roadmap.html">路线图</a>
+      <a href="tools.html">工具箱</a>
+      <a href="ctf.html">CTF</a>
+    </nav>
+  </section>
+
+  <div class="divider"></div>
+
+  <div class="wrap">
+
+  <!-- Table of Contents -->
   <div class="toc">
-    <h3>📑 课程目录</h3>
+    <h3>课程目录</h3>
     <div class="toc-grid">
       <div>
         <div class="toc-stage">阶段一 · 基础筑基</div>
@@ -126,7 +461,7 @@
 
   <!-- ==================== 阶段一：基础筑基 ==================== -->
   <div class="phase" id="phase1">
-    <h2 class="phase-title">🌱 阶段一：基础筑基（0-6 个月）</h2>
+    <h2 class="phase-title">阶段一：基础筑基（0-6 个月）</h2>
     <p class="phase-meta">打好计算机科学基础，掌握核心编程与系统管理能力</p>
 
     <div class="module" id="m1-1">
@@ -312,7 +647,7 @@
 
   <!-- ==================== 阶段二：安全入门 ==================== -->
   <div class="phase" id="phase2">
-    <h2 class="phase-title">🔐 阶段二：安全入门（6-12 个月）</h2>
+    <h2 class="phase-title">阶段二：安全入门（6-12 个月）</h2>
     <p class="phase-meta">建立安全思维，掌握 Web 安全与渗透测试基础</p>
 
     <div class="module" id="m2-1">
@@ -498,7 +833,7 @@
 
   <!-- ==================== 阶段三：渗透进阶 ==================== -->
   <div class="phase" id="phase3">
-    <h2 class="phase-title">⚔️ 阶段三：渗透进阶（1-2 年）</h2>
+    <h2 class="phase-title">阶段三：渗透进阶（1-2 年）</h2>
     <p class="phase-meta">深入攻击技术，掌握内网渗透、代码审计与红队作战能力</p>
 
     <div class="module" id="m3-1">
@@ -533,7 +868,7 @@
     </div>
 
     <div class="module" id="m3-2">
-      <div class="mod-head"><div class="mod-title">3.2 代码审计</div><div class="mod-time">⏱ 40 学时</div></div>
+      <div class="mod-head"><div class="mod-title">3.2 代码审计</div><div class="mod-time">⏱ 35 学时</div></div>
       <div class="mod-goal">🎯 能审计 PHP/Java/Python 代码，发现 0day 漏洞</div>
       <div class="mod-section">
         <div class="mod-section-title">核心知识点</div>
@@ -654,7 +989,7 @@
 
   <!-- ==================== 阶段四：安全防御 ==================== -->
   <div class="phase" id="phase4">
-    <h2 class="phase-title">🛡️ 阶段四：安全防御（2-3 年）</h2>
+    <h2 class="phase-title">阶段四：安全防御（2-3 年）</h2>
     <p class="phase-meta">从攻击转向防御，掌握企业级安全运营与应急响应</p>
 
     <div class="module" id="m4-1">
@@ -838,7 +1173,7 @@
 
   <!-- ==================== 阶段五：全栈开发 ==================== -->
   <div class="phase" id="phase5">
-    <h2 class="phase-title">💻 阶段五：全栈开发（2-3 年）</h2>
+    <h2 class="phase-title">阶段五：全栈开发（2-3 年）</h2>
     <p class="phase-meta">掌握前后端开发与云原生技术，能独立开发安全产品</p>
 
     <div class="module" id="m5-1">
@@ -998,7 +1333,7 @@
 
   <!-- ==================== 阶段六：高级专项 ==================== -->
   <div class="phase" id="phase6">
-    <h2 class="phase-title">🔬 阶段六：高级专项（3-5 年）</h2>
+    <h2 class="phase-title">阶段六：高级专项（3-5 年）</h2>
     <p class="phase-meta">深入底层安全与前沿领域，成为细分方向专家</p>
 
     <div class="module" id="m6-1">
@@ -1159,7 +1494,7 @@
 
   <!-- ==================== 阶段七：架构领袖 ==================== -->
   <div class="phase" id="phase7">
-    <h2 class="phase-title">👑 阶段七：架构领袖（5 年+）</h2>
+    <h2 class="phase-title">阶段七：架构领袖（5 年+）</h2>
     <p class="phase-meta">站在全局视角设计安全体系，成为安全架构师与技术领袖</p>
 
     <div class="module" id="m7-1">
@@ -1225,97 +1560,100 @@
     </div>
   </div>
 
-</div><!-- end .wrap -->
+  </div><!-- end .wrap -->
 
-<!-- 侧边浮动索引 -->
-<nav class="side-index" id="sideIndex">
-  <div class="si-title">📍 索引</div>
-  <div class="si-stage">阶段一 · 基础筑基</div>
-  <a href="#m1-1">1.1 计算机组成</a>
-  <a href="#m1-2">1.2 计算机网络</a>
-  <a href="#m1-3">1.3 Linux 管理</a>
-  <a href="#m1-4">1.4 Python 编程</a>
-  <a href="#m1-5">1.5 数据库 SQL</a>
-  <a href="#m1-6">1.6 Shell 脚本</a>
-  <div class="si-stage">阶段二 · 安全入门</div>
-  <a href="#m2-1">2.1 Web 安全</a>
-  <a href="#m2-2">2.2 渗透工具链</a>
-  <a href="#m2-3">2.3 密码学</a>
-  <a href="#m2-4">2.4 协议安全</a>
-  <a href="#m2-5">2.5 系统安全</a>
-  <a href="#m2-6">2.6 法规合规</a>
-  <div class="si-stage">阶段三 · 渗透进阶</div>
-  <a href="#m3-1">3.1 内网域攻防</a>
-  <a href="#m3-2">3.2 代码审计</a>
-  <a href="#m3-3">3.3 红队武器化</a>
-  <a href="#m3-4">3.4 移动安全</a>
-  <a href="#m3-5">3.5 漏洞赏金</a>
-  <div class="si-stage">阶段四 · 安全防御</div>
-  <a href="#m4-1">4.1 SIEM 运营</a>
-  <a href="#m4-2">4.2 IDS/IPS</a>
-  <a href="#m4-3">4.3 应急取证</a>
-  <a href="#m4-4">4.4 威胁情报</a>
-  <a href="#m4-5">4.5 安全框架</a>
-  <a href="#m4-6">4.6 DevSecOps</a>
-  <div class="si-stage">阶段五 · 全栈开发</div>
-  <a href="#m5-1">5.1 前端开发</a>
-  <a href="#m5-2">5.2 后端 API</a>
-  <a href="#m5-3">5.3 工具开发</a>
-  <a href="#m5-4">5.4 云安全</a>
-  <a href="#m5-5">5.5 容器 DevOps</a>
-  <div class="si-stage">阶段六 · 高级专项</div>
-  <a href="#m6-1">6.1 逆向工程</a>
-  <a href="#m6-2">6.2 二进制利用</a>
-  <a href="#m6-3">6.3 恶意软件</a>
-  <a href="#m6-4">6.4 AI 安全</a>
-  <a href="#m6-5">6.5 IoT 工控</a>
-  <div class="si-stage">阶段七 · 架构领袖</div>
-  <a href="#m7-1">7.1 安全架构</a>
-  <a href="#m7-2">7.2 管理领导力</a>
-</nav>
-<button class="si-toggle" id="siToggle" onclick="document.getElementById('sideIndex').classList.remove('collapsed')" aria-label="展开索引">📍索引</button>
+  <!-- Footer -->
+  <footer>
+    <span class="footer-copy">© 2026 BigHeadZuo</span>
+  </footer>
 
-<button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
+  <!-- Side Index -->
+  <nav class="side-index" id="sideIndex">
+    <div class="si-title">索引</div>
+    <div class="si-stage">阶段一 · 基础筑基</div>
+    <a href="#m1-1">1.1 计算机组成</a>
+    <a href="#m1-2">1.2 计算机网络</a>
+    <a href="#m1-3">1.3 Linux 管理</a>
+    <a href="#m1-4">1.4 Python 编程</a>
+    <a href="#m1-5">1.5 数据库 SQL</a>
+    <a href="#m1-6">1.6 Shell 脚本</a>
+    <div class="si-stage">阶段二 · 安全入门</div>
+    <a href="#m2-1">2.1 Web 安全</a>
+    <a href="#m2-2">2.2 渗透工具链</a>
+    <a href="#m2-3">2.3 密码学</a>
+    <a href="#m2-4">2.4 协议安全</a>
+    <a href="#m2-5">2.5 系统安全</a>
+    <a href="#m2-6">2.6 法规合规</a>
+    <div class="si-stage">阶段三 · 渗透进阶</div>
+    <a href="#m3-1">3.1 内网域攻防</a>
+    <a href="#m3-2">3.2 代码审计</a>
+    <a href="#m3-3">3.3 红队武器化</a>
+    <a href="#m3-4">3.4 移动安全</a>
+    <a href="#m3-5">3.5 漏洞赏金</a>
+    <div class="si-stage">阶段四 · 安全防御</div>
+    <a href="#m4-1">4.1 SIEM 运营</a>
+    <a href="#m4-2">4.2 IDS/IPS</a>
+    <a href="#m4-3">4.3 应急取证</a>
+    <a href="#m4-4">4.4 威胁情报</a>
+    <a href="#m4-5">4.5 安全框架</a>
+    <a href="#m4-6">4.6 DevSecOps</a>
+    <div class="si-stage">阶段五 · 全栈开发</div>
+    <a href="#m5-1">5.1 前端开发</a>
+    <a href="#m5-2">5.2 后端 API</a>
+    <a href="#m5-3">5.3 工具开发</a>
+    <a href="#m5-4">5.4 云安全</a>
+    <a href="#m5-5">5.5 容器 DevOps</a>
+    <div class="si-stage">阶段六 · 高级专项</div>
+    <a href="#m6-1">6.1 逆向工程</a>
+    <a href="#m6-2">6.2 二进制利用</a>
+    <a href="#m6-3">6.3 恶意软件</a>
+    <a href="#m6-4">6.4 AI 安全</a>
+    <a href="#m6-5">6.5 IoT 工控</a>
+    <div class="si-stage">阶段七 · 架构领袖</div>
+    <a href="#m7-1">7.1 安全架构</a>
+    <a href="#m7-2">7.2 管理领导力</a>
+  </nav>
+  <button class="si-toggle" id="siToggle" onclick="document.getElementById('sideIndex').classList.remove('collapsed')" aria-label="展开索引">索引</button>
 
-<script>
-// 星空背景
-const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
-function r(){c.width=innerWidth;c.height=innerHeight;s=[];
-const n=Math.floor(c.width*c.height/6000);
-for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5+0.3,a:Math.random()*0.8+0.2,sp:Math.random()*0.005+0.002});}
-function d(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
-s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
-requestAnimationFrame(d);}
-addEventListener('resize',r);r();d();
+  <button class="back-top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
 
-// 回到顶部按钮
-const btn=document.querySelector('.back-top');
-addEventListener('scroll',()=>{btn.classList.toggle('show',scrollY>400);});
-
-// 侧边索引高亮当前位置
-(function(){
-  const si=document.getElementById('sideIndex');
-  const links=si.querySelectorAll('a[href^="#m"]');
-  const sections=[];
-  links.forEach(a=>{
-    const id=a.getAttribute('href').slice(1);
-    const el=document.getElementById(id);
-    if(el) sections.push({el,a});
+  <script>
+  // Back to top button
+  const btn = document.querySelector('.back-top');
+  addEventListener('scroll', () => {
+    btn.classList.toggle('show', scrollY > 400);
   });
-  let ticking=false;
-  addEventListener('scroll',()=>{
-    if(!ticking){requestAnimationFrame(()=>{
-      let current=null;
-      const offset=window.innerHeight*0.3;
-      for(let i=sections.length-1;i>=0;i--){
-        if(sections[i].el.getBoundingClientRect().top<=offset){current=sections[i];break;}
+
+  // Side index active state tracking
+  (function(){
+    const si = document.getElementById('sideIndex');
+    const links = si.querySelectorAll('a[href^="#m"]');
+    const sections = [];
+    links.forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if(el) sections.push({el, a});
+    });
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if(!ticking){
+        requestAnimationFrame(() => {
+          let current = null;
+          const offset = window.innerHeight * 0.3;
+          for(let i = sections.length - 1; i >= 0; i--){
+            if(sections[i].el.getBoundingClientRect().top <= offset){
+              current = sections[i];
+              break;
+            }
+          }
+          links.forEach(a => a.classList.remove('active'));
+          if(current) current.a.classList.add('active');
+          ticking = false;
+        });
+        ticking = true;
       }
-      links.forEach(a=>a.classList.remove('active'));
-      if(current) current.a.classList.add('active');
-      ticking=false;
-    });ticking=true;}
-  });
-})();
-</script>
+    });
+  })();
+  </script>
 </body>
 </html>

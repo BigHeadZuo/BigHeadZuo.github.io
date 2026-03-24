@@ -5,336 +5,416 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>安全工具箱 - BigHeadZuo</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0a0a1a;
-      color: #e0e0e0;
-      min-height: 100vh;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg: #000;
+      --surface: #111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-dim: #6e6e73;
+      --accent: #2997ff;
+      --accent-hover: #0077ed;
     }
-    canvas#bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-    .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 3rem 1rem 4rem; }
-    h1 { text-align: center; font-size: 2rem; color: #fff; text-shadow: 0 0 20px rgba(100,140,255,0.4); margin-bottom: 0.4rem; }
-    .subtitle { text-align: center; color: #6688cc; margin-bottom: 2.5rem; }
-    .nav-back { text-align: center; margin-bottom: 2rem; }
-    .nav-back a { color: #6688cc; text-decoration: none; font-size: 0.9rem; }
-    .nav-back a:hover { color: #88aaee; }
-    .category { margin-bottom: 2.5rem; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+      background:var(--bg); color:var(--text); min-height:100vh;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a { text-decoration:none; color:inherit; }
+
+    .wrapper { max-width:980px; margin:0 auto; padding:0 24px; }
+
+    /* ===== Header ===== */
+    .page-header {
+      text-align:center; padding:80px 24px 48px;
+      max-width:680px; margin:0 auto;
+    }
+    .page-header h1 {
+      font-size:48px; font-weight:700; letter-spacing:-0.04em;
+      line-height:1.08; margin-bottom:10px;
+      background:linear-gradient(180deg,#fff 40%,#999);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .subtitle {
+      font-size:19px; font-weight:400; color:var(--text-secondary);
+      line-height:1.5; letter-spacing:-0.01em;
+    }
+
+    /* ===== Nav ===== */
+    .nav-back {
+      text-align:center; margin-bottom:40px;
+    }
+    .nav-back a {
+      color:var(--accent); font-size:14px; font-weight:400;
+      transition:color 0.2s;
+    }
+    .nav-back a:hover { color:var(--accent-hover); }
+    .nav-back .sep { color:var(--text-dim); margin:0 8px; }
+
+    /* ===== Search ===== */
+    .search-wrap {
+      max-width:480px; margin:0 auto 48px;
+    }
+    .search-wrap input {
+      width:100%; padding:12px 16px;
+      border-radius:12px; border:1px solid var(--border);
+      background:var(--surface); color:var(--text);
+      font-family:inherit; font-size:15px;
+      outline:none; transition:border-color 0.3s;
+    }
+    .search-wrap input::placeholder { color:var(--text-dim); }
+    .search-wrap input:focus { border-color:rgba(255,255,255,0.2); }
+
+    /* ===== Category ===== */
+    .category { margin-bottom:48px; }
     .cat-title {
-      font-size: 1.15rem; color: #fff; margin-bottom: 1rem;
-      padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08);
-      display: flex; align-items: center; gap: 0.5rem;
+      font-size:20px; font-weight:600; color:#fff;
+      letter-spacing:-0.02em; margin-bottom:20px;
+      padding-bottom:12px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; gap:10px;
     }
     .cat-tag {
-      font-size: 0.7rem; padding: 2px 8px; border-radius: 12px;
-      background: rgba(100,140,255,0.15); color: #88aaee;
+      font-size:11px; font-weight:500; padding:3px 10px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.06); color:var(--text-secondary);
     }
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+    /* ===== Tool Cards ===== */
+    .tools-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:16px;
+    }
     .tool-card {
-      background: rgba(15,15,35,0.85); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 10px; padding: 1.1rem; backdrop-filter: blur(6px);
-      transition: all 0.3s; text-decoration: none; color: inherit; display: block;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:24px;
+      transition:transform 0.3s, border-color 0.3s;
+      text-decoration:none; color:inherit; display:block;
     }
     .tool-card:hover {
-      border-color: rgba(100,140,255,0.3); transform: translateY(-3px);
-      box-shadow: 0 6px 25px rgba(100,140,255,0.1);
+      transform:scale(1.02);
+      border-color:rgba(255,255,255,0.16);
     }
-    .tool-name { font-weight: 600; color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
-    .tool-desc { font-size: 0.83rem; color: #8888aa; line-height: 1.6; margin-bottom: 0.5rem; }
-    .tool-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tool-name {
+      font-size:17px; font-weight:600; color:#fff;
+      letter-spacing:-0.01em; margin-bottom:6px;
+    }
+    .tool-desc {
+      font-size:13px; color:var(--text-secondary); line-height:1.6;
+      margin-bottom:12px;
+    }
+    .tool-tags { display:flex; flex-wrap:wrap; gap:6px; }
     .tag {
-      font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
-      background: rgba(255,255,255,0.05); color: #7777aa;
+      font-size:11px; font-weight:500; padding:3px 10px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.06); color:var(--text-dim);
     }
-    .tag.free { background: rgba(76,175,80,0.12); color: #81c784; }
-    .tag.open { background: rgba(33,150,243,0.12); color: #64b5f6; }
-    .tag.paid { background: rgba(255,152,0,0.12); color: #ffb74d; }
-    @media (max-width: 600px) { .tools-grid { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } }
+    .tag.free { background:rgba(48,209,88,0.1); color:#30d158; }
+    .tag.open { background:rgba(41,151,255,0.1); color:#64d2ff; }
+    .tag.paid { background:rgba(255,159,10,0.1); color:#ff9f0a; }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align:center; padding:40px 24px 48px;
+      border-top:1px solid var(--border); margin-top:16px;
+    }
+    footer p {
+      font-size:12px; color:var(--text-dim);
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px) {
+      .page-header { padding:56px 20px 36px; }
+      .page-header h1 { font-size:34px; }
+      .subtitle { font-size:16px; }
+      .tools-grid { grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); }
+    }
+    @media(max-width:480px) {
+      .tools-grid { grid-template-columns:1fr; }
+      .page-header h1 { font-size:28px; }
+    }
   </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="wrapper">
-  <h1>🧰 网络安全工具箱</h1>
-  <p class="subtitle">精选安全工具 · 按阶段分类整理</p>
-  <nav class="nav-back"><a href="index.html">← 返回主页</a> · <a href="roadmap.html">发展路线</a> · <a href="ctf.html">CTF 资源</a></nav>
 
-  <div style="max-width:500px;margin:0 auto 2rem;">
-    <input type="text" id="searchBox" placeholder="🔍 搜索工具名称或关键词..." style="width:100%;padding:0.7rem 1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#e0e0e0;font-size:0.95rem;outline:none;backdrop-filter:blur(6px);transition:border-color 0.3s;" onfocus="this.style.borderColor='rgba(100,140,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" aria-label="搜索工具">
-  </div>
+  <!-- Header -->
+  <section class="page-header">
+    <h1>🧰 网络安全工具箱</h1>
+    <p class="subtitle">精选安全工具 · 按阶段分类整理</p>
+  </section>
 
-  <!-- 信息收集 -->
-  <div class="category">
-    <h2 class="cat-title">🔍 信息收集与侦察 <span class="cat-tag">基础阶段</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://nmap.org" target="_blank" rel="noopener">
-        <div class="tool-name">Nmap</div>
-        <div class="tool-desc">网络发现和安全审计的必备工具，端口扫描、服务识别、OS 指纹探测</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">端口扫描</span></div>
-      </a>
-      <a class="tool-card" href="https://www.shodan.io" target="_blank" rel="noopener">
-        <div class="tool-name">Shodan</div>
-        <div class="tool-desc">互联网设备搜索引擎，发现暴露在公网的设备、服务和漏洞</div>
-        <div class="tool-tags"><span class="tag paid">部分付费</span><span class="tag">资产发现</span><span class="tag">IoT</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/OWASP/Amass" target="_blank" rel="noopener">
-        <div class="tool-name">Amass</div>
-        <div class="tool-desc">OWASP 出品的子域名枚举工具，支持被动/主动/暴力枚举</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">子域名</span></div>
-      </a>
-      <a class="tool-card" href="https://www.wireshark.org" target="_blank" rel="noopener">
-        <div class="tool-name">Wireshark</div>
-        <div class="tool-desc">最流行的网络协议分析器，抓包分析、流量审计、协议调试</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">抓包</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/projectdiscovery/httpx" target="_blank" rel="noopener">
-        <div class="tool-name">httpx</div>
-        <div class="tool-desc">快速多功能 HTTP 探测工具，批量探活、标题获取、技术栈识别</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HTTP探测</span></div>
-      </a>
-      <a class="tool-card" href="https://fofa.info" target="_blank" rel="noopener">
-        <div class="tool-name">FOFA</div>
-        <div class="tool-desc">国内网络空间测绘平台，资产搜索、指纹识别、数据分析</div>
-        <div class="tool-tags"><span class="tag paid">部分付费</span><span class="tag">资产测绘</span></div>
-      </a>
+  <div class="wrapper">
+    <nav class="nav-back"><a href="index.html">← 返回主页</a><span class="sep">·</span><a href="roadmap.html">发展路线</a><span class="sep">·</span><a href="ctf.html">CTF 资源</a></nav>
+
+    <div class="search-wrap">
+      <input type="text" id="searchBox" placeholder="🔍 搜索工具名称或关键词..." aria-label="搜索工具">
     </div>
-  </div>
 
-  <!-- 漏洞扫描 -->
-  <div class="category">
-    <h2 class="cat-title">🎯 漏洞扫描与利用 <span class="cat-tag">进阶阶段</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://portswigger.net/burp" target="_blank" rel="noopener">
-        <div class="tool-name">Burp Suite</div>
-        <div class="tool-desc">Web 安全测试的瑞士军刀，代理抓包、漏洞扫描、Intruder 爆破</div>
-        <div class="tool-tags"><span class="tag paid">社区版免费</span><span class="tag">Web安全</span><span class="tag">必备</span></div>
-      </a>
-      <a class="tool-card" href="https://www.metasploit.com" target="_blank" rel="noopener">
-        <div class="tool-name">Metasploit</div>
-        <div class="tool-desc">最强渗透测试框架，漏洞利用、Payload 生成、后渗透模块</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">渗透框架</span></div>
-      </a>
-      <a class="tool-card" href="https://sqlmap.org" target="_blank" rel="noopener">
-        <div class="tool-name">SQLMap</div>
-        <div class="tool-desc">自动化 SQL 注入检测与利用工具，支持多种数据库和注入技术</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">SQL注入</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/projectdiscovery/nuclei" target="_blank" rel="noopener">
-        <div class="tool-name">Nuclei</div>
-        <div class="tool-desc">基于模板的快速漏洞扫描器，社区维护海量 PoC 模板</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">漏洞扫描</span></div>
-      </a>
-      <a class="tool-card" href="https://www.tenable.com/products/nessus" target="_blank" rel="noopener">
-        <div class="tool-name">Nessus</div>
-        <div class="tool-desc">企业级漏洞评估工具，全面的漏洞检测、合规检查、配置审计</div>
-        <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">企业级</span><span class="tag">漏洞评估</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/vanhauser-thc/thc-hydra" target="_blank" rel="noopener">
-        <div class="tool-name">Hydra</div>
-        <div class="tool-desc">在线密码暴力破解工具，支持 SSH、FTP、HTTP、RDP 等多种协议</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">暴力破解</span></div>
-      </a>
+    <!-- 信息收集 -->
+    <div class="category">
+      <h2 class="cat-title">🔍 信息收集与侦察 <span class="cat-tag">基础阶段</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://nmap.org" target="_blank" rel="noopener">
+          <div class="tool-name">Nmap</div>
+          <div class="tool-desc">网络发现和安全审计的必备工具，端口扫描、服务识别、OS 指纹探测</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">端口扫描</span></div>
+        </a>
+        <a class="tool-card" href="https://www.shodan.io" target="_blank" rel="noopener">
+          <div class="tool-name">Shodan</div>
+          <div class="tool-desc">互联网设备搜索引擎，发现暴露在公网的设备、服务和漏洞</div>
+          <div class="tool-tags"><span class="tag paid">部分付费</span><span class="tag">资产发现</span><span class="tag">IoT</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/OWASP/Amass" target="_blank" rel="noopener">
+          <div class="tool-name">Amass</div>
+          <div class="tool-desc">OWASP 出品的子域名枚举工具，支持被动/主动/暴力枚举</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">子域名</span></div>
+        </a>
+        <a class="tool-card" href="https://www.wireshark.org" target="_blank" rel="noopener">
+          <div class="tool-name">Wireshark</div>
+          <div class="tool-desc">最流行的网络协议分析器，抓包分析、流量审计、协议调试</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">抓包</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/projectdiscovery/httpx" target="_blank" rel="noopener">
+          <div class="tool-name">httpx</div>
+          <div class="tool-desc">快速多功能 HTTP 探测工具，批量探活、标题获取、技术栈识别</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HTTP探测</span></div>
+        </a>
+        <a class="tool-card" href="https://fofa.info" target="_blank" rel="noopener">
+          <div class="tool-name">FOFA</div>
+          <div class="tool-desc">国内网络空间测绘平台，资产搜索、指纹识别、数据分析</div>
+          <div class="tool-tags"><span class="tag paid">部分付费</span><span class="tag">资产测绘</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- 红队工具 -->
-  <div class="category">
-    <h2 class="cat-title">⚔️ 红队与后渗透 <span class="cat-tag">高级阶段</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://www.cobaltstrike.com" target="_blank" rel="noopener">
-        <div class="tool-name">Cobalt Strike</div>
-        <div class="tool-desc">商业红队 C2 框架，Beacon 通信、横向移动、团队协作</div>
-        <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">C2框架</span><span class="tag">红队</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/BishopFox/sliver" target="_blank" rel="noopener">
-        <div class="tool-name">Sliver</div>
-        <div class="tool-desc">开源 C2 框架，支持多种通信协议、跨平台植入体、对抗检测</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">C2框架</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/gentilkiwi/mimikatz" target="_blank" rel="noopener">
-        <div class="tool-name">Mimikatz</div>
-        <div class="tool-desc">Windows 凭证提取神器，抓取密码、哈希、Kerberos 票据</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">凭证提取</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/fatedier/frp" target="_blank" rel="noopener">
-        <div class="tool-name">frp</div>
-        <div class="tool-desc">高性能反向代理工具，内网穿透、端口转发、隧道搭建</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">内网穿透</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/BloodHoundAD/BloodHound" target="_blank" rel="noopener">
-        <div class="tool-name">BloodHound</div>
-        <div class="tool-desc">Active Directory 攻击路径分析，可视化域环境关系和提权路径</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">域渗透</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/carlospolop/PEASS-ng" target="_blank" rel="noopener">
-        <div class="tool-name">LinPEAS / WinPEAS</div>
-        <div class="tool-desc">本地提权枚举脚本，自动发现 Linux/Windows 提权向量</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">提权</span></div>
-      </a>
+    <!-- 漏洞扫描 -->
+    <div class="category">
+      <h2 class="cat-title">🎯 漏洞扫描与利用 <span class="cat-tag">进阶阶段</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://portswigger.net/burp" target="_blank" rel="noopener">
+          <div class="tool-name">Burp Suite</div>
+          <div class="tool-desc">Web 安全测试的瑞士军刀，代理抓包、漏洞扫描、Intruder 爆破</div>
+          <div class="tool-tags"><span class="tag paid">社区版免费</span><span class="tag">Web安全</span><span class="tag">必备</span></div>
+        </a>
+        <a class="tool-card" href="https://www.metasploit.com" target="_blank" rel="noopener">
+          <div class="tool-name">Metasploit</div>
+          <div class="tool-desc">最强渗透测试框架，漏洞利用、Payload 生成、后渗透模块</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">渗透框架</span></div>
+        </a>
+        <a class="tool-card" href="https://sqlmap.org" target="_blank" rel="noopener">
+          <div class="tool-name">SQLMap</div>
+          <div class="tool-desc">自动化 SQL 注入检测与利用工具，支持多种数据库和注入技术</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">SQL注入</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/projectdiscovery/nuclei" target="_blank" rel="noopener">
+          <div class="tool-name">Nuclei</div>
+          <div class="tool-desc">基于模板的快速漏洞扫描器，社区维护海量 PoC 模板</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">漏洞扫描</span></div>
+        </a>
+        <a class="tool-card" href="https://www.tenable.com/products/nessus" target="_blank" rel="noopener">
+          <div class="tool-name">Nessus</div>
+          <div class="tool-desc">企业级漏洞评估工具，全面的漏洞检测、合规检查、配置审计</div>
+          <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">企业级</span><span class="tag">漏洞评估</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/vanhauser-thc/thc-hydra" target="_blank" rel="noopener">
+          <div class="tool-name">Hydra</div>
+          <div class="tool-desc">在线密码暴力破解工具，支持 SSH、FTP、HTTP、RDP 等多种协议</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">暴力破解</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- 防御与监控 -->
-  <div class="category">
-    <h2 class="cat-title">🛡️ 防御与监控 <span class="cat-tag">防御阶段</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://www.elastic.co/security" target="_blank" rel="noopener">
-        <div class="tool-name">Elastic Security (ELK)</div>
-        <div class="tool-desc">日志收集分析平台，SIEM 功能、威胁检测、安全事件可视化</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag">SIEM</span><span class="tag">日志分析</span></div>
-      </a>
-      <a class="tool-card" href="https://suricata.io" target="_blank" rel="noopener">
-        <div class="tool-name">Suricata</div>
-        <div class="tool-desc">高性能网络 IDS/IPS 引擎，实时流量检测、协议分析</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">IDS/IPS</span></div>
-      </a>
-      <a class="tool-card" href="https://wazuh.com" target="_blank" rel="noopener">
-        <div class="tool-name">Wazuh</div>
-        <div class="tool-desc">开源安全平台，主机入侵检测、日志分析、合规监控、漏洞检测</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HIDS</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/CrowdStrike/CRT" target="_blank" rel="noopener">
-        <div class="tool-name">YARA</div>
-        <div class="tool-desc">恶意软件分类和识别工具，基于规则的模式匹配引擎</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">恶意软件</span></div>
-      </a>
-      <a class="tool-card" href="https://www.snort.org" target="_blank" rel="noopener">
-        <div class="tool-name">Snort</div>
-        <div class="tool-desc">经典网络入侵检测系统，实时流量分析和数据包记录</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">IDS</span></div>
-      </a>
-      <a class="tool-card" href="https://www.ossec.net" target="_blank" rel="noopener">
-        <div class="tool-name">OSSEC</div>
-        <div class="tool-desc">主机入侵检测系统，文件完整性监控、日志分析、Rootkit 检测</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HIDS</span></div>
-      </a>
+    <!-- 红队工具 -->
+    <div class="category">
+      <h2 class="cat-title">⚔️ 红队与后渗透 <span class="cat-tag">高级阶段</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://www.cobaltstrike.com" target="_blank" rel="noopener">
+          <div class="tool-name">Cobalt Strike</div>
+          <div class="tool-desc">商业红队 C2 框架，Beacon 通信、横向移动、团队协作</div>
+          <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">C2框架</span><span class="tag">红队</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/BishopFox/sliver" target="_blank" rel="noopener">
+          <div class="tool-name">Sliver</div>
+          <div class="tool-desc">开源 C2 框架，支持多种通信协议、跨平台植入体、对抗检测</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">C2框架</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/gentilkiwi/mimikatz" target="_blank" rel="noopener">
+          <div class="tool-name">Mimikatz</div>
+          <div class="tool-desc">Windows 凭证提取神器，抓取密码、哈希、Kerberos 票据</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">凭证提取</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/fatedier/frp" target="_blank" rel="noopener">
+          <div class="tool-name">frp</div>
+          <div class="tool-desc">高性能反向代理工具，内网穿透、端口转发、隧道搭建</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">内网穿透</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/BloodHoundAD/BloodHound" target="_blank" rel="noopener">
+          <div class="tool-name">BloodHound</div>
+          <div class="tool-desc">Active Directory 攻击路径分析，可视化域环境关系和提权路径</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">域渗透</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/carlospolop/PEASS-ng" target="_blank" rel="noopener">
+          <div class="tool-name">LinPEAS / WinPEAS</div>
+          <div class="tool-desc">本地提权枚举脚本，自动发现 Linux/Windows 提权向量</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">提权</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- 逆向与取证 -->
-  <div class="category">
-    <h2 class="cat-title">🔬 逆向工程与数字取证 <span class="cat-tag">专项方向</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://ghidra-sre.org" target="_blank" rel="noopener">
-        <div class="tool-name">Ghidra</div>
-        <div class="tool-desc">NSA 开源逆向工程框架，反编译、反汇编、脚本自动化分析</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">逆向</span></div>
-      </a>
-      <a class="tool-card" href="https://hex-rays.com/ida-pro" target="_blank" rel="noopener">
-        <div class="tool-name">IDA Pro</div>
-        <div class="tool-desc">业界标准反汇编器，强大的交互式分析、插件生态丰富</div>
-        <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">逆向</span><span class="tag">行业标准</span></div>
-      </a>
-      <a class="tool-card" href="https://www.volatilityfoundation.org" target="_blank" rel="noopener">
-        <div class="tool-name">Volatility</div>
-        <div class="tool-desc">内存取证框架，分析内存转储、提取进程/网络/注册表信息</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">内存取证</span></div>
-      </a>
-      <a class="tool-card" href="https://www.autopsy.com" target="_blank" rel="noopener">
-        <div class="tool-name">Autopsy</div>
-        <div class="tool-desc">数字取证平台，磁盘镜像分析、文件恢复、时间线分析</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">磁盘取证</span></div>
-      </a>
+    <!-- 防御与监控 -->
+    <div class="category">
+      <h2 class="cat-title">🛡️ 防御与监控 <span class="cat-tag">防御阶段</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://www.elastic.co/security" target="_blank" rel="noopener">
+          <div class="tool-name">Elastic Security (ELK)</div>
+          <div class="tool-desc">日志收集分析平台，SIEM 功能、威胁检测、安全事件可视化</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag">SIEM</span><span class="tag">日志分析</span></div>
+        </a>
+        <a class="tool-card" href="https://suricata.io" target="_blank" rel="noopener">
+          <div class="tool-name">Suricata</div>
+          <div class="tool-desc">高性能网络 IDS/IPS 引擎，实时流量检测、协议分析</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">IDS/IPS</span></div>
+        </a>
+        <a class="tool-card" href="https://wazuh.com" target="_blank" rel="noopener">
+          <div class="tool-name">Wazuh</div>
+          <div class="tool-desc">开源安全平台，主机入侵检测、日志分析、合规监控、漏洞检测</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HIDS</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/CrowdStrike/CRT" target="_blank" rel="noopener">
+          <div class="tool-name">YARA</div>
+          <div class="tool-desc">恶意软件分类和识别工具，基于规则的模式匹配引擎</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">恶意软件</span></div>
+        </a>
+        <a class="tool-card" href="https://www.snort.org" target="_blank" rel="noopener">
+          <div class="tool-name">Snort</div>
+          <div class="tool-desc">经典网络入侵检测系统，实时流量分析和数据包记录</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">IDS</span></div>
+        </a>
+        <a class="tool-card" href="https://www.ossec.net" target="_blank" rel="noopener">
+          <div class="tool-name">OSSEC</div>
+          <div class="tool-desc">主机入侵检测系统，文件完整性监控、日志分析、Rootkit 检测</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">HIDS</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- 靶场 -->
-  <div class="category">
-    <h2 class="cat-title">🎮 练习靶场与平台 <span class="cat-tag">实战练习</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://www.hackthebox.com" target="_blank" rel="noopener">
-        <div class="tool-name">Hack The Box</div>
-        <div class="tool-desc">在线渗透测试靶场，真实场景模拟、CTF 挑战、学习路径</div>
-        <div class="tool-tags"><span class="tag free">部分免费</span><span class="tag">靶场</span><span class="tag">推荐</span></div>
-      </a>
-      <a class="tool-card" href="https://tryhackme.com" target="_blank" rel="noopener">
-        <div class="tool-name">TryHackMe</div>
-        <div class="tool-desc">新手友好的安全学习平台，引导式学习路径、浏览器内实验</div>
-        <div class="tool-tags"><span class="tag free">部分免费</span><span class="tag">学习平台</span><span class="tag">新手推荐</span></div>
-      </a>
-      <a class="tool-card" href="https://portswigger.net/web-security" target="_blank" rel="noopener">
-        <div class="tool-name">PortSwigger Web Academy</div>
-        <div class="tool-desc">Burp Suite 官方 Web 安全学院，系统化 Web 漏洞学习与实验</div>
-        <div class="tool-tags"><span class="tag free">免费</span><span class="tag">Web安全</span><span class="tag">必刷</span></div>
-      </a>
-      <a class="tool-card" href="https://buuoj.cn" target="_blank" rel="noopener">
-        <div class="tool-name">BUUCTF</div>
-        <div class="tool-desc">国内 CTF 刷题平台，收录大量历年赛题，支持在线环境</div>
-        <div class="tool-tags"><span class="tag free">免费</span><span class="tag">CTF</span><span class="tag">国内平台</span></div>
-      </a>
+    <!-- 逆向与取证 -->
+    <div class="category">
+      <h2 class="cat-title">🔬 逆向工程与数字取证 <span class="cat-tag">专项方向</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://ghidra-sre.org" target="_blank" rel="noopener">
+          <div class="tool-name">Ghidra</div>
+          <div class="tool-desc">NSA 开源逆向工程框架，反编译、反汇编、脚本自动化分析</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">逆向</span></div>
+        </a>
+        <a class="tool-card" href="https://hex-rays.com/ida-pro" target="_blank" rel="noopener">
+          <div class="tool-name">IDA Pro</div>
+          <div class="tool-desc">业界标准反汇编器，强大的交互式分析、插件生态丰富</div>
+          <div class="tool-tags"><span class="tag paid">付费</span><span class="tag">逆向</span><span class="tag">行业标准</span></div>
+        </a>
+        <a class="tool-card" href="https://www.volatilityfoundation.org" target="_blank" rel="noopener">
+          <div class="tool-name">Volatility</div>
+          <div class="tool-desc">内存取证框架，分析内存转储、提取进程/网络/注册表信息</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">内存取证</span></div>
+        </a>
+        <a class="tool-card" href="https://www.autopsy.com" target="_blank" rel="noopener">
+          <div class="tool-name">Autopsy</div>
+          <div class="tool-desc">数字取证平台，磁盘镜像分析、文件恢复、时间线分析</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">磁盘取证</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- OSINT 情报收集 -->
-  <div class="category">
-    <h2 class="cat-title">🕵️ OSINT 开源情报 <span class="cat-tag">情报收集</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://osintframework.com" target="_blank" rel="noopener">
-        <div class="tool-name">OSINT Framework</div>
-        <div class="tool-desc">开源情报工具导航图，按类别整理数百个 OSINT 资源和工具</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">导航</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/sherlock-project/sherlock" target="_blank" rel="noopener">
-        <div class="tool-name">Sherlock</div>
-        <div class="tool-desc">跨平台社交媒体用户名搜索工具，支持 300+ 社交网站</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">社交搜索</span></div>
-      </a>
-      <a class="tool-card" href="https://www.maltego.com" target="_blank" rel="noopener">
-        <div class="tool-name">Maltego</div>
-        <div class="tool-desc">可视化情报分析平台，关联分析人员、组织、域名、IP 等实体关系</div>
-        <div class="tool-tags"><span class="tag paid">社区版免费</span><span class="tag">关联分析</span><span class="tag">可视化</span></div>
-      </a>
-      <a class="tool-card" href="https://github.com/laramies/theHarvester" target="_blank" rel="noopener">
-        <div class="tool-name">theHarvester</div>
-        <div class="tool-desc">邮箱、子域名、IP 地址信息收集工具，支持多种搜索引擎数据源</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">信息收集</span></div>
-      </a>
+    <!-- 靶场 -->
+    <div class="category">
+      <h2 class="cat-title">🎮 练习靶场与平台 <span class="cat-tag">实战练习</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://www.hackthebox.com" target="_blank" rel="noopener">
+          <div class="tool-name">Hack The Box</div>
+          <div class="tool-desc">在线渗透测试靶场，真实场景模拟、CTF 挑战、学习路径</div>
+          <div class="tool-tags"><span class="tag free">部分免费</span><span class="tag">靶场</span><span class="tag">推荐</span></div>
+        </a>
+        <a class="tool-card" href="https://tryhackme.com" target="_blank" rel="noopener">
+          <div class="tool-name">TryHackMe</div>
+          <div class="tool-desc">新手友好的安全学习平台，引导式学习路径、浏览器内实验</div>
+          <div class="tool-tags"><span class="tag free">部分免费</span><span class="tag">学习平台</span><span class="tag">新手推荐</span></div>
+        </a>
+        <a class="tool-card" href="https://portswigger.net/web-security" target="_blank" rel="noopener">
+          <div class="tool-name">PortSwigger Web Academy</div>
+          <div class="tool-desc">Burp Suite 官方 Web 安全学院，系统化 Web 漏洞学习与实验</div>
+          <div class="tool-tags"><span class="tag free">免费</span><span class="tag">Web安全</span><span class="tag">必刷</span></div>
+        </a>
+        <a class="tool-card" href="https://buuoj.cn" target="_blank" rel="noopener">
+          <div class="tool-name">BUUCTF</div>
+          <div class="tool-desc">国内 CTF 刷题平台，收录大量历年赛题，支持在线环境</div>
+          <div class="tool-tags"><span class="tag free">免费</span><span class="tag">CTF</span><span class="tag">国内平台</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <!-- 在线实用工具 -->
-  <div class="category">
-    <h2 class="cat-title">⚡ 在线实用工具 <span class="cat-tag">效率工具</span></h2>
-    <div class="tools-grid">
-      <a class="tool-card" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">
-        <div class="tool-name">CyberChef</div>
-        <div class="tool-desc">编解码、加解密、数据转换一站式在线工具，安全人员的瑞士军刀</div>
-        <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">编解码</span></div>
-      </a>
-      <a class="tool-card" href="https://www.virustotal.com" target="_blank" rel="noopener">
-        <div class="tool-name">VirusTotal</div>
-        <div class="tool-desc">在线文件和 URL 多引擎扫描，快速判断文件是否为恶意软件</div>
-        <div class="tool-tags"><span class="tag free">免费</span><span class="tag">恶意检测</span><span class="tag">必备</span></div>
-      </a>
-      <a class="tool-card" href="https://crt.sh" target="_blank" rel="noopener">
-        <div class="tool-name">crt.sh</div>
-        <div class="tool-desc">证书透明度日志搜索，通过 SSL 证书发现子域名和关联资产</div>
-        <div class="tool-tags"><span class="tag free">免费</span><span class="tag">证书搜索</span><span class="tag">子域名</span></div>
-      </a>
-      <a class="tool-card" href="https://explainshell.com" target="_blank" rel="noopener">
-        <div class="tool-name">explainshell</div>
-        <div class="tool-desc">Shell 命令在线解析器，粘贴任意命令自动解释每个参数的含义</div>
-        <div class="tool-tags"><span class="tag free">免费</span><span class="tag">Linux</span><span class="tag">学习工具</span></div>
-      </a>
+    <!-- OSINT 情报收集 -->
+    <div class="category">
+      <h2 class="cat-title">🕵️ OSINT 开源情报 <span class="cat-tag">情报收集</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://osintframework.com" target="_blank" rel="noopener">
+          <div class="tool-name">OSINT Framework</div>
+          <div class="tool-desc">开源情报工具导航图，按类别整理数百个 OSINT 资源和工具</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">导航</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/sherlock-project/sherlock" target="_blank" rel="noopener">
+          <div class="tool-name">Sherlock</div>
+          <div class="tool-desc">跨平台社交媒体用户名搜索工具，支持 300+ 社交网站</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">社交搜索</span></div>
+        </a>
+        <a class="tool-card" href="https://www.maltego.com" target="_blank" rel="noopener">
+          <div class="tool-name">Maltego</div>
+          <div class="tool-desc">可视化情报分析平台，关联分析人员、组织、域名、IP 等实体关系</div>
+          <div class="tool-tags"><span class="tag paid">社区版免费</span><span class="tag">关联分析</span><span class="tag">可视化</span></div>
+        </a>
+        <a class="tool-card" href="https://github.com/laramies/theHarvester" target="_blank" rel="noopener">
+          <div class="tool-name">theHarvester</div>
+          <div class="tool-desc">邮箱、子域名、IP 地址信息收集工具，支持多种搜索引擎数据源</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">信息收集</span></div>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <p style="text-align:center;color:#4a4a6a;font-size:0.85rem;margin-top:3rem;">
-    ✨ BigHeadZuo 的安全工具箱 · 持续收录中
-  </p>
-</div>
+    <!-- 在线实用工具 -->
+    <div class="category">
+      <h2 class="cat-title">⚡ 在线实用工具 <span class="cat-tag">效率工具</span></h2>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">
+          <div class="tool-name">CyberChef</div>
+          <div class="tool-desc">编解码、加解密、数据转换一站式在线工具，安全人员的瑞士军刀</div>
+          <div class="tool-tags"><span class="tag open">开源</span><span class="tag free">免费</span><span class="tag">编解码</span></div>
+        </a>
+        <a class="tool-card" href="https://www.virustotal.com" target="_blank" rel="noopener">
+          <div class="tool-name">VirusTotal</div>
+          <div class="tool-desc">在线文件和 URL 多引擎扫描，快速判断文件是否为恶意软件</div>
+          <div class="tool-tags"><span class="tag free">免费</span><span class="tag">恶意检测</span><span class="tag">必备</span></div>
+        </a>
+        <a class="tool-card" href="https://crt.sh" target="_blank" rel="noopener">
+          <div class="tool-name">crt.sh</div>
+          <div class="tool-desc">证书透明度日志搜索，通过 SSL 证书发现子域名和关联资产</div>
+          <div class="tool-tags"><span class="tag free">免费</span><span class="tag">证书搜索</span><span class="tag">子域名</span></div>
+        </a>
+        <a class="tool-card" href="https://explainshell.com" target="_blank" rel="noopener">
+          <div class="tool-name">explainshell</div>
+          <div class="tool-desc">Shell 命令在线解析器，粘贴任意命令自动解释每个参数的含义</div>
+          <div class="tool-tags"><span class="tag free">免费</span><span class="tag">Linux</span><span class="tag">学习工具</span></div>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- end .wrapper -->
+
+  <!-- Footer -->
+  <footer>
+    <p>✨ BigHeadZuo 的安全工具箱 · 持续收录中</p>
+  </footer>
 
 <script>
-const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
-function r(){c.width=innerWidth;c.height=document.documentElement.scrollHeight;s=[];
-const n=Math.floor(c.width*c.height/10000);
-for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+0.3,a:Math.random()*0.7+0.2,sp:Math.random()*0.004+0.002});}
-function d(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
-s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
-requestAnimationFrame(d);}
-addEventListener('resize',r);r();d();
-new ResizeObserver(()=>{c.height=document.documentElement.scrollHeight}).observe(document.body);
-
 // 搜索过滤
 document.getElementById('searchBox').addEventListener('input', function() {
   const q = this.value.toLowerCase();
