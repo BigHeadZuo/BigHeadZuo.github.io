@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BigHeadZuo - 网络安全全栈工程师</title>
+  <title>BigHeadZuo - IT 全栈工程师学习基地</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -14,68 +14,99 @@
     }
     canvas#bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
     .page { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem 1rem; }
-    .container { text-align: center; max-width: 700px; width: 100%; }
+    .container { text-align: center; max-width: 900px; width: 100%; }
+
+    /* 头像 */
     .avatar {
-      width: 130px; height: 130px; border-radius: 50%;
+      width: 120px; height: 120px; border-radius: 50%;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem; box-shadow: 0 0 40px rgba(102,126,234,0.3);
+      margin: 0 auto 1.2rem; display: flex; align-items: center; justify-content: center;
+      font-size: 3.2rem; box-shadow: 0 0 40px rgba(102,126,234,0.3);
       animation: float 3s ease-in-out infinite;
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    h1 { font-size: 2.2rem; margin-bottom: 0.4rem; color: #fff; text-shadow: 0 0 20px rgba(100,140,255,0.3); }
-    .tagline { color: #8888bb; margin-bottom: 1.5rem; font-size: 1.05rem; }
-    .bio { margin: 0 auto 2rem; line-height: 1.8; color: #9999bb; max-width: 500px; font-size: 0.95rem; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+    h1 { font-size: 2.2rem; margin-bottom: 0.3rem; color: #fff; text-shadow: 0 0 20px rgba(100,140,255,0.3); }
+    .tagline { color: #8888bb; margin-bottom: 1.2rem; font-size: 1rem; }
+    .bio { margin: 0 auto 1.8rem; line-height: 1.8; color: #9999bb; max-width: 520px; font-size: 0.92rem; }
+
     /* 技能标签 */
-    .skills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .skills { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-bottom: 2rem; }
     .skill {
-      font-size: 0.78rem; padding: 4px 12px; border-radius: 20px;
+      font-size: 0.75rem; padding: 3px 11px; border-radius: 20px;
       background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
       color: #8899bb; transition: all 0.3s;
     }
     .skill:hover { background: rgba(100,140,255,0.1); border-color: rgba(100,140,255,0.3); color: #aabbee; }
-    .skill.highlight { background: rgba(100,140,255,0.12); border-color: rgba(100,140,255,0.25); color: #88aaee; }
+    .skill.hl { background: rgba(100,140,255,0.12); border-color: rgba(100,140,255,0.25); color: #88aaee; }
+
+    /* 分组标题 */
+    .section-label {
+      font-size: 0.72rem; color: #555577; text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 0.8rem; margin-top: 0.5rem;
+    }
+
     /* 导航卡片 */
-    .nav-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .nav-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin-bottom: 1.8rem; }
     .nav-card {
       background: rgba(15,15,35,0.8); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 1.3rem 1rem; text-decoration: none; color: inherit;
-      transition: all 0.3s; backdrop-filter: blur(6px);
+      border-radius: 12px; padding: 1.2rem 0.9rem; text-decoration: none; color: inherit;
+      transition: all 0.3s; backdrop-filter: blur(6px); position: relative; overflow: hidden;
+    }
+    .nav-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent, rgba(100,140,255,0.3)); opacity: 0; transition: opacity 0.3s;
     }
     .nav-card:hover { border-color: rgba(100,140,255,0.3); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(100,140,255,0.1); }
-    .nav-card .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
-    .nav-card .card-title { font-weight: 600; color: #fff; font-size: 0.95rem; margin-bottom: 0.3rem; }
-    .nav-card .card-desc { font-size: 0.8rem; color: #7777aa; line-height: 1.5; }
-    /* 社交链接 */
-    .social { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+    .nav-card:hover::before { opacity: 1; }
+    .nav-card .icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+    .nav-card .card-tag {
+      display: inline-block; font-size: 0.6rem; padding: 1px 7px; border-radius: 8px;
+      margin-bottom: 0.4rem; letter-spacing: 0.5px;
+    }
+    .tag-course { background: rgba(100,140,255,0.12); color: #7cacf8; }
+    .tag-resource { background: rgba(76,175,80,0.12); color: #81c784; }
+    .tag-link { background: rgba(255,183,77,0.12); color: #ffb74d; }
+    .nav-card .card-title { font-weight: 600; color: #fff; font-size: 0.92rem; margin-bottom: 0.25rem; }
+    .nav-card .card-desc { font-size: 0.76rem; color: #7777aa; line-height: 1.5; }
+
+    /* 底部 */
+    .social { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.2rem; }
     .social a {
-      padding: 0.6rem 1.2rem; border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px; color: #8899bb; text-decoration: none; font-size: 0.85rem;
+      padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; color: #8899bb; text-decoration: none; font-size: 0.82rem;
       transition: all 0.3s; background: rgba(255,255,255,0.03);
     }
     .social a:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); color: #bbccee; }
-    .footer { margin-top: 2rem; color: #3a3a5a; font-size: 0.8rem; }
-    @media (max-width: 500px) { h1 { font-size: 1.7rem; } .nav-cards { grid-template-columns: 1fr 1fr; } }
+    .footer { margin-top: 1.5rem; color: #3a3a5a; font-size: 0.78rem; }
+
+    /* 响应式 */
+    @media (max-width: 700px) {
+      h1 { font-size: 1.7rem; }
+      .nav-cards { grid-template-columns: repeat(2, 1fr); }
+      .nav-card:last-child { grid-column: span 2; }
+    }
+    @media (max-width: 400px) {
+      .nav-cards { grid-template-columns: 1fr; }
+      .nav-card:last-child { grid-column: span 1; }
+    }
   </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
 <div class="page">
   <main class="container">
-    <div class="avatar" role="img" aria-label="头像">�️</div>
+    <div class="avatar" role="img" aria-label="头像">🛡️</div>
     <h1>BigHeadZuo</h1>
     <p class="tagline">网络安全工程师 / 全栈开发者</p>
     <p class="bio">
       热爱网络安全与全栈开发，正在从基础筑基到安全架构师的星链之路上前行。<br>
-      这里记录我的学习路线、安全工具收藏和成长轨迹。
+      这里记录我的学习路线、课程体系、安全工具收藏和成长轨迹。
     </p>
 
     <div class="skills">
-      <span class="skill highlight">Python</span>
-      <span class="skill highlight">Kali Linux</span>
+      <span class="skill hl">Python</span>
+      <span class="skill hl">Kali Linux</span>
       <span class="skill">Burp Suite</span>
       <span class="skill">Nmap</span>
       <span class="skill">Wireshark</span>
@@ -84,45 +115,60 @@
       <span class="skill">渗透测试</span>
       <span class="skill">网络协议</span>
       <span class="skill">Docker</span>
+      <span class="skill">Kubernetes</span>
       <span class="skill">Go</span>
       <span class="skill">Vue.js</span>
+      <span class="skill">Ansible</span>
+      <span class="skill">Terraform</span>
     </div>
 
+    <p class="section-label">📚 课程体系</p>
     <div class="nav-cards">
-      <a class="nav-card" href="roadmap.html">
-        <div class="icon">🗺️</div>
-        <div class="card-title">发展路线</div>
-        <div class="card-desc">7 阶段星链路线图，从入门到安全架构师</div>
+      <a class="nav-card" href="courses.html" style="--accent:linear-gradient(90deg,#667eea,#764ba2)">
+        <div class="icon">�</div>
+        <span class="card-tag tag-course">35 门课程</span>
+        <div class="card-title">网络安全工程师</div>
+        <div class="card-desc">7 阶段完整路径，从零到安全架构师</div>
       </a>
-      <a class="nav-card" href="tools.html">
-        <div class="icon">🧰</div>
-        <div class="card-title">安全工具箱</div>
-        <div class="card-desc">精选 30+ 安全工具，按方向分类整理</div>
-      </a>
-      <a class="nav-card" href="ctf.html">
-        <div class="icon">🚩</div>
-        <div class="card-title">CTF 资源</div>
-        <div class="card-desc">练习平台、比赛日历、工具与学习资源</div>
-      </a>
-      <a class="nav-card" href="courses.html">
-        <div class="icon">📖</div>
-        <div class="card-title">安全课程</div>
-        <div class="card-desc">35 门课程，网络安全全栈工程师学习路径</div>
-      </a>
-      <a class="nav-card" href="network-engineer.html">
+      <a class="nav-card" href="network-engineer.html" style="--accent:linear-gradient(90deg,#43e97b,#38f9d7)">
         <div class="icon">🌐</div>
+        <span class="card-tag tag-course">30 门课程</span>
         <div class="card-title">网络工程师</div>
-        <div class="card-desc">30 门课程，从路由交换到 SD-WAN 架构师</div>
+        <div class="card-desc">6 阶段路径，从路由交换到 SD-WAN</div>
       </a>
-      <a class="nav-card" href="server-engineer.html">
+      <a class="nav-card" href="server-engineer.html" style="--accent:linear-gradient(90deg,#fa709a,#fee140)">
         <div class="icon">🖥️</div>
+        <span class="card-tag tag-course">30 门课程</span>
         <div class="card-title">服务器工程师</div>
-        <div class="card-desc">30 门课程，从运维到云原生架构师</div>
+        <div class="card-desc">6 阶段路径，从运维到云原生架构师</div>
       </a>
-      <a class="nav-card" href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">
+    </div>
+
+    <p class="section-label">🧭 资源与工具</p>
+    <div class="nav-cards" style="grid-template-columns: repeat(4, 1fr);">
+      <a class="nav-card" href="roadmap.html" style="--accent:linear-gradient(90deg,#a18cd1,#fbc2eb)">
+        <div class="icon">🗺️</div>
+        <span class="card-tag tag-resource">路线图</span>
+        <div class="card-title">发展路线</div>
+        <div class="card-desc">星链式路线图</div>
+      </a>
+      <a class="nav-card" href="tools.html" style="--accent:linear-gradient(90deg,#ffecd2,#fcb69f)">
+        <div class="icon">🧰</div>
+        <span class="card-tag tag-resource">40+ 工具</span>
+        <div class="card-title">安全工具箱</div>
+        <div class="card-desc">按方向分类整理</div>
+      </a>
+      <a class="nav-card" href="ctf.html" style="--accent:linear-gradient(90deg,#ff9a9e,#fad0c4)">
+        <div class="icon">🚩</div>
+        <span class="card-tag tag-resource">CTF</span>
+        <div class="card-title">CTF 资源</div>
+        <div class="card-desc">平台·工具·学习</div>
+      </a>
+      <a class="nav-card" href="https://github.com/BigHeadZuo" target="_blank" rel="noopener" style="--accent:linear-gradient(90deg,#c2e9fb,#a1c4fd)">
         <div class="icon">💻</div>
+        <span class="card-tag tag-link">外部链接</span>
         <div class="card-title">GitHub</div>
-        <div class="card-desc">开源项目与代码仓库</div>
+        <div class="card-desc">代码与项目</div>
       </a>
     </div>
 
@@ -130,7 +176,7 @@
       <a href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">GitHub</a>
       <a href="mailto:your@email.com">邮箱</a>
     </div>
-    <p class="footer">© 2026 BigHeadZuo · 网络安全全栈之路</p>
+    <p class="footer">© 2026 BigHeadZuo · IT 全栈工程师学习基地 · 95 门课程持续更新中</p>
   </main>
 </div>
 
