@@ -5,247 +5,273 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BigHeadZuo - IT 全栈工程师学习基地</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     :root {
-      --bg: #0b0b1a;
-      --surface: rgba(18,18,40,0.65);
-      --border: rgba(255,255,255,0.06);
-      --text: #c8c8e0;
-      --text-dim: #6a6a8e;
-      --accent: #7cacf8;
-      --glow: rgba(100,140,255,0.08);
+      --bg: #000;
+      --surface: #111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-dim: #6e6e73;
+      --accent: #2997ff;
+      --accent-hover: #0077ed;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
-    canvas#bg { position:fixed; inset:0; width:100%; height:100%; z-index:0; }
+    body {
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+      background:var(--bg); color:var(--text); min-height:100vh;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a { text-decoration:none; color:inherit; }
 
-    /* 主容器 */
-    .page { position:relative; z-index:1; max-width:1060px; margin:0 auto; padding:3rem 1.5rem 4rem; }
-
-    /* 头部区域 - 玻璃拟态 */
+    /* ===== Hero ===== */
     .hero {
-      text-align:center; padding:2.5rem 2rem 2rem;
-      background:var(--surface); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-      border:1px solid var(--border); border-radius:24px;
-      margin-bottom:2rem; position:relative; overflow:hidden;
+      text-align:center; padding:100px 24px 60px;
+      max-width:680px; margin:0 auto;
     }
-    .hero::before {
-      content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
-      background:radial-gradient(circle at 30% 20%, rgba(102,126,234,0.06) 0%, transparent 50%),
-                 radial-gradient(circle at 70% 80%, rgba(118,75,162,0.04) 0%, transparent 50%);
-      pointer-events:none;
+    .hero-eyebrow {
+      font-size:17px; font-weight:600; color:var(--accent);
+      letter-spacing:-0.2px; margin-bottom:16px;
     }
-    .avatar {
-      width:100px; height:100px; border-radius:50%;
-      background:linear-gradient(135deg,#667eea,#764ba2);
-      margin:0 auto 1rem; display:flex; align-items:center; justify-content:center;
-      font-size:2.8rem; box-shadow:0 0 50px rgba(102,126,234,0.25);
-      animation:float 4s ease-in-out infinite;
+    .hero h1 {
+      font-size:56px; font-weight:700; letter-spacing:-0.04em;
+      line-height:1.05; margin-bottom:12px;
+      background:linear-gradient(180deg,#fff 40%,#999);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
     }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-    h1 { font-size:2rem; color:#fff; font-weight:700; letter-spacing:-0.5px; margin-bottom:0.2rem; }
-    .tagline { color:var(--text-dim); font-size:0.92rem; margin-bottom:1rem; }
-    .bio { color:#8888aa; font-size:0.88rem; line-height:1.7; max-width:480px; margin:0 auto 1.2rem; }
-
-    /* 技能标签 */
-    .skills { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
-    .skill {
-      font-size:0.7rem; padding:3px 10px; border-radius:20px;
-      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
-      color:#7788aa; transition:all 0.3s;
-    }
-    .skill:hover { background:rgba(100,140,255,0.08); border-color:rgba(100,140,255,0.2); color:#99bbee; }
-    .skill.hl { background:rgba(100,140,255,0.08); border-color:rgba(100,140,255,0.18); color:#88aaee; }
-
-    /* 分组标题 */
-    .section-title {
-      font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:2.5px;
-      margin:2rem 0 1rem; padding-left:4px;
+    .hero p {
+      font-size:21px; font-weight:400; color:var(--text-secondary);
+      line-height:1.5; letter-spacing:-0.01em;
     }
 
-    /* Bento Grid */
-    .bento { display:grid; gap:0.8rem; }
-    .bento-courses { grid-template-columns:1.2fr 1fr 1fr; grid-template-rows:auto; }
-    .bento-resources { grid-template-columns:1fr 1fr 1fr 1fr; }
+    /* ===== 分割线 ===== */
+    .divider { height:1px; background:var(--border); max-width:980px; margin:0 auto; }
 
-    /* 卡片 - 玻璃拟态 */
-    .card {
-      background:var(--surface); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-      border:1px solid var(--border); border-radius:16px;
-      padding:1.4rem 1.2rem; text-decoration:none; color:inherit;
-      transition:all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
-      position:relative; overflow:hidden;
-    }
-    .card::after {
-      content:''; position:absolute; inset:0; border-radius:16px;
-      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(100,140,255,0.06) 0%, transparent 60%);
-      opacity:0; transition:opacity 0.4s; pointer-events:none;
-    }
-    .card:hover { border-color:rgba(100,140,255,0.15); transform:translateY(-3px); }
-    .card:hover::after { opacity:1; }
+    /* ===== 课程区块 - 左右构图 ===== */
+    .courses-section { max-width:980px; margin:0 auto; padding:0 24px; }
 
-    /* 卡片内容 */
-    .card-icon { font-size:2rem; margin-bottom:0.6rem; display:block; }
-    .card-badge {
-      display:inline-block; font-size:0.58rem; padding:2px 8px; border-radius:6px;
-      margin-bottom:0.5rem; font-weight:500; letter-spacing:0.3px;
+    .course-row {
+      display:grid; grid-template-columns:1fr 1fr; gap:0;
+      border-bottom:1px solid var(--border);
+      min-height:280px; align-items:center;
+      transition:background 0.3s;
     }
-    .badge-blue { background:rgba(100,140,255,0.1); color:#7cacf8; }
-    .badge-green { background:rgba(76,175,80,0.1); color:#81c784; }
-    .badge-amber { background:rgba(255,183,77,0.1); color:#ffb74d; }
-    .card-name { font-size:0.95rem; font-weight:600; color:#fff; margin-bottom:0.2rem; }
-    .card-desc { font-size:0.76rem; color:var(--text-dim); line-height:1.5; }
+    .course-row:hover { background:rgba(255,255,255,0.02); }
 
-    /* 特色卡片（大卡） */
-    .card-featured { grid-row:span 1; }
-    .card-featured .card-icon { font-size:2.4rem; }
-    .card-featured .card-name { font-size:1.05rem; }
-    .card-featured .card-stats {
-      display:flex; gap:1rem; margin-top:0.8rem; padding-top:0.7rem;
-      border-top:1px solid rgba(255,255,255,0.05);
+    .course-text { padding:48px 48px 48px 0; }
+    .course-visual {
+      padding:48px 0 48px 48px;
+      display:flex; align-items:center; justify-content:center;
     }
-    .card-featured .stat { font-size:0.68rem; color:var(--text-dim); }
-    .card-featured .stat span { color:#fff; font-weight:600; font-size:0.82rem; display:block; }
 
-    /* 底部 */
-    .footer-area { text-align:center; margin-top:2.5rem; }
-    .social { display:flex; gap:0.6rem; justify-content:center; margin-bottom:1rem; }
-    .social a {
-      padding:0.45rem 1rem; border:1px solid var(--border); border-radius:8px;
-      color:#7788aa; text-decoration:none; font-size:0.8rem;
-      transition:all 0.3s; background:rgba(255,255,255,0.02);
+    /* 奇数行：左文右图 / 偶数行：左图右文 */
+    .course-row:nth-child(even) .course-text { order:2; padding:48px 0 48px 48px; }
+    .course-row:nth-child(even) .course-visual { order:1; padding:48px 48px 48px 0; }
+
+    .course-icon {
+      width:96px; height:96px; border-radius:24px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:44px;
+      background:linear-gradient(135deg,rgba(41,151,255,0.12),rgba(41,151,255,0.03));
+      border:1px solid rgba(41,151,255,0.1);
     }
-    .social a:hover { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.15); color:#aabbdd; }
-    .footer-text { color:#333355; font-size:0.72rem; }
+    .course-row:nth-child(2) .course-icon {
+      background:linear-gradient(135deg,rgba(48,209,88,0.12),rgba(48,209,88,0.03));
+      border-color:rgba(48,209,88,0.1);
+    }
+    .course-row:nth-child(3) .course-icon {
+      background:linear-gradient(135deg,rgba(175,130,255,0.12),rgba(175,130,255,0.03));
+      border-color:rgba(175,130,255,0.1);
+    }
 
-    /* 响应式 */
+    .course-label {
+      font-size:12px; font-weight:600; text-transform:uppercase;
+      letter-spacing:1px; color:var(--accent); margin-bottom:8px;
+    }
+    .course-row:nth-child(2) .course-label { color:#30d158; }
+    .course-row:nth-child(3) .course-label { color:#af82ff; }
+
+    .course-name {
+      font-size:32px; font-weight:700; letter-spacing:-0.03em;
+      line-height:1.15; color:#fff; margin-bottom:8px;
+    }
+    .course-desc {
+      font-size:17px; color:var(--text-secondary); line-height:1.5;
+      letter-spacing:-0.01em; margin-bottom:16px;
+    }
+    .course-meta {
+      display:flex; gap:20px; font-size:13px; color:var(--text-dim);
+    }
+    .course-meta span { display:flex; align-items:center; gap:4px; }
+
+    .course-link {
+      display:inline-flex; align-items:center; gap:4px;
+      font-size:17px; font-weight:400; color:var(--accent);
+      transition:gap 0.25s;
+    }
+    .course-row:hover .course-link { gap:8px; }
+    .course-link::after { content:'›'; font-size:22px; line-height:1; }
+
+    /* ===== 资源网格 ===== */
+    .resources-section {
+      max-width:980px; margin:0 auto; padding:60px 24px 0;
+    }
+    .resources-header {
+      text-align:center; margin-bottom:40px;
+    }
+    .resources-header h2 {
+      font-size:40px; font-weight:700; letter-spacing:-0.03em; color:#fff;
+    }
+    .resources-header p {
+      font-size:17px; color:var(--text-secondary); margin-top:8px;
+    }
+    .resources-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+    }
+    .res-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:28px 24px; text-align:center;
+      transition:all 0.3s;
+    }
+    .res-card:hover { background:#1a1a1a; border-color:rgba(255,255,255,0.12); transform:scale(1.02); }
+    .res-icon { font-size:32px; margin-bottom:12px; display:block; }
+    .res-name { font-size:17px; font-weight:600; color:#fff; margin-bottom:4px; }
+    .res-desc { font-size:13px; color:var(--text-dim); line-height:1.4; }
+
+    /* ===== Footer ===== */
+    footer {
+      max-width:980px; margin:0 auto; padding:40px 24px 48px;
+      border-top:1px solid var(--border); margin-top:60px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .footer-copy { font-size:12px; color:var(--text-dim); }
+    .footer-links { display:flex; gap:24px; }
+    .footer-links a {
+      font-size:12px; color:var(--text-dim); transition:color 0.2s;
+    }
+    .footer-links a:hover { color:var(--text); }
+
+    /* ===== 响应式 ===== */
     @media(max-width:768px) {
-      .page { padding:2rem 1rem 3rem; }
-      .hero { padding:2rem 1.2rem 1.5rem; border-radius:18px; }
-      h1 { font-size:1.6rem; }
-      .bento-courses { grid-template-columns:1fr; }
-      .bento-resources { grid-template-columns:1fr 1fr; }
-      .card-featured .card-stats { flex-wrap:wrap; }
+      .hero { padding:64px 20px 40px; }
+      .hero h1 { font-size:36px; }
+      .hero p { font-size:17px; }
+      .course-row { grid-template-columns:1fr; min-height:auto; }
+      .course-text { padding:32px 0 16px !important; order:2 !important; }
+      .course-visual { padding:32px 0 0 !important; order:1 !important; justify-content:flex-start; }
+      .course-name { font-size:24px; }
+      .course-icon { width:72px; height:72px; font-size:34px; border-radius:18px; }
+      .resources-grid { grid-template-columns:1fr 1fr; }
+      .resources-header h2 { font-size:28px; }
+      footer { flex-direction:column; gap:16px; text-align:center; }
     }
     @media(max-width:480px) {
-      .bento-resources { grid-template-columns:1fr; }
+      .resources-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="page">
 
   <!-- Hero -->
-  <header class="hero">
-    <div class="avatar" role="img" aria-label="头像">�️</div>
-    <h1>BigHeadZuo</h1>
-    <p class="tagline">网络安全工程师 / 全栈开发者</p>
-    <p class="bio">热爱网络安全与全栈开发，正在从基础筑基到安全架构师的星链之路上前行。这里是我的学习基地 — 课程体系、工具收藏、成长轨迹，全部开源。</p>
-    <div class="skills">
-      <span class="skill hl">Python</span>
-      <span class="skill hl">Kali Linux</span>
-      <span class="skill">Burp Suite</span>
-      <span class="skill">Nmap</span>
-      <span class="skill">Wireshark</span>
-      <span class="skill">Metasploit</span>
-      <span class="skill">Web安全</span>
-      <span class="skill">渗透测试</span>
-      <span class="skill">Docker</span>
-      <span class="skill">Kubernetes</span>
-      <span class="skill">Go</span>
-      <span class="skill">Vue.js</span>
-      <span class="skill">Ansible</span>
-      <span class="skill">Terraform</span>
-    </div>
-  </header>
+  <section class="hero">
+    <p class="hero-eyebrow">BigHeadZuo 学习基地</p>
+    <h1>成为 IT 全栈工程师。</h1>
+    <p>从网络安全到服务器运维，95 门课程覆盖完整技术栈。<br>体系化学习，开源共享。</p>
+  </section>
 
-  <!-- 课程体系 Bento Grid -->
-  <p class="section-title">📚 课程体系</p>
-  <div class="bento bento-courses">
-    <a class="card card-featured" href="courses.html">
-      <span class="card-icon">🔐</span>
-      <span class="card-badge badge-blue">核心方向</span>
-      <div class="card-name">网络安全全栈工程师</div>
-      <div class="card-desc">从零基础到安全架构师，覆盖攻防全链路的完整学习路径</div>
-      <div class="card-stats">
-        <div class="stat"><span>35</span>课程模块</div>
-        <div class="stat"><span>7</span>学习阶段</div>
-        <div class="stat"><span>500+</span>学时</div>
+  <div class="divider"></div>
+
+  <!-- 课程 -->
+  <section class="courses-section">
+
+    <a class="course-row" href="courses.html">
+      <div class="course-text">
+        <p class="course-label">核心方向</p>
+        <h3 class="course-name">网络安全<br>全栈工程师</h3>
+        <p class="course-desc">从零基础到安全架构师，覆盖攻防全链路的完整学习路径。</p>
+        <div class="course-meta">
+          <span>35 门课程</span><span>7 个阶段</span><span>500+ 学时</span>
+        </div>
+        <p class="course-link" style="margin-top:16px">开始学习</p>
+      </div>
+      <div class="course-visual">
+        <div class="course-icon">🔐</div>
       </div>
     </a>
-    <a class="card" href="network-engineer.html">
-      <span class="card-icon">🌐</span>
-      <span class="card-badge badge-blue">30 门课程</span>
-      <div class="card-name">网络工程师</div>
-      <div class="card-desc">路由交换 → BGP/MPLS → SDN/SD-WAN → 网络架构师</div>
-    </a>
-    <a class="card" href="server-engineer.html">
-      <span class="card-icon">🖥️</span>
-      <span class="card-badge badge-blue">30 门课程</span>
-      <div class="card-name">服务器工程师</div>
-      <div class="card-desc">Linux 运维 → 自动化 → K8s → 云原生架构师</div>
-    </a>
-  </div>
 
-  <!-- 资源与工具 -->
-  <p class="section-title">🧭 资源与工具</p>
-  <div class="bento bento-resources">
-    <a class="card" href="roadmap.html">
-      <span class="card-icon">🗺️</span>
-      <span class="card-badge badge-green">路线图</span>
-      <div class="card-name">发展路线</div>
-      <div class="card-desc">星链式 7 阶段路线图</div>
+    <a class="course-row" href="network-engineer.html">
+      <div class="course-text">
+        <p class="course-label">网络方向</p>
+        <h3 class="course-name">网络工程师</h3>
+        <p class="course-desc">路由交换、BGP/MPLS、SDN/SD-WAN，直通网络架构师。</p>
+        <div class="course-meta">
+          <span>30 门课程</span><span>6 个阶段</span>
+        </div>
+        <p class="course-link" style="margin-top:16px">开始学习</p>
+      </div>
+      <div class="course-visual">
+        <div class="course-icon">🌐</div>
+      </div>
     </a>
-    <a class="card" href="tools.html">
-      <span class="card-icon">🧰</span>
-      <span class="card-badge badge-green">40+ 工具</span>
-      <div class="card-name">安全工具箱</div>
-      <div class="card-desc">按攻防方向分类整理</div>
-    </a>
-    <a class="card" href="ctf.html">
-      <span class="card-icon">🚩</span>
-      <span class="card-badge badge-green">竞赛资源</span>
-      <div class="card-name">CTF 资源</div>
-      <div class="card-desc">平台 · 工具 · 学习资料</div>
-    </a>
-    <a class="card" href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">
-      <span class="card-icon">💻</span>
-      <span class="card-badge badge-amber">外部链接</span>
-      <div class="card-name">GitHub</div>
-      <div class="card-desc">开源项目与代码仓库</div>
-    </a>
-  </div>
 
-  <!-- 底部 -->
-  <footer class="footer-area">
-    <div class="social">
-      <a href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">GitHub</a>
-      <a href="mailto:your@email.com">邮箱</a>
+    <a class="course-row" href="server-engineer.html">
+      <div class="course-text">
+        <p class="course-label">运维方向</p>
+        <h3 class="course-name">服务器工程师</h3>
+        <p class="course-desc">Linux 运维、自动化、K8s 容器编排，迈向云原生架构师。</p>
+        <div class="course-meta">
+          <span>30 门课程</span><span>6 个阶段</span>
+        </div>
+        <p class="course-link" style="margin-top:16px">开始学习</p>
+      </div>
+      <div class="course-visual">
+        <div class="course-icon">🖥️</div>
+      </div>
+    </a>
+
+  </section>
+
+  <div class="divider" style="margin-top:0"></div>
+
+  <!-- 资源 -->
+  <section class="resources-section">
+    <div class="resources-header">
+      <h2>探索更多资源。</h2>
+      <p>路线图、工具箱、CTF 竞赛，助你全方位成长。</p>
     </div>
-    <p class="footer-text">© 2026 BigHeadZuo · IT 全栈工程师学习基地 · 95 门课程持续更新中</p>
+    <div class="resources-grid">
+      <a class="res-card" href="roadmap.html">
+        <span class="res-icon">🗺️</span>
+        <div class="res-name">发展路线</div>
+        <div class="res-desc">星链式 7 阶段路线图</div>
+      </a>
+      <a class="res-card" href="tools.html">
+        <span class="res-icon">🧰</span>
+        <div class="res-name">安全工具箱</div>
+        <div class="res-desc">40+ 工具按攻防分类</div>
+      </a>
+      <a class="res-card" href="ctf.html">
+        <span class="res-icon">🚩</span>
+        <div class="res-name">CTF 资源</div>
+        <div class="res-desc">平台 · 工具 · 学习资料</div>
+      </a>
+      <a class="res-card" href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">
+        <span class="res-icon">💻</span>
+        <div class="res-name">GitHub</div>
+        <div class="res-desc">开源项目与代码仓库</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span class="footer-copy">© 2026 BigHeadZuo</span>
+    <div class="footer-links">
+      <a href="https://github.com/BigHeadZuo" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:your@email.com">联系</a>
+    </div>
   </footer>
 
-</div>
-
-<script>
-// 星空
-const c=document.getElementById('bg'),x=c.getContext('2d');let s=[];
-function rs(){c.width=innerWidth;c.height=innerHeight;s=[];
-const n=Math.floor(c.width*c.height/5500);
-for(let i=0;i<n;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+0.3,a:Math.random()*0.7+0.2,sp:Math.random()*0.004+0.001});}
-function dr(){x.clearRect(0,0,c.width,c.height);const t=Date.now();
-s.forEach(p=>{const f=Math.sin(t*p.sp)*0.3+0.7;x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fillStyle=`rgba(180,200,255,${p.a*f})`;x.fill();});
-requestAnimationFrame(dr);}
-addEventListener('resize',rs);rs();dr();
-
-// 卡片鼠标跟随光效
-document.querySelectorAll('.card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-  });
-});
-</script>
 </body>
 </html>
